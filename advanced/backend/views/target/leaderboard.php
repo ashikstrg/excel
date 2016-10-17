@@ -65,7 +65,7 @@ if(!empty($searchModel->target_date)) {
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['daily'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['leaderboard'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 

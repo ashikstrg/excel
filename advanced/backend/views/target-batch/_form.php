@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 // Custom Datepicker
 use kartik\widgets\DatePicker;
+// Custom Fileinput
+use kartik\file\FileInput;
 
 ?>
 
@@ -21,16 +23,24 @@ use kartik\widgets\DatePicker;
                 ]
             ]); ?>
 
-    <?= $form->field($model, 'file')->fileInput() ?>
+    <?php 
     
-    <?php
-    if ($model->file_import) {
-        echo '<img src="'.\Yii::$app->urlManagerFrontend->baseUrl.'/'.$model->file_import.'" width="90px">&nbsp;&nbsp;&nbsp;';
-        echo Html::a('Delete Files', ['deleteimg', 'id'=>$model->id, 'field'=> 'file_import'], ['class'=>'btn btn-danger']).'<p>';
-    }
+    echo '<label class="control-label">CSV File</label>';
+    
+    echo FileInput::widget([
+        'model' => $model,
+        'attribute' => 'file',
+        'options' => ['multiple' => false],
+        'pluginOptions' => [
+            'previewFileType' => 'any',
+            'showUpload' => false,
+            'allowedFileExtensions'=>['csv'],
+            'maxFileCount' => 1
+        ]
+    ]);
     ?>
 
-    <div class="box-footer">
+    <div class="box-footer" style="margin-top: 40px;">
         <div class="row">
             <div class="col-md-6">
                 <?= Html::submitButton('Upload CSV', ['class' => 'btn btn-primary']) ?>

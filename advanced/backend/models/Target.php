@@ -61,8 +61,8 @@ class Target extends \yii\db\ActiveRecord
     {
         return [
             [['batch', 'retail_id', 'retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 'retail_area', 'retail_territory', 'hr_id', 'employee_id', 'employee_name', 'designation', 'fsm_vol', 'fsm_val', 'tm_parent', 'tm_employee_id', 'tm_name', 'tm_vol', 'tm_val', 'am_parent', 'am_employee_id', 'am_name', 'am_vol', 'am_val', 'csm_parent', 'csm_employee_id', 'csm_name', 'csm_vol', 'csm_val', 'product_name', 'product_model_code', 'product_model_name', 'product_type', 'target_date', 'created_by'], 'required'],
-            [['batch', 'retail_id', 'hr_id', 'fsm_vol', 'tm_parent', 'tm_vol', 'am_parent', 'am_vol', 'csm_parent', 'csm_vol'], 'integer'],
-            [['fsm_val', 'tm_val', 'am_val', 'csm_val'], 'number'],
+            [['batch', 'retail_id', 'hr_id', 'fsm_vol', 'fsm_vol_sales', 'tm_parent', 'tm_vol', 'tm_vol_sales', 'am_parent', 'am_vol', 'am_vol_sales', 'csm_parent', 'csm_vol', 'csm_vol_sales'], 'integer'],
+            [['fsm_val', 'fsm_val_sales', 'tm_val', 'tm_val_sales', 'am_val', 'am_val_sales', 'csm_val', 'csm_val_sales'], 'number'],
             [['target_date', 'created_at', 'updated_at'], 'safe'],
             [['retail_dms_code', 'retail_channel_type', 'retail_type', 'designation'], 'string', 'max' => 100],
             [['retail_name', 'retail_zone'], 'string', 'max' => 150],

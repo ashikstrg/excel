@@ -17,7 +17,7 @@ use yii\web\UploadedFile;
 use backend\models\Product;
 use backend\models\Hr;
 use backend\models\Sales;
-
+use backend\models\Target;
 // Custom Helpers
 use yii\helpers\HtmlPurifier;
 
@@ -78,7 +78,7 @@ class SalesBatchController extends Controller
                 $random = $random_date.rand(10,100).$userId;
                 $now = new Expression('NOW()');
                 $today = date('Y-m-d', time());
-
+                $monthYear = explode('-', $today);
                 $uploadExists = 1;
             }
 
@@ -107,6 +107,7 @@ class SalesBatchController extends Controller
                             if($hrModel !== null) {
                                 
                                 $rowNumber = 0;
+                                
                                 while( ($line = fgetcsv($handle, 1000, ",")) != FALSE) {
                                 
                                     $rowNumber++;
@@ -170,9 +171,19 @@ class SalesBatchController extends Controller
                                                     'created_at' => $now,
                                                     'created_by' => $username
                                                 ];
+                                                                                                 
+                                                
+                                                $targetModel = Target::find()->where('(hr_id=:hr_id AND product_model_code=:product_model_code) AND (YEAR(target_date)=:target_date_year AND MONTH(target_date)=:target_date_month)', 
+                                                        [':hr_id' => $hrModel->id, ':product_model_code' => $productModel->model_code, ':target_date_year' => $monthYear[0], ':target_date_month' => $monthYear[1]])->one();
+                                                $targetUpdateCounter = [
+                                                    'fsm_vol_sales' => 1, 'fsm_val_sales' => $productModel->rrp, 
+                                                    'tm_vol_sales' => 1, 'tm_val_sales' => $productModel->rrp,
+                                                    'am_vol_sales' => 1, 'am_val_sales' => $productModel->rrp,
+                                                    'csm_vol_sales' => 1, 'csm_val_sales' => $productModel->rrp];
+                                                $targetModel->updateCounters($targetUpdateCounter);
                                                 
                                                 $successArray[] = 'Row Number ' . $rowNumber . ':Sales Data has successfully been uploaded.';
-
+                                                
                                             } else {
 
                                                 $errorsArray[] = 'Row Number ' . $rowNumber . ':Product Model/Color is invalid.';
@@ -241,11 +252,20 @@ class SalesBatchController extends Controller
                         Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
                         #print_r($bulkInsertArray);
                     }
+                    
+                    \Yii::$app->session['errorsArray'] = $errorsArray;
+                    \Yii::$app->session['successArray'] = $successArray;
+                    return $this->redirect(['view', 'id' => $model->id]);
+                    
+            } else {
+                
+                Yii::$app->session->setFlash('error', 'Invalid CSV File.');
+                return $this->render('create', [
+                    'model' => $model
+                ]);
             }
             
-            \Yii::$app->session['errorsArray'] = $errorsArray;
-            \Yii::$app->session['successArray'] = $successArray;
-            return $this->redirect(['view', 'id' => $model->id]);
+            
             
 	} else {
             return $this->render('create', [

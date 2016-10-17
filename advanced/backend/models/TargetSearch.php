@@ -125,6 +125,18 @@ class TargetSearch extends Target
             $this->retail_territory = null;
         }
         
+        if(empty($this->employee_id)) {
+            $this->employee_id = null;
+        }
+        
+        if(empty($this->employee_name)) {
+            $this->employee_name = null;
+        }
+        
+        if(empty($this->designation)) {
+            $this->designation = null;
+        }
+        
         if(empty($this->target_date)) {
             $this->target_date = date('Y-m', time());
         }
@@ -136,6 +148,9 @@ class TargetSearch extends Target
         $retailZone = $this->retail_zone;
         $retailArea = $this->retail_area;
         $retailTerritory = $this->retail_territory;
+        $employeeId = $this->employee_id;
+        $employeeName = $this->employee_name;
+        $designation = $this->designation;
         $targetDate = $this->target_date;
         
         $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate.'-01'])->distinct()->all();
@@ -147,17 +162,27 @@ class TargetSearch extends Target
             }
         }  
         
-        $productString = "'".implode("','", $product)."'";;
+        $productString = '"'.implode('","', $product).'"';
         
         $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM target')
 			->queryScalar();
         
         $sql= "SET @sql = NULL;
             SELECT 
-                SUM(fsm_vol) AS `total`
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'MAX(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', fsm_vol, 0)) AS ',
+                        product_model_code
+                    )
+                )
             INTO @sql
             FROM target;
-            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, retail_territory, employee_id, employee_name, ', @sql, ' FROM target, (SELECT @i:= 0) AS i 
+            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
+            retail_territory, employee_id, employee_name, designation, ', @sql, ', SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent 
+            FROM target, (SELECT @i:= 0) AS i 
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
             AND (retail_type like :retail_type or :retail_type is null)
@@ -165,7 +190,10 @@ class TargetSearch extends Target
             AND (retail_zone like :retail_zone or :retail_zone is null)
             AND (retail_area like :retail_area or :retail_area is null)
             AND (retail_territory like :retail_territory or :retail_territory is null)
-           
+            AND (employee_id like :employee_id or :employee_id is null)
+            AND (employee_name like :employee_name or :employee_name is null)
+            AND (designation like :designation or :designation is null)
+            AND (product_model_code IN ($productString))
             AND (target_date=:target_date)
             GROUP BY employee_id'); ";
 
@@ -186,12 +214,15 @@ class TargetSearch extends Target
                 ':retail_zone' => '%' . $retailZone . '%',
                 ':retail_area' => '%' . $retailArea . '%',
                 ':retail_territory' => '%' . $retailTerritory . '%',
-                ':product_model_code' => $productString,
+                ':employee_id' => '%' . $employeeId . '%',
+                ':employee_name' => '%' . $employeeName . '%',
+                ':designation' => '%' . $designation . '%',
                 ':target_date' => $targetDate.'-01'
             ],
             'totalCount' => $totalCount,
             //'sort' =>false, to remove the table header sorting
             'sort' => [
+                'defaultOrder' => ['achievement_percent'=>SORT_ASC],
                 'attributes' => [
                     'retail_dms_code' => [
                         'asc' => ['retail_dms_code' => SORT_ASC],
@@ -220,6 +251,22 @@ class TargetSearch extends Target
                     'retail_territory' => [
                         'asc' => ['retail_territory' => SORT_ASC],
                         'desc' => ['retail_territory' => SORT_DESC],
+                    ],
+                    'employee_id' => [
+                        'asc' => ['employee_id' => SORT_ASC],
+                        'desc' => ['employee_id' => SORT_DESC],
+                    ],
+                    'employee_name' => [
+                        'asc' => ['employee_name' => SORT_ASC],
+                        'desc' => ['employee_name' => SORT_DESC],
+                    ],
+                    'designation' => [
+                        'asc' => ['designation' => SORT_ASC],
+                        'desc' => ['designation' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
                     ],
                 ],
             ],

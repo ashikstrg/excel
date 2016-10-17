@@ -18,6 +18,7 @@ use backend\models\Product;
 use backend\models\Hr;
 use backend\models\HrSales;
 use backend\models\Target;
+use backend\models\Sales;
 
 // Custom Helpers
 use yii\helpers\HtmlPurifier;
@@ -89,7 +90,7 @@ class TargetBatchController extends Controller
 
                     $handle = fopen($model->file_import, 'r');
                     
-                    if ($handle) {
+                    if($handle) {
                             
                         $model->batch = $random;
                         $model->status = 'Active';
@@ -218,13 +219,14 @@ class TargetBatchController extends Controller
 
                     $handle = fopen($model->file_import, 'r');
                     
-                    if ($handle) {
+                    if($handle) {
                             
                         $model->batch = $random;
                         $model->status = 'Active';
                         $model->created_by = $username;
                         $model->created_at = $now;
                         $model->target_date = $model->target_date . '-01';
+                        $monthYear = explode('-', $model->target_date);
                         
                         if($model->save()){
                             
@@ -250,12 +252,12 @@ class TargetBatchController extends Controller
                                 while( ($line = fgetcsv($handle, 1000, ",")) != FALSE) {
                                 
                                     $rowNumber++;
-                                    $productModelCode = HtmlPurifier::process(trim($line[0]));
-                                    $targetVolume = (int)HtmlPurifier::process(trim($line[1]));          
-
                                     if($rowNumber == 1) {
                                         continue;
                                     }
+                                    
+                                    $productModelCode = HtmlPurifier::process(trim($line[0]));
+                                    $targetVolume = (int)HtmlPurifier::process(trim($line[1]));  
                                     
                                     if (is_int($targetVolume)) {
                                         
@@ -281,6 +283,45 @@ class TargetBatchController extends Controller
 
                                                 foreach($hrModel as $hr) { 
                                                     
+                                                    $hrId = $hr->id;
+                                                    $tmParent = $hr->tm_parent;
+                                                    $amParent = $hr->am_parent;
+                                                    $csmParent = $hr->csm_parent;
+                                                    
+                                                    $sales = (new \yii\db\Query())
+                                                            ->select([
+                                                                "sum(case when `hr_id`='$hrId' then 1 else 0 end) fsm_vol",
+                                                                "sum(case when `hr_id`='$hrId' then price else 0 end) fsm_val",
+                                                                "sum(case when `tm_parent`='$tmParent' then 1 else 0 end) tm_vol",
+                                                                "sum(case when `tm_parent`='$tmParent' then price else 0 end) tm_val",
+                                                                "sum(case when `am_parent`='$amParent' then 1 else 0 end) am_vol",
+                                                                "sum(case when `am_parent`='$amParent' then price else 0 end) am_val",
+                                                                "sum(case when `csm_parent`='$csmParent' then 1 else 0 end) csm_vol",
+                                                                "sum(case when `csm_parent`='$csmParent' then price else 0 end) csm_val"])
+                                                            ->from('sales')
+                                                            ->where([
+                                                                'product_model_code' => $productModelCode, 
+                                                                'YEAR(sales_date)' => $monthYear[0], 
+                                                                'MONTH(sales_date)' => $monthYear[1]])
+                                                            ->one();
+                                                    
+//                                                    $salesVol = Sales::find()
+//                                                            ->where('product_model_code=:product_model_code AND csm_parent=:csm_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
+//                                                                    [':product_model_code' => $productModelCode, ':csm_parent' => $hr->csm_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
+//                                                            ->count();
+//                                                    $salesVal = Sales::find()
+//                                                            ->where('product_model_code=:product_model_code AND csm_parent=:csm_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
+//                                                                    [':product_model_code' => $productModelCode, ':csm_parent' => $hr->csm_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
+//                                                            ->sum('price');
+//                                                    $salesVolAm = Sales::find()
+//                                                            ->where('product_model_code=:product_model_code AND am_parent=:am_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
+//                                                                    [':product_model_code' => $productModelCode, ':am_parent' => $hr->am_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
+//                                                            ->count();
+//                                                    $salesValAm = Sales::find()
+//                                                            ->where('product_model_code=:product_model_code AND am_parent=:am_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
+//                                                                    [':product_model_code' => $productModelCode, ':am_parent' => $hr->am_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
+//                                                            ->sum('price');
+                                                    
                                                     $bulkInsertArray[]=[
                                                         'batch' => $model->batch,
                                                         'retail_id' => $hr->retail_id,
@@ -291,27 +332,35 @@ class TargetBatchController extends Controller
                                                         'retail_zone' => $hr->retail_zone,
                                                         'retail_area' => $hr->retail_area,
                                                         'retail_territory' => $hr->retail_territory,
-                                                        'hr_id' => $hr->id,
+                                                        'hr_id' => $hrId,
                                                         'designation' => $hr->designation,
                                                         'employee_id' => $hr->employee_id,
                                                         'employee_name' => $hr->name,
                                                         'fsm_vol' => 0,
                                                         'fsm_val' => 0.00,
-                                                        'tm_parent' => $hr->tm_parent,
+                                                        'fsm_vol_sales' => $sales['fsm_vol'],
+                                                        'fsm_val_sales' => $sales['fsm_val'],
+                                                        'tm_parent' => $tmParent,
                                                         'tm_employee_id' => $hr->tm_employee_id,
                                                         'tm_name' => $hr->tm_name,
                                                         'tm_vol' => 0,
                                                         'tm_val' => 0.0,
-                                                        'am_parent' => $hr->am_parent,
+                                                        'tm_vol_sales' => $sales['tm_vol'],
+                                                        'tm_val_sales' => $sales['tm_val'],
+                                                        'am_parent' => $amParent,
                                                         'am_employee_id' => $hr->am_employee_id,
                                                         'am_name' => $hr->am_name,
                                                         'am_vol' => $targetVolumeAm,
                                                         'am_val' => $targetValueAm,
-                                                        'csm_parent' => $hr->csm_parent,
+                                                        'am_vol_sales' => $sales['am_vol'],
+                                                        'am_val_sales' => $sales['am_val'],
+                                                        'csm_parent' => $csmParent,
                                                         'csm_employee_id' => $hr->csm_employee_id,
                                                         'csm_name' => $hr->csm_name,
                                                         'csm_vol' => $targetVolume,
                                                         'csm_val' => $targetValue,
+                                                        'csm_vol_sales' => $sales['csm_vol'],
+                                                        'csm_val_sales' => $sales['csm_val'],
                                                         'product_name' => $productModel->name,
                                                         'product_model_code' => $productModel->model_code,
                                                         'product_model_name' => $productModel->model_name,
@@ -371,21 +420,29 @@ class TargetBatchController extends Controller
                             'employee_name',
                             'fsm_vol',
                             'fsm_val',
+                            'fsm_vol_sales',
+                            'fsm_val_sales',
                             'tm_parent',
                             'tm_employee_id',
                             'tm_name',
                             'tm_vol',
                             'tm_val',
+                            'tm_vol_sales',
+                            'tm_val_sales',
                             'am_parent',
                             'am_employee_id',
                             'am_name',
                             'am_vol',
                             'am_val',
+                            'am_vol_sales',
+                            'am_val_sales',
                             'csm_parent',
                             'csm_employee_id',
                             'csm_name',
                             'csm_vol',
                             'csm_val',
+                            'csm_vol_sales',
+                            'csm_val_sales',
                             'product_name',
                             'product_model_code',
                             'product_model_name',
@@ -397,11 +454,19 @@ class TargetBatchController extends Controller
                         Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
                         #print_r($bulkInsertArray);
                     }
+                    
+                \Yii::$app->session['errorsArray'] = $errorsArray;
+                \Yii::$app->session['successArray'] = $successArray;
+                return $this->redirect(['view', 'id' => $model->id]);
+                
+            } else {
+                
+                Yii::$app->session->setFlash('error', 'Invalid CSV File.');
+                return $this->render('create', [
+                    'model' => $model
+                ]);
             }
-            
-            \Yii::$app->session['errorsArray'] = $errorsArray;
-            \Yii::$app->session['successArray'] = $successArray;
-            return $this->redirect(['view', 'id' => $model->id]);
+
             
 	} else {
             return $this->render('create', [

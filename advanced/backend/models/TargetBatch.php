@@ -17,10 +17,10 @@ class TargetBatch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['batch', 'file_import'], 'required'],
+            [['batch', 'file_import', 'target_date'], 'required'],
             [['batch'], 'integer'],
             [['status'], 'string'],
-            [['created_at', 'deleted_at', 'target_date'], 'safe'],
+            [['created_at', 'deleted_at'], 'safe'],
             [['file_import', 'created_by', 'deleted_by'], 'string', 'max' => 255],
         ];
     }
