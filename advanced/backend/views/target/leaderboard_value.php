@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Leaderboard by Volume';
+$this->title = 'Leaderboard by Value';
 $this->miniTitle = 'Leaderboard Module';
 $this->subTitle = 'Leaderboard Ranking';
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,7 +33,7 @@ if($currentMonth ==  $month && $currentYear == $year) {
 ?>
 <div class="target-leaderboard">
     
-    <?php echo $this->render('_search_leaderboard', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search_leaderboard_value', ['model' => $searchModel]); ?>
 
     <?php 
     
@@ -80,7 +80,7 @@ if($currentMonth ==  $month && $currentYear == $year) {
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['leaderboard_value'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['leaderboard'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 

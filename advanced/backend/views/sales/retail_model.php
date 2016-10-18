@@ -5,35 +5,25 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Leaderboard by Volume';
-$this->miniTitle = 'Leaderboard Module';
-$this->subTitle = 'Leaderboard Ranking';
+$this->title = 'R/M Report by Volume';
+$this->miniTitle = 'Sales Module';
+$this->subTitle = 'Retail-wise Product Model Data';
 $this->params['breadcrumbs'][] = $this->title;
 
 $year = date('Y', time());
 $month = date('m', time());
 $monthFullName = date('F', time());
-if(!empty($searchModel->target_date)) {
-    $monthYear = explode('-', $searchModel->target_date);
+if(!empty($searchModel->sales_date)) {
+    $monthYear = explode('-', $searchModel->sales_date);
     $year = $monthYear[0];
     $month = $monthYear[1];
     $monthFullName = date('F', mktime(0, 0, 0, $monthYear[1], 10));
 }
 
-$currentMonth = date('m', time());
-$currentYear = date('Y', time());
-if($currentMonth ==  $month && $currentYear == $year) {
-    $timePass = number_format(((date('d', time()) - 1) / date('t', time())) * 100, 2);
-} elseif(($currentMonth >  $month && $currentYear >= $year) || ($currentMonth <=  $month && $currentYear > $year)) {
-    $timePass = 100;
-} else {
-    $timePass = 0;
-}
-
 ?>
 <div class="target-leaderboard">
     
-    <?php echo $this->render('_search_leaderboard', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search_retail_model', ['model' => $searchModel]); ?>
 
     <?php 
     
@@ -86,7 +76,7 @@ if($currentMonth ==  $month && $currentYear == $year) {
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> <b>Leaderboard Report (Month): </b>' . $monthFullName . ' | <b>Total Time Pass: </b>' . $timePass .'%',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> <b>Month: </b>' . $monthFullName,
             ],
         ]); ?>
     <?php Pjax::end(); ?>

@@ -7,6 +7,9 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Sales;
 
+// Custom
+use yii\data\SqlDataProvider;
+
 class SalesSearch extends Sales
 {
     
@@ -14,7 +17,7 @@ class SalesSearch extends Sales
     {
         return [
             [['id', 'retail_id', 'tm_parent', 'am_parent', 'csm_parent', 'product_id'], 'integer'],
-            [['retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 'retail_area', 'retail_territory', 'designation', 'employee_id', 'employee_name', 'tm_employee_id', 'tm_name', 'am_employee_id', 'am_name', 'csm_employee_id', 'csm_name', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'imei_no', 'sales_date', 'created_at', 'created_by'], 'safe'],
+            [['retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 'retail_area', 'retail_territory', 'designation', 'employee_id', 'employee_name', 'tm_employee_id', 'tm_name', 'am_employee_id', 'am_name', 'csm_employee_id', 'csm_name', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'imei_no', 'sales_date', 'created_at', 'created_by', 'date_range'], 'safe'],
             [['price'], 'number'],
         ];
     }
@@ -46,17 +49,17 @@ class SalesSearch extends Sales
             $query->andFilterWhere([
                 'employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'TM') {
+        } else if(Yii::$app->session->get('isTM')) {
             $query->andFilterWhere([
-                'tm_employee_id' => Yii::$app->session->get('tm_employee_id')
+                'tm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'AM') {
+        } else if(Yii::$app->session->get('isAM')) {
             $query->andFilterWhere([
-                'am_employee_id' => Yii::$app->session->get('am_employee_id')
+                'am_employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'CSM') {
+        } else if(Yii::$app->session->get('isCSM')) {
             $query->andFilterWhere([
-                'csm_employee_id' => Yii::$app->session->get('csm_employee_id')
+                'csm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
         }
 
@@ -197,17 +200,17 @@ class SalesSearch extends Sales
             $query->andFilterWhere([
                 'employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'TM') {
+        } else if(Yii::$app->session->get('isTM')) {
             $query->andFilterWhere([
-                'tm_employee_id' => Yii::$app->session->get('tm_employee_id')
+                'tm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'AM') {
+        } else if(Yii::$app->session->get('isAM')) {
             $query->andFilterWhere([
-                'am_employee_id' => Yii::$app->session->get('am_employee_id')
+                'am_employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'CSM') {
+        } else if(Yii::$app->session->get('isCSM')) {
             $query->andFilterWhere([
-                'csm_employee_id' => Yii::$app->session->get('csm_employee_id')
+                'csm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
         }
         
@@ -355,17 +358,17 @@ class SalesSearch extends Sales
             $query->andFilterWhere([
                 'employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'TM') {
+        } else if(Yii::$app->session->get('isTM')) {
             $query->andFilterWhere([
-                'tm_employee_id' => Yii::$app->session->get('tm_employee_id')
+                'tm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'AM') {
+        } else if(Yii::$app->session->get('isAM')) {
             $query->andFilterWhere([
-                'am_employee_id' => Yii::$app->session->get('am_employee_id')
+                'am_employee_id' => Yii::$app->session->get('employee_id')
             ]);
-        } else if(Yii::$app->session->get('userRole') == 'CSM') {
+        } else if(Yii::$app->session->get('isCSM')) {
             $query->andFilterWhere([
-                'csm_employee_id' => Yii::$app->session->get('csm_employee_id')
+                'csm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
         }
         
@@ -413,6 +416,213 @@ class SalesSearch extends Sales
             ]
         ]);
             
+        return $dataProvider;
+    }
+    
+    public function retail_model($params)
+    {
+        $salesDateMonth = null;
+        $salesDateYear = null;
+        
+        $this->load($params);
+        
+        if(empty($this->retail_dms_code)) {
+            $this->retail_dms_code = null;
+        }
+        
+        if(empty($this->retail_name)) {
+            $this->retail_name = null;
+        }
+        
+        if(empty($this->retail_type)) {
+            $this->retail_type = null;
+        }
+        
+        if(empty($this->retail_channel_type)) {
+            $this->retail_channel_type = null;
+        }
+        
+        if(empty($this->retail_area)) {
+            $this->retail_area = null;
+        }
+        
+        if(empty($this->retail_zone)) {
+            $this->retail_zone = null;
+        }
+        
+        if(empty($this->retail_territory)) {
+            $this->retail_territory = null;
+        }
+        
+        if(empty($this->employee_id)) {
+            $this->employee_id = null;
+        }
+        
+        if(empty($this->employee_name)) {
+            $this->employee_name = null;
+        }
+        
+        if(empty($this->designation)) {
+            $this->designation = null;
+        }
+        
+        if(!empty($this->sales_date)) {
+            $monthYear = explode('-', $this->sales_date);
+            $salesDateYear = $monthYear[0];
+            $salesDateMonth = $monthYear[1];
+        }
+        
+        if(!empty($this->date_range)) {
+            
+        }
+        
+        if(Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        } else if(Yii::$app->session->get('isAM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+            $this->csm_employee_id = null;
+        } else if(Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+        
+        $retailDmsCode = $this->retail_dms_code;
+        $retailName = $this->retail_name;
+        $retailType = $this->retail_type;
+        $retailChannelType = $this->retail_channel_type;
+        $retailZone = $this->retail_zone;
+        $retailArea = $this->retail_area;
+        $retailTerritory = $this->retail_territory;
+        $employeeId = $this->employee_id;
+        $employeeName = $this->employee_name;
+        $designation = $this->designation;    
+        
+        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM sales')
+			->queryScalar();
+        
+        $sql= "SET @sql = NULL;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'SUM(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', 1, 0)) AS ',
+                        product_model_name
+                    )
+                )
+            INTO @sql
+            FROM sales;
+            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
+            retail_territory, employee_id, employee_name, designation, ', @sql, ', COUNT(id) AS total
+            FROM sales, (SELECT @i:= 0) AS i
+            WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
+            AND (retail_name like :retail_name or :retail_name is null)
+            AND (retail_type like :retail_type or :retail_type is null)
+            AND (retail_channel_type like :retail_channel_type or :retail_channel_type is null)
+            AND (retail_zone like :retail_zone or :retail_zone is null)
+            AND (retail_area like :retail_area or :retail_area is null)
+            AND (retail_territory like :retail_territory or :retail_territory is null)
+            AND (employee_id like :employee_id or :employee_id is null)
+            AND (employee_name like :employee_name or :employee_name is null)
+            AND (designation like :designation or :designation is null)
+            AND ((MONTH(sales_date)=:sales_date_month or :sales_date_month is NULL) AND (YEAR(sales_date)=:sales_date_year or :sales_date_year is null))
+            AND ((sales_date>=:start_date OR :start_date IS NULL) AND (sales_date<=:end_date OR :end_date is NULL))
+            AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
+            GROUP BY employee_id'); ";
+
+        $cmd  = Yii::$app->db->createCommand($sql); 
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+        
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();       
+        
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':retail_dms_code' => $retailDmsCode,
+                ':retail_name' => '%' . $retailName . '%',
+                ':retail_type' => '%' . $retailType . '%',
+                ':retail_channel_type' => '%' . $retailChannelType . '%',
+                ':retail_zone' => '%' . $retailZone . '%',
+                ':retail_area' => '%' . $retailArea . '%',
+                ':retail_territory' => '%' . $retailTerritory . '%',
+                ':employee_id' => '%' . $employeeId . '%',
+                ':employee_name' => '%' . $employeeName . '%',
+                ':designation' => '%' . $designation . '%',
+                ':sales_date_month' => $salesDateMonth,
+                ':sales_date_year' => $salesDateYear,
+                ':tm_employee_id' => $this->tm_employee_id,
+                ':am_employee_id' => $this->am_employee_id,
+                ':csm_employee_id' => $this->csm_employee_id,
+                ':start_date' => null,
+                ':end_date' => null
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'attributes' => [
+                    'retail_dms_code' => [
+                        'asc' => ['retail_dms_code' => SORT_ASC],
+                        'desc' => ['retail_dms_code' => SORT_DESC],
+                    ],
+                    'retail_name' => [
+                        'asc' => ['retail_name' => SORT_ASC],
+                        'desc' => ['retail_name' => SORT_DESC],
+                    ],
+                    'retail_type' => [
+                        'asc' => ['retail_type' => SORT_ASC],
+                        'desc' => ['retail_type' => SORT_DESC],
+                    ],
+                    'retail_channel_type' => [
+                        'asc' => ['retail_channel_type' => SORT_ASC],
+                        'desc' => ['retail_channel_type' => SORT_DESC],
+                    ],
+                    'retail_zone' => [
+                        'asc' => ['retail_zone' => SORT_ASC],
+                        'desc' => ['retail_zone' => SORT_DESC],
+                    ],
+                    'retail_area' => [
+                        'asc' => ['retail_area' => SORT_ASC],
+                        'desc' => ['retail_area' => SORT_DESC],
+                    ],
+                    'retail_territory' => [
+                        'asc' => ['retail_territory' => SORT_ASC],
+                        'desc' => ['retail_territory' => SORT_DESC],
+                    ],
+                    'employee_id' => [
+                        'asc' => ['employee_id' => SORT_ASC],
+                        'desc' => ['employee_id' => SORT_DESC],
+                    ],
+                    'employee_name' => [
+                        'asc' => ['employee_name' => SORT_ASC],
+                        'desc' => ['employee_name' => SORT_DESC],
+                    ],
+                    'designation' => [
+                        'asc' => ['designation' => SORT_ASC],
+                        'desc' => ['designation' => SORT_DESC],
+                    ],
+                    'total' => [
+                        'asc' => ['total' => SORT_ASC],
+                        'desc' => ['total' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+        
         return $dataProvider;
     }
 }

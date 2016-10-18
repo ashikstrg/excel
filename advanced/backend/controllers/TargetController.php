@@ -11,9 +11,6 @@ use yii\filters\VerbFilter;
 
 class TargetController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -43,6 +40,17 @@ class TargetController extends Controller
         $dataProvider = $searchModel->leaderboard(Yii::$app->request->queryParams);
 
         return $this->render('leaderboard', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionLeaderboard_value()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->leaderboard_value(Yii::$app->request->queryParams);
+
+        return $this->render('leaderboard_value', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

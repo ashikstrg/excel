@@ -79,6 +79,19 @@ class SalesController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionRetail_model()
+    {
+        $searchModel = new SalesSearch();
+        $dataProvider = $searchModel->retail_model(Yii::$app->request->queryParams);
+        
+        $dataProvider->pagination->pageSize= 20;
+
+        return $this->render('retail_model', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionUpdate($id)
     {

@@ -38,6 +38,7 @@ class Sales extends \yii\db\ActiveRecord
     public $D30;
     public $D31;
     public $total_national;
+    public $date_range;
     
     public static function tableName()
     {

@@ -13,6 +13,23 @@ if(!empty($searchModel->sales_date)) {
     $month = date('F', mktime(0, 0, 0, $monthYear[1], 10));
 }
 
+$visibleDay31 = 0;
+$visibleDay30 = 0;
+$visibleDay29 = 0;
+if(date('t', strtotime($year . '-' . $month . '-' . '01')) == 31) {
+    $visibleDay31 = 1;
+    $visibleDay30 = 1;
+    $visibleDay29 = 1;
+} else if(date('t', strtotime($year . '-' . $month . '-' . '01')) == 30) {
+    $visibleDay31 = 0;
+    $visibleDay30 = 1;
+    $visibleDay29 = 1;
+} else if(date('t', strtotime($year . '-' . $month . '-' . '01')) == 29) {
+    $visibleDay31 = 0;
+    $visibleDay30 = 0;
+    $visibleDay29 = 1;
+}
+
 $this->title = 'National Sales Data (Value)';
 $this->miniTitle = 'Sales Module';
 $this->subTitle = 'Model/Day wise sales data (Value)';
@@ -61,9 +78,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'D26',
         'D27',
         'D28',
-        'D29',
-        'D30',
-        'D31'
+        [
+            'attribute' => 'D29',
+            'visible' => $visibleDay29
+        ],
+        [
+            'attribute' => 'D30',
+            'visible' => $visibleDay30
+        ],
+        [
+            'attribute' => 'D31',
+            'visible' => $visibleDay31
+        ]
     ];
 
     $fullExportMenu = ExportMenu::widget([
