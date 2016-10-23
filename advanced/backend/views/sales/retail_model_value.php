@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'F/M Report by Volume';
+$this->title = 'F/M Report by Value';
 $this->miniTitle = 'Sales Module';
 $this->subTitle = 'FSM-wise Product Model Data';
 $this->params['breadcrumbs'][] = $this->title;
@@ -31,9 +31,9 @@ if(!empty($searchModel->date_range)) {
 $stringBoxHeader .= $salesDate;
 
 ?>
-<div class="target-leaderboard">
+<div class="sales-retail_model_value">
     
-    <?php echo $this->render('_search_retail_model', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search_retail_model_value', ['model' => $searchModel]); ?>
 
     <?php 
     
@@ -70,6 +70,7 @@ $stringBoxHeader .= $salesDate;
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             //'columns' => $gridColumns,
+            'showPageSummary' => true,
             'pjax' => true,
             'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
             'export' => [
@@ -80,10 +81,9 @@ $stringBoxHeader .= $salesDate;
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['retail_model'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['retail_model_value'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
-
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
                 'heading'=> '<i class="glyphicon glyphicon-book"></i> ' . $stringBoxHeader,
@@ -96,7 +96,7 @@ $stringBoxHeader .= $salesDate;
 <div class="box-footer">
     <div class="row">
         <div class="col-md-12">
-             <i>* Either search by <b>date range</b> or <b>month</b>.</i>
+            <i>* Either search by <b>date range</b> or <b>month</b>.</i>
         </div>
     </div>
 </div>

@@ -80,6 +80,32 @@ class SalesController extends Controller
         ]);
     }
     
+    public function actionNational_retail()
+    {
+        $searchModel = new SalesSearch();
+        $dataProvider = $searchModel->national_retail(Yii::$app->request->queryParams);
+        
+        $dataProvider->pagination->pageSize= 20;
+
+        return $this->render('national_retail', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionNational_fsm_value()
+    {
+        $searchModel = new SalesSearch();
+        $dataProvider = $searchModel->national_fsm_value(Yii::$app->request->queryParams);
+        
+        $dataProvider->pagination->pageSize= 20;
+
+        return $this->render('national_fsm_value', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     public function actionRetail_model()
     {
         $searchModel = new SalesSearch();
@@ -88,6 +114,19 @@ class SalesController extends Controller
         $dataProvider->pagination->pageSize= 20;
 
         return $this->render('retail_model', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionRetail_model_value()
+    {
+        $searchModel = new SalesSearch();
+        $dataProvider = $searchModel->retail_model_value(Yii::$app->request->queryParams);
+        
+        $dataProvider->pagination->pageSize= 20;
+
+        return $this->render('retail_model_value', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

@@ -91,6 +91,66 @@ class TargetSearch extends Target
         return $dataProvider;
     }
     
+    public function trend_achievement($params)
+    {
+        $this->load($params);
+        
+        if(Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+        } else if(Yii::$app->session->get('isAM')) {
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+        } else if(Yii::$app->session->get('isCSM')) {
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        }
+        
+        if(empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+        
+        $dataProvider = Target::find()
+                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_vol) AS fsm_vol', 'SUM(fsm_vol_sales) AS fsm_vol_sales'])
+                ->andFilterWhere(['like', 'target_date', $this->target_date])
+                ->andFilterWhere([
+                    'tm_employee_id' => $this->tm_employee_id,
+                    'am_employee_id' => $this->am_employee_id,
+                    'csm_employee_id' => $this->csm_employee_id
+                        ])
+                ->groupBy(['hr_id'])
+                ->all();
+
+        return $dataProvider;
+    }
+    
+    public function trend_achievement_value($params)
+    {
+        $this->load($params);
+        
+        if(Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+        } else if(Yii::$app->session->get('isAM')) {
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+        } else if(Yii::$app->session->get('isCSM')) {
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        }
+        
+        if(empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+        
+        $dataProvider = Target::find()
+                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_val) AS fsm_val', 'SUM(fsm_val_sales) AS fsm_val_sales'])
+                ->andFilterWhere(['like', 'target_date', $this->target_date])
+                ->andFilterWhere([
+                    'tm_employee_id' => $this->tm_employee_id,
+                    'am_employee_id' => $this->am_employee_id,
+                    'csm_employee_id' => $this->csm_employee_id
+                        ])
+                ->groupBy(['hr_id'])
+                ->all();
+
+        return $dataProvider;
+    }
+    
     public function leaderboard($params)
     {
         $product = array();

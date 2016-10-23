@@ -39,15 +39,13 @@ class Sales extends \yii\db\ActiveRecord
     public $D31;
     public $total_national;
     public $date_range;
+    public $total;
     
     public static function tableName()
     {
         return 'sales';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -138,4 +136,5 @@ class Sales extends \yii\db\ActiveRecord
             'D31' => '31'
         ];
     }
+    
 }

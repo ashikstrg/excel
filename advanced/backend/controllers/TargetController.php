@@ -22,6 +22,28 @@ class TargetController extends Controller
             ],
         ];
     }
+    
+    public function actionTrend_achievement()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->trend_achievement(Yii::$app->request->queryParams);
+
+        return $this->render('trend_achievement', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionTrend_achievement_value()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->trend_achievement_value(Yii::$app->request->queryParams);
+
+        return $this->render('trend_achievement_value', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionIndex()
     {

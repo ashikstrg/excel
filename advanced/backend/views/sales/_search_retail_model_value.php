@@ -12,7 +12,7 @@ use kartik\daterange\DateRangePicker;
 <div class="stock-search_daily">
     
     <?php $form = ActiveForm::begin([
-        'action' => ['retail_model'],
+        'action' => ['retail_model_value'],
         'method' => 'get',
     ]); ?>
 

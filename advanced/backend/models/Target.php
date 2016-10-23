@@ -93,7 +93,7 @@ class Target extends \yii\db\ActiveRecord
             'employee_id' => 'FSM ID',
             'employee_name' => 'FSM Name',
             'designation' => 'FSM Type',
-            'fsm_vol' => 'FSL Volume',
+            'fsm_vol' => 'FSM Volume',
             'fsm_val' => 'FSM Value',
             'tm_parent' => 'Tm Parent',
             'tm_employee_id' => 'Tm Employee ID',
