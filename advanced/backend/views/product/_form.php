@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'model_code')->textInput(['placeholder' => 'Enter Handset Model Code', 'maxlength' => true]) ?>
 
-            <?= $form->field($model, 'model_name')->textInput(['maxlength' => true]) ?>            
+            <?= $form->field($model, 'model_name')->textInput(['placeholder' => 'Enter Handset Model Name', 'maxlength' => true]) ?>            
             
 
         </div>
@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'lifting_price')->textInput(['placeholder' => 'Enter Handset Lifting Price', 'maxlength' => true]) ?>
 
-            <?= $form->field($model, 'rrp')->textInput(['placeholder', 'maxlength' => true]) ?>
+            <?= $form->field($model, 'rrp')->textInput(['placeholder' => 'Please enter RRP', 'maxlength' => true]) ?>
 
             <?= $form->field($model, 'status')->dropDownList(['' => 'Select Product Status', 'Active' => 'Active', 'Inactive' => 'Inactive']) ?>
 

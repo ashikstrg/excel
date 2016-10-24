@@ -45,7 +45,7 @@ class Retail extends \yii\db\ActiveRecord
             'retail_type' => 'Retail Type',
             'retailType' => 'Retail Type',
             'status' => 'Status',
-            'dms_code' => 'Dms Code',
+            'dms_code' => 'DMS Code',
             'name' => 'Retail Name',
             'retail_zone' => 'Retail Zone',
             'retailZone' => 'Retail Zone',

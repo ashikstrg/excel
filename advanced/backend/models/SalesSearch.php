@@ -45,7 +45,7 @@ class SalesSearch extends Sales
             return $dataProvider;
         }
         
-        if(Yii::$app->session->get('userRole') == 'FSM') {
+        if(Yii::$app->session->get('isFSM')) {
             $query->andFilterWhere([
                 'employee_id' => Yii::$app->session->get('employee_id')
             ]);

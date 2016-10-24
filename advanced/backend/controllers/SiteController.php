@@ -47,7 +47,49 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $queryTarget = \backend\models\Target::find();
+        $queryTarget->select([
+            'SUM(`fsm_vol`) as fsm_vol', 
+            'SUM(fsm_vol_sales) AS fsm_vol_sales', 
+            'SUM(`fsm_val`) as fsm_val', 
+            'SUM(`fsm_val_sales`) as fsm_val_sales',
+            'SUM(`tm_vol`) as tm_vol', 
+            'SUM(`tm_vol_sales`) as tm_vol_sales', 
+            'SUM(`tm_val`) as tm_val', 
+            'SUM(`tm_val_sales`) as tm_val_sales', 
+            'SUM(`am_vol`) as am_vol', 
+            'SUM(`am_vol_sales`) as am_vol_sales', 
+            'SUM(`am_val`) as am_val', 
+            'SUM(`am_val_sales`) as am_val_sales', 
+            'SUM(`csm_vol`) as csm_vol', 
+            'SUM(`csm_vol_sales`) as csm_vol_sales', 
+            'SUM(`csm_val`) as csm_val', 
+            'SUM(`csm_val_sales`) as csm_val_sales', 
+            '(SUM(`fsm_vol_sales`)/SUM(fsm_vol))*100 as total_achv_percent',
+            '(SUM(`fsm_val_sales`)/SUM(fsm_val))*100 as total_achv_percent_value',
+            ]);    
+        if(Yii::$app->session->get('isFSM')) {
+            $queryTarget->andFilterWhere([
+                'employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isTM')) {
+            $queryTarget->andFilterWhere([
+                'tm_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isAM')) {
+            $queryTarget->andFilterWhere([
+                'am_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isCSM')) {
+            $queryTarget->andFilterWhere([
+                'csm_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        }
+        $target = $queryTarget->one();
+        
+        return $this->render('index', [
+            'target' => $target
+        ]);
     }
 
     public function actionLogin()

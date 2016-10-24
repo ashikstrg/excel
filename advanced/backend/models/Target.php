@@ -51,6 +51,8 @@ use Yii;
 
 class Target extends \yii\db\ActiveRecord
 {
+    public $total_achv_percent;
+    public $total_achv_percent_value;
 
     public static function tableName()
     {
