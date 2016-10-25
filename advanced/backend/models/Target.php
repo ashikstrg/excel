@@ -53,8 +53,7 @@ class Target extends \yii\db\ActiveRecord
 {
     public $total_achv_percent;
     public $total_achv_percent_value;
-    public $name;
-    public $y;
+    public $total;
 
     public static function tableName()
     {
