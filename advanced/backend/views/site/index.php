@@ -1,10 +1,19 @@
 <?php
 
+use miloschuman\highcharts\Highcharts;
+
 $this->title = 'Dashboard';
 $this->miniTitle = 'Control Panel';
-$this->subTitle = '<b>Summery Report ' . '[' . date('F') . ']</b>: ' .  number_format($target->total_achv_percent, 2) . '% by volume &amp; ' . number_format($target->total_achv_percent_value, 2) .'% by value';
+$this->subTitle = '<b>Summery Report: </b>' .  date('F', time());
 
 $this->params['breadcrumbs'][] = $this->title;
+
+$productTypeData = array();
+foreach($salesProductType as $sales) {
+    array_push($productTypeData, ['name' => $sales->product_type, 'y' => (int) $sales->total]);
+}
+
+$timePass = number_format(((date('d', time()) - 1) / date('t', time())) * 100, 2);
  
 ?>
 <div class="row">
@@ -67,3 +76,152 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- ./col -->
 </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <!-- Achievement -->
+        <div class="box box-solid bg-blue-gradient">
+          <div class="box-header">
+            <i class="fa fa-bar-chart"></i>
+            <h3 class="box-title">Achievement Percentage(%)</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body no-padding">
+            <!--The calendar -->
+            <div id="calendar" style="width: 100%"></div>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer text-black">
+            <div class="row">
+              <div class="col-sm-12">
+                <!-- Progress bars -->
+                
+                <div class="clearfix">
+                  <span class="pull-left">Time Pass</span>
+                  <small class="pull-right"><?= number_format($timePass, 2); ?>%</small>
+                </div>
+                <div class="progress xs">
+                  <div class="progress-bar progress-bar-yellow" style="width: <?= round($timePass); ?>%;"></div>
+                </div>
+                
+                <div class="clearfix">
+                  <span class="pull-left">Volume</span>
+                  <small class="pull-right"><?= number_format($target->total_achv_percent, 2); ?>%</small>
+                </div>
+                <div class="progress xs">
+                  <div class="progress-bar progress-bar-green" style="width: <?= round($target->total_achv_percent); ?>%;"></div>
+                </div>
+
+                <div class="clearfix">
+                  <span class="pull-left">Value</span>
+                  <small class="pull-right"><?= number_format($target->total_achv_percent_value, 2); ?>%</small>
+                </div>
+                <div class="progress xs">
+                  <div class="progress-bar progress-bar-green" style="width: <?= round($target->total_achv_percent_value); ?>%;"></div>
+                </div>
+                
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <div class="box-footer">               
+            <div class="row">
+                  <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                    <input type="text" class="knob" data-readonly="true" value="<?= number_format($timePass, 2); ?>" data-width="60" data-height="60" data-fgColor="#f39c12">
+
+                    <div class="knob-label">Time Pass</div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                    <input type="text" class="knob" data-readonly="true" value="<?= number_format($target->total_achv_percent, 2); ?>" data-width="60" data-height="60" data-fgColor="#39CCCC">
+
+                    <div class="knob-label">Volume</div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-xs-4 text-center">
+                    <input type="text" class="knob" data-readonly="true" value="<?= number_format($target->total_achv_percent_value, 2); ?>" data-width="60" data-height="60" data-fgColor="#39CCCC">
+
+                    <div class="knob-label">Value</div>
+                  </div>
+                  <!-- ./col -->
+              </div>
+                <!-- /.row -->
+          </div>
+        </div>
+        <!-- /.box -->
+    </div>
+    <div class="col-md-6">
+        <!-- DONUT CHART -->
+        <div class="box box-solid bg-blue-gradient">
+          <div class="box-header">
+            <i class="fa fa-pie-chart"></i>
+            <h3 class="box-title">Product Type Sales Ratio</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body no-padding">
+            <!--The calendar -->
+            <div id="calendar" style="width: 100%"></div>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer text-black">
+            <div class="row">
+              <div class="col-sm-12">
+                <!-- Progress bars -->
+                
+                <?php 
+
+                echo Highcharts::widget([
+                 'scripts'=> ['highcharts-more', 'modules/exporting', 'modules/drilldown'],
+                 'options' => [
+                      'title' => ['text' => 'Pie Chart'],
+                      'credits' => array('enabled' => false),
+                      'exporting' => array('enabled' => true),
+                      'chart' => array(
+                          'plotBackgroundColor' => '#ffffff',
+                          'plotBorderWidth' => null,
+                          'plotShadow' => true,
+                          'type' => 'pie',
+                          'height' => 248,
+                      ),
+          //           'tooltip' => array(
+          //                'plotBackgroundColor' => '#ffffff',
+          //            ),
+                     'plotOptions' => array (
+                          'pie' => array (
+                              'allowPointSelect' => true,
+                              'cursor' => 'pointer',
+                              'dataLabels' => array(
+                                  'enabled' => true,
+                                  'format'=> '<b>{point.name}</b>: {point.percentage:.1f}%',
+                              ),
+                          ),
+                      ), 
+                      'series' => [
+                         ['name' => 'Sales', 'data' => $productTypeData],
+                      ]
+                 ]
+              ]);
+
+                ?>
+                
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+        </div>
+        <!-- /.box -->
+
+    </div>
+</div>
+
+<?php 
+
+// Register JS and CSS File
+$asset = backend\assets\AppAsset::register($this);
+$baseUrl = $asset->baseUrl;
+$this->registerJsFile($baseUrl . '/plugins/knob/jquery.knob.js', ['depends' => [\yii\bootstrap\BootstrapPluginAsset::className()]]);
+
+$this->registerJs(' 
+    $(document).ready(function(){
+        $(".knob").knob();
+    });', \yii\web\View::POS_READY);

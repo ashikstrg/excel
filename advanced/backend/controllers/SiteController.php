@@ -47,8 +47,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $queryTarget = \backend\models\Target::find();
-        $queryTarget->select([
+        $targetQuery = \backend\models\Target::find();
+        $targetQuery->select([
             'SUM(`fsm_vol`) as fsm_vol', 
             'SUM(fsm_vol_sales) AS fsm_vol_sales', 
             'SUM(`fsm_val`) as fsm_val', 
@@ -68,27 +68,61 @@ class SiteController extends Controller
             '(SUM(`fsm_vol_sales`)/SUM(fsm_vol))*100 as total_achv_percent',
             '(SUM(`fsm_val_sales`)/SUM(fsm_val))*100 as total_achv_percent_value',
             ]);    
+        $targetQuery->andFilterWhere([
+            'MONTH(target_date)' => date('m', time()),
+            'YEAR(target_date)' => date('Y', time()),
+        ]);
         if(Yii::$app->session->get('isFSM')) {
-            $queryTarget->andFilterWhere([
+            $targetQuery->andFilterWhere([
                 'employee_id' => Yii::$app->session->get('employee_id')
             ]);
         } else if(Yii::$app->session->get('isTM')) {
-            $queryTarget->andFilterWhere([
+            $targetQuery->andFilterWhere([
                 'tm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
         } else if(Yii::$app->session->get('isAM')) {
-            $queryTarget->andFilterWhere([
+            $targetQuery->andFilterWhere([
                 'am_employee_id' => Yii::$app->session->get('employee_id')
             ]);
         } else if(Yii::$app->session->get('isCSM')) {
-            $queryTarget->andFilterWhere([
+            $targetQuery->andFilterWhere([
                 'csm_employee_id' => Yii::$app->session->get('employee_id')
             ]);
         }
-        $target = $queryTarget->one();
+        $target = $targetQuery->one();
+        
+        $salesProductTypeQuery = \backend\models\Sales::find();
+        $salesProductTypeQuery->select([
+            'COUNT(id) AS total',
+            'product_type'
+        ]);
+        $salesProductTypeQuery->andFilterWhere([
+            'MONTH(sales_date)' => date('m', time()),
+            'YEAR(sales_date)' => date('Y', time()),
+        ]);
+        if(Yii::$app->session->get('isFSM')) {
+            $salesProductTypeQuery->andFilterWhere([
+                'employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isTM')) {
+            $salesProductTypeQuery->andFilterWhere([
+                'tm_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isAM')) {
+            $salesProductTypeQuery->andFilterWhere([
+                'am_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isCSM')) {
+            $salesProductTypeQuery->andFilterWhere([
+                'csm_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        }
+        $salesProductTypeQuery->groupBy(['product_type']);
+        $salesProductType = $salesProductTypeQuery->all();
         
         return $this->render('index', [
-            'target' => $target
+            'target' => $target,
+            'salesProductType' => $salesProductType
         ]);
     }
 
