@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\HrManagement;
-use backend\models\HrManagementSearch;
+use backend\models\HrTrainer;
+use backend\models\HrTrainerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,10 +22,12 @@ use Imagine\Image\Box;
 use backend\models\HrDesignation;
 use backend\models\HrEmployeeType;
 use common\models\User;
+use backend\models\HrSales;
 
-class HrManagementController extends Controller
+class HrTrainerController extends Controller
 {
-
+    public static $employeeTypeId = 4;
+    
     public function behaviors()
     {
         return [
@@ -40,7 +42,7 @@ class HrManagementController extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new HrManagementSearch();
+        $searchModel = new HrTrainerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -58,7 +60,7 @@ class HrManagementController extends Controller
     
     public static function getDesignationParent($parent) {
 
-        $data = HrManagement::find()->where(['designation_id'=> $parent])->select(['employee_id as id', 'CONCAT(employee_id, " - ", name) as name'])->asArray()->all();
+        $data = HrSales::find()->where(['designation_id'=> $parent])->select(['employee_id as id', 'CONCAT(employee_id, " - ", name) as name'])->asArray()->all();
         $value = (count($data) == 0) ? ['' => ''] : $data;
 
         return $value;
@@ -87,7 +89,7 @@ class HrManagementController extends Controller
 
     public function actionCreate()
     {
-        $model = new HrManagement();
+        $model = new HrTrainer();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
@@ -97,7 +99,7 @@ class HrManagementController extends Controller
             $hrEmployeeType = HrEmployeeType::find()->select('type')->where(['id' => self::$employeeTypeId])->one();
             $model->employee_type = $hrEmployeeType->type;
 
-            $hrManager = HrManagement::find()->select(['id', 'name', 'designation'])->where(['employee_id' => $model->manager_id])->one();
+            $hrManager = HrSales::find()->select(['id', 'name', 'designation'])->where(['employee_id' => $model->manager_id])->one();
             $model->parent = $hrManager->id;
             $model->manager_name = $hrManager->name;
             $model->manager_designation = $hrManager->designation;
@@ -149,7 +151,7 @@ class HrManagementController extends Controller
 
             if ($model->save()) { 
 
-                Yii::$app->session->setFlash('success', 'HR (Management) has successfully been added.');
+                Yii::$app->session->setFlash('success', 'HR (Trainer) has successfully been added.');
                 return $this->redirect(['view', 'id' => $model->id]);    
 
             }  else {
@@ -212,7 +214,7 @@ class HrManagementController extends Controller
 
             if ($model->save()) { 
 
-                Yii::$app->session->setFlash('success', 'HR (Sales) has successfully been updated.');
+                Yii::$app->session->setFlash('success', 'HR (Trainer) has successfully been updated.');
                 return $this->redirect(['view', 'id' => $model->id]);    
 
             }  else {
@@ -232,6 +234,23 @@ class HrManagementController extends Controller
             ]);
         }
     }
+    
+    public function actionMdelete()
+    {
+        $updated_at = date('Y-m-d H:i:s', time());
+        $updated_by = Yii::$app->user->identity->username;
+        
+        $pk = Yii::$app->request->post('row_id');
+
+        foreach ($pk as $key => $value) 
+        {
+            $sql = "UPDATE hr_trainer SET status='Inactive', updated_at='$updated_at', updated_by='$updated_by' WHERE id = $value";
+            $query = Yii::$app->db->createCommand($sql)->execute();
+        }
+
+        return $this->redirect(['index']);
+
+    }
 
     public function actionDelete($id)
     {
@@ -242,7 +261,7 @@ class HrManagementController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = HrManagement::findOne($id)) !== null) {
+        if (($model = HrTrainer::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

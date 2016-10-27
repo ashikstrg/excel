@@ -4,11 +4,47 @@ namespace backend\models;
 
 use Yii;
 
-class HrManagement extends \yii\db\ActiveRecord
+/**
+ * This is the model class for table "hr_trainer".
+ *
+ * @property string $id
+ * @property string $designation_id
+ * @property string $designation
+ * @property string $employee_type_id
+ * @property string $employee_type
+ * @property string $employee_id
+ * @property string $parent
+ * @property string $manager_id
+ * @property string $manager_name
+ * @property string $manager_designation
+ * @property string $name
+ * @property string $status
+ * @property string $joining_date
+ * @property string $leaving_date
+ * @property string $image
+ * @property string $image_src_filename
+ * @property string $image_web_filename
+ * @property string $contact_no_official
+ * @property string $contact_no_personal
+ * @property string $name_immergency_contact_person
+ * @property string $relation_immergency_contact_person
+ * @property string $contact_no_immergency
+ * @property string $email_address
+ * @property string $email_address_official
+ * @property string $blood_group
+ * @property string $permanent_address
+ * @property string $present_address
+ * @property string $created_at
+ * @property string $created_by
+ * @property string $updated_at
+ * @property string $updated_by
+ * @property string $user_id
+ */
+class HrTrainer extends \yii\db\ActiveRecord
 {
     public static function tableName()
     {
-        return 'hr_management';
+        return 'hr_trainer';
     }
 
     public function rules()

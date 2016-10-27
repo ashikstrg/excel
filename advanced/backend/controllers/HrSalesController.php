@@ -159,7 +159,6 @@ class HrSalesController extends Controller
 
             }            
 
-
         } else {
 
             $hrDesignationModel = ArrayHelper::map(HrDesignation::find()->select(['id', 'type'])->where(['employee_type_id' => self::$employeeTypeId])->all(), 'id', 'type');

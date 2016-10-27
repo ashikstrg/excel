@@ -79,10 +79,10 @@ class HrSales extends \yii\db\ActiveRecord
             'previous_experience_two' => 'Previous Experience 2 (Month)',
             'permanent_address' => 'Permanent Address',
             'present_address' => 'Present Address',
-            'created_at' => 'Created AT',
-            'created_by' => 'Created BY',
-            'updated_at' => 'Updated AT',
-            'updated_by' => 'Updated BY',
+            'created_at' => 'Created At',
+            'created_by' => 'Created By',
+            'updated_at' => 'Updated At',
+            'updated_by' => 'Updated By',
         ];
     }
 }

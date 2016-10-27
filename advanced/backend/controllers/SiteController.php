@@ -158,10 +158,20 @@ class SiteController extends Controller
             } else if (Yii::$app->session->get('userRole') == 'admin') {
                 
                 $hrModel = \backend\models\HrManagement::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                
                 Yii::$app->session->set('isAdmin', 1);
                 Yii::$app->session->set('isSales', 0);
                 Yii::$app->session->set('isFSM', 0);
-            }
+                
+            } else if (Yii::$app->session->get('userRole') == 'Trainer') {
+                
+                $hrModel = \backend\models\HrTrainer::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                
+                Yii::$app->session->set('isAdmin', 0);
+                Yii::$app->session->set('isSales', 0);
+                Yii::$app->session->set('isFSM', 0);
+                
+            } 
             
             if($hrModel->designation == 'TM') {
                 
@@ -189,7 +199,7 @@ class SiteController extends Controller
             Yii::$app->session->set('designation', $hrModel->designation);
             Yii::$app->session->set('joining_date', $hrModel->joining_date);
                 
-            return $this->goBack();
+            return $this->goHome();
             
         } else {
             return $this->render('login', [
