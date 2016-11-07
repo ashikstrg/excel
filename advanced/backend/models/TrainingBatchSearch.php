@@ -7,38 +7,23 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\TrainingBatch;
 
-/**
- * TrainingBatchSearch represents the model behind the search form about `backend\models\TrainingBatch`.
- */
 class TrainingBatchSearch extends TrainingBatch
 {
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
-            [['id', 'batch', 'notification_count'], 'integer'],
-            [['name', 'file_import', 'status', 'created_by', 'deleted_by', 'created_at', 'deleted_at', 'training_datetime'], 'safe'],
+            [['id', 'batch'], 'integer'],
+            [['name', 'file_import', 'status', 'created_by', 'deleted_by', 'created_at', 'deleted_at'], 'safe'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $query = TrainingBatch::find();
@@ -61,10 +46,8 @@ class TrainingBatchSearch extends TrainingBatch
         $query->andFilterWhere([
             'id' => $this->id,
             'batch' => $this->batch,
-            'notification_count' => $this->notification_count,
             'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,
-            'training_datetime' => $this->training_datetime,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

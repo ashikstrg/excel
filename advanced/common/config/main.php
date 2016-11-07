@@ -5,6 +5,9 @@ return [
         'auth' => [
             'class' => 'common\modules\auth\Module',
         ],
+        'pdfjs' => [
+            'class' => '\yii2assets\pdfjs\Module',
+        ],
     ],
     'components' => [
         'cache' => [

@@ -7,14 +7,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\TrainingPdf;
 
-/**
- * TrainingPdfSearch represents the model behind the search form about `backend\models\TrainingPdf`.
- */
 class TrainingPdfSearch extends TrainingPdf
 {
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -23,22 +17,12 @@ class TrainingPdfSearch extends TrainingPdf
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $query = TrainingPdf::find();
@@ -47,6 +31,7 @@ class TrainingPdfSearch extends TrainingPdf
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);

@@ -14,25 +14,20 @@ class TrainingPdf extends \yii\db\ActiveRecord
         return 'training_pdf';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['batch', 'name', 'file_import'], 'required'],
-            [['batch', 'notification_count'], 'integer'],
+            [['name', 'training_datetime'], 'required'],
+            [['notification_count'], 'integer'],
             [['status'], 'string'],
             [['created_at', 'deleted_at', 'training_datetime'], 'safe'],
             [['name', 'file_import', 'created_by', 'deleted_by'], 'string', 'max' => 255],
             [['training_datetime'], 'string', 'max' => 50],
+            [['batch'], 'string', 'max' => 30],
             [['batch'], 'unique'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [

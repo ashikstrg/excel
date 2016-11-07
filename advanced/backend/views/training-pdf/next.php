@@ -2,17 +2,19 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Training Data Update';
+$this->title = 'Training PDF Upload';
 $this->miniTitle = 'Training Module';
-$this->subTitle = '<b>Training Form:</b> ' . $model->name;
+$this->subTitle = 'PDF Upload Form';
 
 $this->params['breadcrumbs'][] = ['label' => 'Training Configure', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="training-pdf-update">
+<div class="training-pdf-next">
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form_next', [
         'model' => $model
     ]) ?>
 
 </div>
+
+

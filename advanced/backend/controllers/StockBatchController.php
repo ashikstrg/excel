@@ -56,7 +56,7 @@ class StockBatchController extends Controller
         ]);
     }
     
-     public function actionUpload()
+    public function actionUpload()
     {
         $model = new StockBatch();
         

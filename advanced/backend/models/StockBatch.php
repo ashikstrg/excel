@@ -4,19 +4,6 @@ namespace backend\models;
 
 use Yii;
 
-/**
- * This is the model class for table "stock_batch".
- *
- * @property integer $id
- * @property string $batch
- * @property string $file_import
- * @property string $status
- * @property string $created_by
- * @property string $deleted_by
- * @property string $created_at
- * @property string $deleted_at
- * @property string $stock_date
- */
 class StockBatch extends \yii\db\ActiveRecord
 {
     public $file;
