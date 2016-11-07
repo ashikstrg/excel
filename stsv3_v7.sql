@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2016 at 05:46 PM
+-- Generation Time: Nov 07, 2016 at 04:33 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -530,7 +530,7 @@ CREATE TABLE IF NOT EXISTS `left_menu` (
   `icon` varchar(255) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `used_by` varchar(64) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `left_menu`
@@ -618,7 +618,10 @@ INSERT INTO `left_menu` (`id`, `name`, `parent_id`, `label`, `icon`, `url`, `use
 (83, 'HR-Trainer Create', 28, 'HR Add (Trainer)', 'fa fa-square-o', '/hr-trainer/create', 'admin'),
 (84, 'HR-Trainer Index', 28, 'HR Config (Trainer)', 'fa fa-square-o', '/hr-trainer/index', 'admin'),
 (85, 'Training Module Hash', 0, 'Training Module', 'fa fa-calendar-check-o', '#', 'Trainer'),
-(86, 'Training PDF Create', 85, 'Add Training PDF', 'fa fa-square-o', '/training-pdf/create', 'Trainer');
+(86, 'Training PDF Create', 85, 'Add Training PDF', 'fa fa-square-o', '/training-pdf/create', 'Trainer'),
+(87, 'Training PDF Index', 85, 'Training Config', 'fa fa-square-o', '/training-pdf/index', 'Trainer'),
+(88, 'Training Batch Index', 85, 'Training PDF Config', 'fa fa-square-o', '/training-batch/index', 'Trainer'),
+(89, 'Training Index', 85, 'Training Config', 'fa fa-square-o', '/training/index', 'Trainer');
 
 -- --------------------------------------------------------
 
@@ -1208,20 +1211,35 @@ INSERT INTO `target_batch` (`id`, `batch`, `file_import`, `status`, `created_by`
 CREATE TABLE IF NOT EXISTS `training` (
   `id` int(8) unsigned NOT NULL,
   `batch` bigint(20) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `hr_id` int(11) unsigned NOT NULL,
   `hr_employee_id` varchar(50) NOT NULL,
-  `hr_deignation` varchar(100) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
   `hr_employee_type` varchar(100) NOT NULL,
   `hr_name` varchar(80) NOT NULL,
   `message` varchar(550) NOT NULL,
-  `training_datetime` datetime NOT NULL,
+  `training_datetime` varchar(50) NOT NULL,
   `status` enum('Active','Inactive') NOT NULL DEFAULT 'Inactive',
   `read_status` enum('Read','Unread') NOT NULL DEFAULT 'Unread',
   `created_at` timestamp NULL DEFAULT NULL,
   `created_by` varchar(255) NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `training`
+--
+
+INSERT INTO `training` (`id`, `batch`, `name`, `hr_id`, `hr_employee_id`, `hr_designation`, `hr_employee_type`, `hr_name`, `message`, `training_datetime`, `status`, `read_status`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+(1, 9223372036854775807, 'Test Training Eleven', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
+(2, 9223372036854775807, 'Test Training Eleven', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
+(3, 9223372036854775807, 'Test Training Eleven', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
+(4, 9223372036854775807, 'Test Training Eleven', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
+(5, 9223372036854775807, 'Test Training Eleven', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL),
+(6, 9223372036854775807, 'Test Training Eleven', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL),
+(7, 9223372036854775807, 'Test Training Eleven', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL),
+(8, 9223372036854775807, 'Test Training Eleven', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1231,7 +1249,7 @@ CREATE TABLE IF NOT EXISTS `training` (
 
 CREATE TABLE IF NOT EXISTS `training_batch` (
   `id` int(11) unsigned NOT NULL,
-  `batch` bigint(20) NOT NULL,
+  `batch` bigint(20) unsigned NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   `file_import` varchar(255) CHARACTER SET utf8 NOT NULL,
   `status` enum('Inactive','Active','Deleted') CHARACTER SET utf8 NOT NULL DEFAULT 'Inactive',
@@ -1239,7 +1257,19 @@ CREATE TABLE IF NOT EXISTS `training_batch` (
   `deleted_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `training_batch`
+--
+
+INSERT INTO `training_batch` (`id`, `batch`, `name`, `file_import`, `status`, `created_by`, `deleted_by`, `created_at`, `deleted_at`) VALUES
+(3, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281907199516-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:32:39', NULL),
+(4, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281909195216-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:33:59', NULL),
+(5, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281910251316-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:34:25', NULL),
+(6, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/210222732819114610016-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:35:07', NULL),
+(7, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281915542316-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:37:54', NULL),
+(8, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281930433816-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:46:43', NULL);
 
 -- --------------------------------------------------------
 
@@ -1249,7 +1279,7 @@ CREATE TABLE IF NOT EXISTS `training_batch` (
 
 CREATE TABLE IF NOT EXISTS `training_pdf` (
   `id` int(11) unsigned NOT NULL,
-  `batch` bigint(20) NOT NULL,
+  `batch` varchar(30) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   `file_import` varchar(255) CHARACTER SET utf8 NOT NULL,
   `status` enum('Inactive','Active','Deleted') CHARACTER SET utf8 NOT NULL DEFAULT 'Inactive',
@@ -1259,7 +1289,19 @@ CREATE TABLE IF NOT EXISTS `training_pdf` (
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `training_datetime` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `training_pdf`
+--
+
+INSERT INTO `training_pdf` (`id`, `batch`, `name`, `file_import`, `status`, `notification_count`, `created_by`, `deleted_by`, `created_at`, `deleted_at`, `training_datetime`) VALUES
+(15, '23129875401334048116', 'Test Training Five', 'uploads/files/training/pdf/77-CaMnTiO3.pdf', 'Deleted', 0, 'TRIN1234', 'TRIN1234', '2016-10-31 18:00:44', '2016-11-06 21:11:37', '2016-10-10 06:50 PM'),
+(16, '23129875401340479616', 'Test Training Seven', 'uploads/files/training/pdf/23129875401340479616-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:26:11', NULL, '2016-10-31 06:00 PM'),
+(17, '27051956392023245116', 'Test Training Eight', 'uploads/files/training/pdf/27051956392023245116-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:26:28', NULL, '2016-11-08 05:40 AM'),
+(18, '27051956392023598516', 'Test Training Nine', 'uploads/files/training/pdf/27051956392023598516-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:28:26', NULL, '2016-11-08 09:20 AM'),
+(19, '27051956392025137016', 'Test Training Ten', 'uploads/files/training/pdf/27051956392025137016-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:32:52', NULL, '2016-11-07 09:40 PM'),
+(20, '27051956392025432016', 'Test Training Eleven', 'uploads/files/training/pdf/27051956392025432016-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 16:43:42', NULL, '2016-11-07 09:40 PM');
 
 -- --------------------------------------------------------
 
@@ -2040,8 +2082,7 @@ ALTER TABLE `training`
 -- Indexes for table `training_batch`
 --
 ALTER TABLE `training_batch`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `batch` (`batch`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `training_pdf`
@@ -2120,7 +2161,7 @@ ALTER TABLE `hr_trainer`
 -- AUTO_INCREMENT for table `left_menu`
 --
 ALTER TABLE `left_menu`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=87;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=90;
 --
 -- AUTO_INCREMENT for table `post`
 --
@@ -2210,17 +2251,17 @@ ALTER TABLE `target_batch`
 -- AUTO_INCREMENT for table `training`
 --
 ALTER TABLE `training`
-  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `training_batch`
 --
 ALTER TABLE `training_batch`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `training_pdf`
 --
 ALTER TABLE `training_pdf`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `upazilas`
 --
