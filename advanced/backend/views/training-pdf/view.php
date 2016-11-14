@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'batch',
             'name',
+            'designations',
+            'message',
             'status',
             'notification_count',
             'created_by',

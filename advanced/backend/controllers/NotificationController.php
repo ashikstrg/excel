@@ -3,20 +3,14 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Training;
-use backend\models\TrainingSearch;
+use backend\models\Notification;
+use backend\models\NotificationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * TrainingController implements the CRUD actions for Training model.
- */
-class TrainingController extends Controller
+class NotificationController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -29,13 +23,9 @@ class TrainingController extends Controller
         ];
     }
 
-    /**
-     * Lists all Training models.
-     * @return mixed
-     */
     public function actionIndex()
     {
-        $searchModel = new TrainingSearch();
+        $searchModel = new NotificationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,12 +33,31 @@ class TrainingController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionRead()
+    {
+        $searchModel = new NotificationSearch();
+        $dataProvider = $searchModel->read(Yii::$app->request->queryParams);
 
-    /**
-     * Displays a single Training model.
-     * @param string $id
-     * @return mixed
-     */
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'read_status' => 'Read'
+        ]);
+    }
+    
+    public function actionUnread()
+    {
+        $searchModel = new NotificationSearch();
+        $dataProvider = $searchModel->unread(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'read_status' => 'Unread'
+        ]);
+    }
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -56,14 +65,9 @@ class TrainingController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Training model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
-        $model = new Training();
+        $model = new Notification();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -74,12 +78,6 @@ class TrainingController extends Controller
         }
     }
 
-    /**
-     * Updates an existing Training model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -93,12 +91,6 @@ class TrainingController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing Training model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -106,16 +98,9 @@ class TrainingController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Training model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Training the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
-        if (($model = Training::findOne($id)) !== null) {
+        if (($model = Notification::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -3,11 +3,14 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Trainings', 'url' => ['index']];
+/* @var $this yii\web\View */
+/* @var $model backend\models\Notification */
+
+$this->title = $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Notifications', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="training-view">
+<div class="notification-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -26,20 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'batch',
+            'name',
+            'module_name',
+            'url:url',
             'hr_id',
             'hr_employee_id',
-            'hr_deignation',
+            'hr_designation',
             'hr_employee_type',
             'hr_name',
             'message',
-            'training_datetime',
-            'status',
             'read_status',
+            'seen',
             'created_at',
             'created_by',
-            'updated_at',
-            'updated_by',
         ],
     ]) ?>
 

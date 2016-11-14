@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6748a4d48c8333de1d5c7ba4708f7146",
-    "content-hash": "8bdfd1e8c1b2b491ad226e78c45a3576",
+    "hash": "998a214fd27e0659a00d2cd6d08daa23",
+    "content-hash": "e22807ca2c1e8f0bcf944f89eddac4ef",
     "packages": [
         {
             "name": "bower-asset/adminlte",
@@ -1788,16 +1788,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-select2",
-            "version": "v2.0.8",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "4d03239c1e28ef8d3b96ab7fe360f5cbda34fb69"
+                "reference": "d7bfdabc48d766f4f4a82f715315f19d25f4a0d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/4d03239c1e28ef8d3b96ab7fe360f5cbda34fb69",
-                "reference": "4d03239c1e28ef8d3b96ab7fe360f5cbda34fb69",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/d7bfdabc48d766f4f4a82f715315f19d25f4a0d9",
+                "reference": "d7bfdabc48d766f4f4a82f715315f19d25f4a0d9",
                 "shasum": ""
             },
             "require": {
@@ -1837,7 +1837,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-02-17 11:49:30"
+            "time": "2016-11-03 17:45:17"
         },
         {
             "name": "kartik-v/yii2-widget-sidenav",
@@ -3154,7 +3154,8 @@
         "kartik-v/yii2-widget-depdrop": 20,
         "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-date-range": 20,
-        "kartik-v/yii2-editable": 20
+        "kartik-v/yii2-editable": 20,
+        "kartik-v/yii2-widget-select2": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

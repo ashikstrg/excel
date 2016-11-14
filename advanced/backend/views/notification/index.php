@@ -5,38 +5,24 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Uploaded Data';
+$this->title = 'Training Notification';
 $this->miniTitle = 'Training Module';
-$this->subTitle = 'Uploaded Training Data';
+$this->subTitle = $read_status . ' Status';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="training-batch-index">
+<div class="notification-index">
 
     <?php 
     $gridColumns = [
-        ['class' => '\kartik\grid\CheckboxColumn'], // 0
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{view} {delete}',
-        ], // 1
-        ['class' => 'yii\grid\SerialColumn'], // 2
 
-            'batch',
+        ['class' => 'yii\grid\SerialColumn'], 
+
             'name',
-            [
-		'header' => 'Seach',
-		'format' => 'raw',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-		'value'=>function ($data) {
-			return Html::a('<i class="fa fa-search"></i>', ['/training/index', 'TrainingSearch', 'batch' => $data->batch]);
-		},
-            ],
-            'status',
-            'created_by',
-            'created_at',
-            'deleted_by',
-            'deleted_at',
+            'hr_employee_id',
+            'hr_designation',
+            'hr_name',
+            'message',
+            'seen',
     ];
 
     $fullExportMenu = ExportMenu::widget([
@@ -44,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
-        'hiddenColumns'=>[0, 1],
-        'noExportColumns'=>[0, 1],
+//        'hiddenColumns'=>[0, 1],
+//        'noExportColumns'=>[0, 1],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,
@@ -77,15 +63,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success']) . ' '.
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [strtolower($read_status)], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Uploaded Training Data',
-                'after' => html::button('<i class="glyphicon glyphicon-remove"></i> Delete Selected Data', ['class' => 'btn btn-danger mdelete pull-right']) . '<div class="clearfix"></div>'
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> Notifications',
             ],
         ]); ?>
     <?php Pjax::end(); ?>
@@ -95,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-footer">
     <div class="row">
         <div class="col-md-12">
-            <i>* Training Files are linked to the main training data. Be careful before delete.</i>
+            <i>* In descending order.</i>
         </div>
     </div>
 </div>

@@ -150,14 +150,14 @@ class SiteController extends Controller
                 
             } else if (Yii::$app->session->get('userRole') == 'Sales') {
                 
-                $hrModel = \backend\models\HrSales::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                $hrModel = \backend\models\HrSales::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date', 'image_web_filename'])->where(['user_id' => Yii::$app->user->identity->id])->one();
                 Yii::$app->session->set('isSales', 1);
                 Yii::$app->session->set('isFSM', 0);
                 Yii::$app->session->set('isAdmin', 0);
                 
             } else if (Yii::$app->session->get('userRole') == 'admin') {
                 
-                $hrModel = \backend\models\HrManagement::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                $hrModel = \backend\models\HrManagement::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date', 'image_web_filename'])->where(['user_id' => Yii::$app->user->identity->id])->one();
                 
                 Yii::$app->session->set('isAdmin', 1);
                 Yii::$app->session->set('isSales', 0);
@@ -165,7 +165,7 @@ class SiteController extends Controller
                 
             } else if (Yii::$app->session->get('userRole') == 'Trainer') {
                 
-                $hrModel = \backend\models\HrTrainer::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                $hrModel = \backend\models\HrTrainer::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date', 'image_web_filename'])->where(['user_id' => Yii::$app->user->identity->id])->one();
                 
                 Yii::$app->session->set('isAdmin', 0);
                 Yii::$app->session->set('isSales', 0);
@@ -198,6 +198,7 @@ class SiteController extends Controller
             Yii::$app->session->set('employee_id', $hrModel->employee_id);
             Yii::$app->session->set('designation', $hrModel->designation);
             Yii::$app->session->set('joining_date', $hrModel->joining_date);
+            Yii::$app->session->set('image_web_filename', $hrModel->image_web_filename);
                 
             return $this->goHome();
             

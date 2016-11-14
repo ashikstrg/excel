@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 07, 2016 at 04:33 PM
+-- Generation Time: Nov 14, 2016 at 04:23 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -402,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `hr_management` (
 --
 
 INSERT INTO `hr_management` (`id`, `designation_id`, `designation`, `employee_type_id`, `employee_type`, `employee_id`, `name`, `status`, `joining_date`, `leaving_date`, `image`, `image_src_filename`, `image_web_filename`, `contact_no_official`, `contact_no_personal`, `name_immergency_contact_person`, `relation_immergency_contact_person`, `contact_no_immergency`, `email_address`, `email_address_official`, `blood_group`, `permanent_address`, `present_address`, `created_at`, `created_by`, `updated_at`, `updated_by`, `user_id`) VALUES
-(2, 1, 'Admin', 1, 'Admin', '123456', 'Ashik M', 'Active', '2016-10-01', NULL, NULL, NULL, NULL, '01790738231', '01790738231', 'Me', 'Self', '01790738231', 'ashik@analyzenbd.com', 'ashik@analyzenbd.com', 'B+', 'N/A', 'N/A', '2016-09-30 18:00:00', 'Admin', NULL, NULL, 1);
+(2, 1, 'Admin', 1, 'Admin', '123456', 'Ashik M', 'Active', '2016-10-01', NULL, NULL, NULL, 'IciQv8Wog81NToL9wBSYCNZE3MPjR8s2.png', '01790738231', '01790738231', 'Me', 'Self', '01790738231', 'ashik@analyzenbd.com', 'ashik@analyzenbd.com', 'B+', 'N/A', 'N/A', '2016-09-30 18:00:00', 'Admin', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -461,7 +461,7 @@ CREATE TABLE IF NOT EXISTS `hr_sales` (
 --
 
 INSERT INTO `hr_sales` (`id`, `designation_id`, `designation`, `employee_type_id`, `employee_type`, `employee_id`, `parent`, `manager_id`, `manager_name`, `manager_designation`, `name`, `status`, `joining_date`, `leaving_date`, `image`, `image_src_filename`, `image_web_filename`, `contact_no_official`, `contact_no_personal`, `name_immergency_contact_person`, `relation_immergency_contact_person`, `contact_no_immergency`, `email_address`, `email_address_official`, `bank_name`, `bank_ac_name`, `bank_ac_no`, `bkash_no`, `blood_group`, `graduation_status`, `educational_qualification`, `educational_institute`, `educational_qualification_second_last`, `educational_institute_second_last`, `previous_experience`, `previous_experience_two`, `permanent_address`, `present_address`, `created_at`, `created_by`, `updated_at`, `updated_by`, `user_id`) VALUES
-(1, 1, 'Admin', 1, 'Admin', '123456', 0, 'N/A', 'N/A', 'N/A', 'HR Admin', 'Active', '2016-09-21', NULL, NULL, NULL, NULL, 'N/A', 'N/A', '', '0', 'N/A', 'admin@email.com', '', '', '', '', '', 'N/A', 'Graduated', 'N/A', 'N/A', 'N/A', 'N/A', 0, 0, 'N/A', 'N/A', '2016-09-20 10:00:00', 'admin1', NULL, NULL, 1),
+(1, 1, 'Admin', 1, 'Admin', '123456', 0, 'N/A', 'N/A', 'N/A', 'HR Admin', 'Active', '2016-09-21', NULL, NULL, NULL, 'IciQv8Wog81NToL9wBSYCNZE3MPjR8s2.png', 'N/A', 'N/A', '', '0', 'N/A', 'admin@email.com', '', '', '', '', '', 'N/A', 'Graduated', 'N/A', 'N/A', 'N/A', 'N/A', 0, 0, 'N/A', 'N/A', '2016-09-20 10:00:00', 'admin1', NULL, NULL, 1),
 (5, 2, 'CSM', 0, 'Sales', 'MS1234', 1, '123456', 'HR Admin', 'Admin', 'Test Name CSM', 'Active', '2016-10-01', NULL, '', '1.png', 'IciQv8Wog81NToL9wBSYCNZE3MPjR8s2.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Brother', '11111111111', 'ashik1@analyzenbd.com', 'ashik1@analyzenbd.com', 'Test Bank Name', 'Test Bank  Account', 'Test Account Number', '11111111111', 'A+', 'Graduated', 'MSC', 'NSU', 'BSC', 'BRAC', 12, 10, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 08:51:31', 'admin1', '2016-10-16 05:23:37', 'admin1', 9),
 (6, 3, 'AM', 0, 'Sales', 'AM123456', 5, 'MS1234', 'Test Name CSM', 'CSM', 'Test Name CSM', 'Active', '2016-10-01', NULL, '', '5.png', 'B7HZ_FOsjhY5bUyarw1rx4PvRzZfQi0Y.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Brother', '11111111111', 'ashik2@analyzenbd.com', 'ashik2@analyzenbd.com', 'Test Bank Name', 'Test Bank  Account', 'Test Account Number', '11111111111', 'A+', 'Graduated', 'MSC', 'NSU', 'BSC', 'BRAC', 12, 10, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 08:54:01', 'admin1', '2016-10-16 05:23:14', 'admin1', 10),
 (7, 4, 'TM', 0, 'Sales', 'TM123456', 6, 'AM123456', 'Test Name CSM', 'AM', 'Test NameTM', 'Active', '2016-10-01', NULL, '', '4.png', '_BbpI72choM7Kd2FORuQ2sIkQI-p1H0a.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Brother', '11111111111', 'ashik3@analyzenbd.com', 'ashik3@analyzenbd.com', 'Test Bank Name', 'Test Bank  Account', 'Test Account Number', '11111111111', 'A+', 'Graduated', 'MSC', 'NSU', 'BSC', 'BRAC', 12, 10, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 08:57:12', 'admin1', '2016-10-16 05:22:54', 'admin1', 11),
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `hr_trainer` (
 
 INSERT INTO `hr_trainer` (`id`, `designation_id`, `designation`, `employee_type_id`, `employee_type`, `employee_id`, `parent`, `manager_id`, `manager_name`, `manager_designation`, `name`, `status`, `joining_date`, `leaving_date`, `image`, `image_src_filename`, `image_web_filename`, `contact_no_official`, `contact_no_personal`, `name_immergency_contact_person`, `relation_immergency_contact_person`, `contact_no_immergency`, `email_address`, `email_address_official`, `blood_group`, `permanent_address`, `present_address`, `created_at`, `created_by`, `updated_at`, `updated_by`, `user_id`) VALUES
 (2, 9, 'Trainer', 0, 'Trainer', 'TR0976', 1, '123456', 'HR Admin', 'Admin', 'Test Trainer Two', 'Active', '2016-11-01', NULL, '', '2.png', 'Id69eIocDUoNcDm9rsnegTs2z93mSO66.png', '01111111111', '01111111111', 'Ashikur Rahman', '01111111111', '01111111111', 'ashik222@analyzenbd.com', 'ashik222@analyzenbd.com', 'O+', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-27 07:16:35', 'admin1', NULL, NULL, 15),
-(3, 9, 'Trainer', 0, 'Trainer', 'TRIN1234', 1, '123456', 'HR Admin', 'Admin', 'Test Name', 'Inactive', '2016-10-01', NULL, '', '1.png', 'kwTQPMIYPK3PA3oPg5gnMHB2ai8RRgMs.png', '01111111111', '01111111111', 'Ashikur Rahman', 'Brother', '01111111111', 'ashik12@analyzenbd.com', 'ashik12@analyzenbd.com', 'O-', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-27 08:31:12', 'admin1', '2016-10-27 08:35:59', 'admin1', 16);
+(3, 9, 'Trainer', 0, 'Trainer', 'TRIN1234', 1, '123456', 'HR Admin', 'Admin', 'Test Name', 'Inactive', '2016-10-01', NULL, '', 'ashik.jpg', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg', '01111111111', '01111111111', 'Ashikur Rahman', 'Brother', '01111111111', 'ashik12@analyzenbd.com', 'ashik12@analyzenbd.com', 'O-', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-27 08:31:12', 'admin1', '2016-11-09 02:38:37', 'admin1', 16);
 
 -- --------------------------------------------------------
 
@@ -530,7 +530,7 @@ CREATE TABLE IF NOT EXISTS `left_menu` (
   `icon` varchar(255) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `used_by` varchar(64) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `left_menu`
@@ -619,9 +619,10 @@ INSERT INTO `left_menu` (`id`, `name`, `parent_id`, `label`, `icon`, `url`, `use
 (84, 'HR-Trainer Index', 28, 'HR Config (Trainer)', 'fa fa-square-o', '/hr-trainer/index', 'admin'),
 (85, 'Training Module Hash', 0, 'Training Module', 'fa fa-calendar-check-o', '#', 'Trainer'),
 (86, 'Training PDF Create', 85, 'Add Training PDF', 'fa fa-square-o', '/training-pdf/create', 'Trainer'),
-(87, 'Training PDF Index', 85, 'Training Config', 'fa fa-square-o', '/training-pdf/index', 'Trainer'),
-(88, 'Training Batch Index', 85, 'Training PDF Config', 'fa fa-square-o', '/training-batch/index', 'Trainer'),
-(89, 'Training Index', 85, 'Training Config', 'fa fa-square-o', '/training/index', 'Trainer');
+(87, 'Training PDF Index', 85, 'Training PDF Config', 'fa fa-square-o', '/training-pdf/index', 'Trainer'),
+(90, 'Notification Module Hash', 0, 'Training Notification', 'fa fa-bell', '#', 'Trainer'),
+(91, 'Notification Read', 90, 'Read', 'fa fa-square-o', '/notification/read', 'Trainer'),
+(92, 'Notification Unread', 90, 'Unread', 'fa fa-square-o', '/notification/unread', 'Trainer');
 
 -- --------------------------------------------------------
 
@@ -642,6 +643,38 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m000000_000000_base', 1471863108),
 ('m130524_201442_init', 1471863113),
 ('m140506_102106_rbac_init', 1472023374);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+CREATE TABLE IF NOT EXISTS `notification` (
+  `id` int(8) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `module_name` varchar(100) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `hr_id` int(11) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `message` varchar(550) NOT NULL,
+  `read_status` enum('Read','Unread') NOT NULL DEFAULT 'Unread',
+  `seen` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`id`, `name`, `module_name`, `url`, `hr_id`, `hr_employee_id`, `hr_designation`, `hr_employee_type`, `hr_name`, `message`, `read_status`, `seen`, `created_at`, `created_by`) VALUES
+(1, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'This Is test', 'Unread', NULL, '2016-11-14 19:09:15', 'TRIN1234'),
+(2, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 8, '12456', 'AM', 'Sales', 'Test Name AM', 'This Is test', 'Unread', NULL, '2016-11-14 19:09:15', 'TRIN1234'),
+(3, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'This Is test', 'Read', NULL, '2016-11-14 19:09:15', 'TRIN1234');
 
 -- --------------------------------------------------------
 
@@ -921,7 +954,7 @@ INSERT INTO `retail_type` (`id`, `type`, `channel_type_id`) VALUES
 CREATE TABLE IF NOT EXISTS `retail_zone` (
   `id` int(11) unsigned NOT NULL,
   `zone` varchar(150) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `retail_zone`
@@ -929,7 +962,8 @@ CREATE TABLE IF NOT EXISTS `retail_zone` (
 
 INSERT INTO `retail_zone` (`id`, `zone`) VALUES
 (1, 'East'),
-(2, 'West');
+(2, 'West'),
+(3, 'Test');
 
 -- --------------------------------------------------------
 
@@ -972,7 +1006,7 @@ CREATE TABLE IF NOT EXISTS `sales` (
   `sales_date` date NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sales`
@@ -983,7 +1017,10 @@ INSERT INTO `sales` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_name
 (2, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '123456789123666', '60000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
 (3, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R1245', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '123456789123777', '70000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
 (4, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R1245', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '123456789123787', '70000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
-(7, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123111', '60000.00', '2016-10-18', '2016-10-19 13:29:35', 'R12458');
+(7, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123111', '60000.00', '2016-10-18', '2016-10-19 13:29:35', 'R12458'),
+(8, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123323', '60000.00', '2016-11-02', '2016-11-01 13:29:35', 'R12458'),
+(9, 223372036844777777, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123333', '60000.00', '2016-11-02', '2016-11-01 13:29:35', 'R12458'),
+(10, 922337203685477580, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '123456789126666', '60000.00', '2016-11-11', '2016-10-11 13:29:35', 'R12458');
 
 -- --------------------------------------------------------
 
@@ -1147,7 +1184,7 @@ CREATE TABLE IF NOT EXISTS `target` (
   `created_by` varchar(255) NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `target`
@@ -1160,7 +1197,8 @@ INSERT INTO `target` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_nam
 (4, 2108543898131154431, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 12, '12456', 'Test Name RSAG', 'RSA-G', 80, 6, '5600000.00', '420000.00', 7, 'TM123456', 'Test NameTM', 0, 6, '0.00', '420000.00', 6, 'AM123456', 'Test Name CSM', 40, 6, '35.00', '420000.00', 5, 'MS1234', 'Test Name CSM', 80, 6, '70000.00', '420000.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-10-01', '2016-10-17 17:19:15', 'admin1', '2016-10-17 19:46:46', 'TM123456'),
 (5, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 450, 0, '30.00', '0.00', 5, 'MS1234', 'Test Name CSM', 900, 0, '60000.00', '0.00', 'Galaxy Note 7', 'N7777', 'N7', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL),
 (6, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 250, 0, '30.00', '0.00', 5, 'MS1234', 'Test Name CSM', 500, 0, '60000.00', '0.00', 'Galaxy S6', 'S6666', 'S6', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL),
-(7, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 400, 0, '35.00', '0.00', 5, 'MS1234', 'Test Name CSM', 800, 0, '70000.00', '0.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL);
+(7, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 400, 0, '35.00', '0.00', 5, 'MS1234', 'Test Name CSM', 800, 0, '70000.00', '0.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL),
+(8, 150482909706423437, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 400, 0, '35.00', '0.00', 5, 'MS1234', 'Test Name CSM', 800, 0, '70000.00', '0.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-11-01', '2016-11-01 14:37:57', 'admin1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1205,71 +1243,56 @@ INSERT INTO `target_batch` (`id`, `batch`, `file_import`, `status`, `created_by`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `training`
+-- Table structure for table `training_assessment_category`
 --
 
-CREATE TABLE IF NOT EXISTS `training` (
-  `id` int(8) unsigned NOT NULL,
-  `batch` bigint(20) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `hr_id` int(11) unsigned NOT NULL,
-  `hr_employee_id` varchar(50) NOT NULL,
-  `hr_designation` varchar(100) NOT NULL,
-  `hr_employee_type` varchar(100) NOT NULL,
-  `hr_name` varchar(80) NOT NULL,
-  `message` varchar(550) NOT NULL,
-  `training_datetime` varchar(50) NOT NULL,
-  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Inactive',
-  `read_status` enum('Read','Unread') NOT NULL DEFAULT 'Unread',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `created_by` varchar(255) NOT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `updated_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `training`
---
-
-INSERT INTO `training` (`id`, `batch`, `name`, `hr_id`, `hr_employee_id`, `hr_designation`, `hr_employee_type`, `hr_name`, `message`, `training_datetime`, `status`, `read_status`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-(1, 9223372036854775807, 'Test Training Eleven', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
-(2, 9223372036854775807, 'Test Training Eleven', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
-(3, 9223372036854775807, 'Test Training Eleven', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
-(4, 9223372036854775807, 'Test Training Eleven', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:37:55', 'TRIN1234', NULL, NULL),
-(5, 9223372036854775807, 'Test Training Eleven', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL),
-(6, 9223372036854775807, 'Test Training Eleven', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL),
-(7, 9223372036854775807, 'Test Training Eleven', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL),
-(8, 9223372036854775807, 'Test Training Eleven', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'Please come at time.', '2016-11-07 09:40 PM', 'Active', 'Unread', '2016-11-07 14:46:45', 'TRIN1234', NULL, NULL);
+CREATE TABLE IF NOT EXISTS `training_assessment_category` (
+  `id` int(11) unsigned NOT NULL,
+  `batch` bigint(20) unsigned NOT NULL,
+  `designations` varchar(550) NOT NULL,
+  `date_month` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `training_batch`
+-- Table structure for table `training_assessment_question`
 --
 
-CREATE TABLE IF NOT EXISTS `training_batch` (
+CREATE TABLE IF NOT EXISTS `training_assessment_question` (
   `id` int(11) unsigned NOT NULL,
   `batch` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `file_import` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `status` enum('Inactive','Active','Deleted') CHARACTER SET utf8 NOT NULL DEFAULT 'Inactive',
-  `created_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `deleted_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+  `question_name` text CHARACTER SET utf8 NOT NULL,
+  `answer1` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `answer2` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `answer3` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `answer4` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `answer` int(8) unsigned NOT NULL,
+  `category_id` int(11) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `training_batch`
+-- Table structure for table `training_assessment_result`
 --
 
-INSERT INTO `training_batch` (`id`, `batch`, `name`, `file_import`, `status`, `created_by`, `deleted_by`, `created_at`, `deleted_at`) VALUES
-(3, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281907199516-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:32:39', NULL),
-(4, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281909195216-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:33:59', NULL),
-(5, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281910251316-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:34:25', NULL),
-(6, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/210222732819114610016-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:35:07', NULL),
-(7, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281915542316-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:37:54', NULL),
-(8, 18446744073709551615, 'Test Training Eleven', 'uploads/files/training/csv/21022273281930433816-employee.csv', 'Active', 'TRIN1234', NULL, '2016-11-07 20:46:43', NULL);
+CREATE TABLE IF NOT EXISTS `training_assessment_result` (
+  `id` int(11) unsigned NOT NULL,
+  `batch` bigint(20) unsigned NOT NULL,
+  `category_id` int(11) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `retail_dms_code` varchar(100) NOT NULL,
+  `retail_name` varchar(150) NOT NULL,
+  `score` int(11) unsigned NOT NULL,
+  `score_percent` decimal(10,2) unsigned NOT NULL,
+  `total_time` int(11) unsigned NOT NULL,
+  `date_month` date NOT NULL,
+  `participation_datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1283,25 +1306,26 @@ CREATE TABLE IF NOT EXISTS `training_pdf` (
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   `file_import` varchar(255) CHARACTER SET utf8 NOT NULL,
   `status` enum('Inactive','Active','Deleted') CHARACTER SET utf8 NOT NULL DEFAULT 'Inactive',
+  `designations` varchar(255) NOT NULL,
+  `message` varchar(550) CHARACTER SET utf8 NOT NULL,
   `notification_count` int(8) DEFAULT '0',
   `created_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `deleted_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `training_datetime` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `training_pdf`
 --
 
-INSERT INTO `training_pdf` (`id`, `batch`, `name`, `file_import`, `status`, `notification_count`, `created_by`, `deleted_by`, `created_at`, `deleted_at`, `training_datetime`) VALUES
-(15, '23129875401334048116', 'Test Training Five', 'uploads/files/training/pdf/77-CaMnTiO3.pdf', 'Deleted', 0, 'TRIN1234', 'TRIN1234', '2016-10-31 18:00:44', '2016-11-06 21:11:37', '2016-10-10 06:50 PM'),
-(16, '23129875401340479616', 'Test Training Seven', 'uploads/files/training/pdf/23129875401340479616-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:26:11', NULL, '2016-10-31 06:00 PM'),
-(17, '27051956392023245116', 'Test Training Eight', 'uploads/files/training/pdf/27051956392023245116-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:26:28', NULL, '2016-11-08 05:40 AM'),
-(18, '27051956392023598516', 'Test Training Nine', 'uploads/files/training/pdf/27051956392023598516-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:28:26', NULL, '2016-11-08 09:20 AM'),
-(19, '27051956392025137016', 'Test Training Ten', 'uploads/files/training/pdf/27051956392025137016-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 14:32:52', NULL, '2016-11-07 09:40 PM'),
-(20, '27051956392025432016', 'Test Training Eleven', 'uploads/files/training/pdf/27051956392025432016-CaMnTiO3.pdf', 'Active', 0, 'TRIN1234', NULL, '2016-11-07 16:43:42', NULL, '2016-11-07 09:40 PM');
+INSERT INTO `training_pdf` (`id`, `batch`, `name`, `file_import`, `status`, `designations`, `message`, `notification_count`, `created_by`, `deleted_by`, `created_at`, `deleted_at`, `training_datetime`) VALUES
+(19, '27051956392025137016', 'Test Training Ten', 'uploads/files/training/pdf/27051956392025137016-CaMnTiO3.pdf', 'Inactive', '', '', 0, 'TRIN1234', NULL, '2016-11-14 20:15:07', NULL, '2016-11-07 09:40 PM'),
+(20, '27051956392025432016', 'Test Training Eleven', 'uploads/files/training/pdf/27051956392025432016-CaMnTiO3.pdf', 'Active', '', '', 0, 'TRIN1234', NULL, '2016-11-07 16:43:42', NULL, '2016-11-07 09:40 PM'),
+(21, '29074174600335138616', 'hshcfua', 'uploads/files/training/pdf/29074174600335138616-CaMnTiO3_ch3.pdf', 'Active', '', '', 2, 'TRIN1234', NULL, '2016-11-13 16:24:38', NULL, '2016-11-13 04:10 PM'),
+(22, '25044491490207171816', 'Test Training Seven', 'uploads/files/training/pdf/25044491490207171816-CaMnTiO3_ch3.pdf', 'Active', 'AM,TM', 'This Is test', 5, 'TRIN1234', NULL, '2016-11-14 18:25:59', NULL, '2016-11-14 02:55 PM'),
+(23, '24044491490707155116', 'hshcfua', 'uploads/files/training/pdf/24044491490707155116-CaMnTiO3.pdf', 'Active', 'SEC,RSA-G,RSA-R', 'This Is test', 0, 'TRIN1234', NULL, '2016-11-14 20:16:59', NULL, '2016-11-13 04:10 PM');
 
 -- --------------------------------------------------------
 
@@ -1967,6 +1991,12 @@ ALTER TABLE `migration`
   ADD PRIMARY KEY (`version`);
 
 --
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `post`
 --
 ALTER TABLE `post`
@@ -2073,15 +2103,22 @@ ALTER TABLE `target_batch`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `training`
+-- Indexes for table `training_assessment_category`
 --
-ALTER TABLE `training`
+ALTER TABLE `training_assessment_category`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `category_name` (`batch`);
+
+--
+-- Indexes for table `training_assessment_question`
+--
+ALTER TABLE `training_assessment_question`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `training_batch`
+-- Indexes for table `training_assessment_result`
 --
-ALTER TABLE `training_batch`
+ALTER TABLE `training_assessment_result`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2161,7 +2198,12 @@ ALTER TABLE `hr_trainer`
 -- AUTO_INCREMENT for table `left_menu`
 --
 ALTER TABLE `left_menu`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=90;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
+--
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `post`
 --
@@ -2216,12 +2258,12 @@ ALTER TABLE `retail_type`
 -- AUTO_INCREMENT for table `retail_zone`
 --
 ALTER TABLE `retail_zone`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `sales_batch`
 --
@@ -2241,27 +2283,32 @@ ALTER TABLE `stock_batch`
 -- AUTO_INCREMENT for table `target`
 --
 ALTER TABLE `target`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `target_batch`
 --
 ALTER TABLE `target_batch`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
 --
--- AUTO_INCREMENT for table `training`
+-- AUTO_INCREMENT for table `training_assessment_category`
 --
-ALTER TABLE `training`
-  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+ALTER TABLE `training_assessment_category`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `training_batch`
+-- AUTO_INCREMENT for table `training_assessment_question`
 --
-ALTER TABLE `training_batch`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+ALTER TABLE `training_assessment_question`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `training_assessment_result`
+--
+ALTER TABLE `training_assessment_result`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `training_pdf`
 --
 ALTER TABLE `training_pdf`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `upazilas`
 --

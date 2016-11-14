@@ -52,14 +52,20 @@ class TrainingPdfController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             
             Yii::$app->session->set('training_pdf_name', $model->name);
+            Yii::$app->session->set('training_pdf_message', $model->message);
+            Yii::$app->session->set('training_pdf_designations', implode(',', $model->designations));
             Yii::$app->session->set('training_pdf_training_datetime', $model->training_datetime);
             
             Yii::$app->session->setFlash('warning', 'If you do not upload PDF here, then your data will not be saved.');
             $this->redirect('next');
             
         } else {
+            
+            $designationModel = \yii\helpers\ArrayHelper::map(\backend\models\HrDesignation::find()->where("employee_type='Sales' OR employee_type='FSM'")->all(), 'type', 'type');
+            
             return $this->render('create', [
                 'model' => $model,
+                'designationModel' => $designationModel
             ]);
         }
     }
@@ -117,6 +123,8 @@ class TrainingPdfController extends Controller
             $model->created_by = $username;
             $model->created_at = $now;
             $model->name = Yii::$app->session->get('training_pdf_name');
+            $model->message = Yii::$app->session->get('training_pdf_message');
+            $model->designations = Yii::$app->session->get('training_pdf_designations');
             $model->training_datetime = Yii::$app->session->get('training_pdf_training_datetime');    
             
             if($model->save()) {
@@ -141,13 +149,23 @@ class TrainingPdfController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->set('training_pdf_name', $model->name);
+            Yii::$app->session->set('training_pdf_message', $model->message);
+            Yii::$app->session->set('training_pdf_designations', implode(',', $model->designations));
+            Yii::$app->session->set('training_pdf_training_datetime', $model->training_datetime);
+            
+            Yii::$app->session->setFlash('warning', 'If you do not upload PDF here, then your data will not be saved.');
+            $this->redirect('next');
             
         } else {
+            
+            $designationModel = \yii\helpers\ArrayHelper::map(\backend\models\HrDesignation::find()->where("employee_type='Sales' OR employee_type='FSM'")->all(), 'type', 'type');
+            
             return $this->render('update', [
                 'model' => $model,
+                'designationModel' => $designationModel
             ]);
         }
     }
@@ -159,8 +177,6 @@ class TrainingPdfController extends Controller
         foreach ($pk as $key => $value) 
         {
             $model = $this->findModel($value);
-        
-            \backend\models\Training::deleteAll(['batch' => $model->batch]);
 
             $model->status = 'Deleted';
             $model->deleted_by = Yii::$app->user->identity->username;
@@ -176,10 +192,11 @@ class TrainingPdfController extends Controller
     {
         $traingPDFModel = $this->findModel($id);
 
-        \backend\models\Training::deleteAll(['batch' => $traingPDFModel->batch]);
+        unlink(getcwd() . '/' . $traingPDFModel->file_import);
         
         $traingPDFModel->delete();
         
+        Yii::$app->session->setFlash('success', 'Data has successfully been deleted.');
         return $this->redirect(['index']);
     }
     
@@ -192,6 +209,91 @@ class TrainingPdfController extends Controller
         $traingPDFModel->save(false);
         
         Yii::$app->session->setFlash('success', 'The training has successfully been activated.');
+        return $this->redirect(['index']);
+    }
+    
+    public function actionInactive($id){  
+        $traingPDFModel = $this->findModel($id);
+        
+        $traingPDFModel->created_by = Yii::$app->user->identity->username;
+        $traingPDFModel->created_at = new Expression('NOW()');
+        $traingPDFModel->status = 'Inactive';
+        $traingPDFModel->save(false);
+        
+        Yii::$app->session->setFlash('success', 'The training has successfully been inactivated.');
+        return $this->redirect(['index']);
+    }
+    
+    public function actionNotification($id){ 
+        
+        $bulkInsertArray = array();
+        $now = new Expression('NOW()');
+        $username = Yii::$app->user->identity->username;
+        
+        $traingPDFModel = $this->findModel($id);
+        $traingPDFModel->notification_count += 1;
+        $traingPDFModel->save(false);
+        
+        $designations = array();
+        $designations = explode(',', $traingPDFModel->designations);
+        
+        foreach ($designations as $k => $v) {
+            
+            $hrModel = null;
+            
+            if($v == 'CSM' || $v == 'AM' || $v == 'TM') {
+                
+                $hrModel = \backend\models\HrSales::find()->select(['id', 'name', 'employee_id', 'employee_type'])->where('designation=:designation', [':designation' => $v])->all();
+                
+            } else {
+                
+                $hrModel = \backend\models\Hr::find()->select(['id', 'name', 'employee_id', 'employee_type'])->where('designation=:designation', [':designation' => $v])->all();
+                
+            }
+            
+            if(!empty($hrModel)) {
+                
+                foreach ($hrModel as $hr) {
+                    
+                    $bulkInsertArray[]=[
+                        'name' => $traingPDFModel->name,
+                        'module_name' => 'Training',
+                        'url' => '/training-pdf/notification_view?id=' . $id,
+                        'hr_id' => $hr->id,
+                        'hr_employee_id' => $hr->employee_id,
+                        'hr_designation' => $v,
+                        'hr_employee_type' => $hr->employee_type,
+                        'hr_name' => $hr->name,
+                        'message' => $traingPDFModel->message,
+                        'read_status' => 'Unread',
+                        'created_at' => $now,
+                        'created_by' => $username
+                    ];
+                    
+                }
+                
+            }
+            
+        }
+        
+        $tableName = 'notification';
+        $columnNameArray=[
+            'name',
+            'module_name',
+            'url',
+            'hr_id',
+            'hr_employee_id',
+            'hr_designation',
+            'hr_employee_type',
+            'hr_name',
+            'message',
+            'read_status',
+            'created_at',
+            'created_by'
+        ];
+        Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
+        
+        Yii::$app->session->setFlash('success', 'The notification has successfully been sent.');
         return $this->redirect(['index']);
     }
     

@@ -17,18 +17,35 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => '\kartik\grid\CheckboxColumn'], // 0
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{view} {delete} {add} {active} ',
+            'template' => '{view} {active} {inactive} {notification} {update} {delete}',
             'buttons' => [
                 'active' => function ($url, $model) {
                     return $model->status == 'Inactive' ? Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, [
                                 'title' => Yii::t('app', 'Activate'),
                                 'data-confirm' => Yii::t('yii', 'Are you sure to active this training?'),
                                 'data-method' => 'post',
-                    ]) : '<span class="glyphicon glyphicon-ok"></span>';
+                    ]) : '';
                 },
-                'add' => function ($url, $model) {
-                    return $model->status !== 'Deleted' ? Html::a('<span class="glyphicon glyphicon-user"></span>', $url, [
-                                'title' => Yii::t('app', 'Add User'),
+                'inactive' => function ($url, $model) {
+                    return $model->status == 'Active' ? Html::a('<span class="glyphicon glyphicon-remove"></span>', $url, [
+                                'title' => Yii::t('app', 'Inactivate'),
+                                'data-confirm' => Yii::t('yii', 'Are you sure to inactivate this training?'),
+                                'data-method' => 'post',
+                    ]) : '';
+                },
+                        
+                'notification' => function ($url, $model) {
+                    return $model->status == 'Active' ? Html::a('<span class="glyphicon glyphicon-bell"></span>', $url, [
+                                'title' => Yii::t('app', 'Send Notification'),
+                                'data-confirm' => Yii::t('yii', 'Are you sure to send notification?'),
+                                'data-method' => 'post',
+                    ]) : '';
+                },
+                        
+                'delete' => function ($url, $model) {
+                    return $model->status == 'Deleted' ? Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                'title' => Yii::t('app', 'Delete'),
+                                'data-confirm' => Yii::t('yii', 'Are you sure to delete this item?'),
                                 'data-method' => 'post',
                     ]) : '';
                 },
@@ -38,14 +55,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     $url = Yii::$app->urlManager->createUrl('training-pdf/active?id=' . $model->id);
                     return $url;
                 }
-
-                if ($action === 'add') {
-                    $url = Yii::$app->urlManager->createUrl('training-pdf/add?id=' . $model->id);
+                
+                if ($action === 'inactive') {
+                    $url = Yii::$app->urlManager->createUrl('training-pdf/inactive?id=' . $model->id);
                     return $url;
                 }
-
-                if ($action === 'done') {
-                    $url = Yii::$app->urlManager->createUrl('portal/done?id=' . $model->id);
+                
+                if ($action === 'notification') {
+                    $url = Yii::$app->urlManager->createUrl('training-pdf/notification?id=' . $model->id);
+                    return $url;
+                }
+                
+                if ($action === 'view') {
+                    $url = Yii::$app->urlManager->createUrl('training-pdf/view?id=' . $model->id);
+                    return $url;
+                }
+                
+                if ($action === 'update') {
+                    $url = Yii::$app->urlManager->createUrl('training-pdf/update?id=' . $model->id);
+                    return $url;
+                }
+                
+                if ($action === 'delete') {
+                    $url = Yii::$app->urlManager->createUrl('training-pdf/delete?id=' . $model->id);
                     return $url;
                 }
             }
@@ -54,16 +86,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'batch',
             'name',
-            [
-		'header' => 'Seach',
-		'format' => 'raw',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-		'value'=>function ($data) {
-			return Html::a('<i class="fa fa-search"></i>', ['/training/index', 'TrainingSearch', 'batch' => $data->batch]);
-		},
-            ],
+            'designations',
+            'message',
             'status',
+            'notification_count',
             'created_by',
             'created_at',
             'deleted_by',

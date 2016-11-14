@@ -17,7 +17,7 @@ class TrainingPdf extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'training_datetime'], 'required'],
+            [['name', 'training_datetime', 'message', 'designations'], 'required'],
             [['notification_count'], 'integer'],
             [['status'], 'string'],
             [['created_at', 'deleted_at', 'training_datetime'], 'safe'],
@@ -25,6 +25,7 @@ class TrainingPdf extends \yii\db\ActiveRecord
             [['training_datetime'], 'string', 'max' => 50],
             [['batch'], 'string', 'max' => 30],
             [['batch'], 'unique'],
+            [['message'], 'string', 'max' => 550]
         ];
     }
 
@@ -42,6 +43,7 @@ class TrainingPdf extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'deleted_at' => 'Deleted At',
             'training_datetime' => 'Training Datetime',
+            'designations' => 'Designation'
         ];
     }
 }

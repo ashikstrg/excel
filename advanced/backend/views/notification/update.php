@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\TrainingBatch */
+/* @var $model backend\models\Notification */
 
-$this->title = 'Update Training Batch: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Training Batches', 'url' => ['index']];
+$this->title = 'Update Notification: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Notifications', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="training-batch-update">
+<div class="notification-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

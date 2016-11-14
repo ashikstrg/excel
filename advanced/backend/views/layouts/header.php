@@ -210,13 +210,13 @@ use yii\helpers\Html;
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<?= $baseUrl; ?>/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<?= Yii::$app->homeUrl. '/../uploads/hr/'. Yii::$app->session->get('image_web_filename'); ?>" class="user-image" alt="User Image">
               <span class="hidden-xs"><?= Yii::$app->session->get('name'); ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="<?= $baseUrl; ?>/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?= Yii::$app->homeUrl. '/../uploads/hr/'. Yii::$app->session->get('image_web_filename'); ?>" class="img-circle" alt="User Image">
 
                 <p>
                   <?= Yii::$app->session->get('name'); ?> - <?= Yii::$app->session->get('designation'); ?>

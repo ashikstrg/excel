@@ -13,7 +13,7 @@ class TrainingPdfSearch extends TrainingPdf
     {
         return [
             [['id', 'batch', 'notification_count'], 'integer'],
-            [['name', 'file_import', 'status', 'created_by', 'deleted_by', 'created_at', 'deleted_at', 'training_datetime'], 'safe'],
+            [['name', 'message', 'designations', 'file_import', 'status', 'created_by', 'deleted_by', 'created_at', 'deleted_at', 'training_datetime'], 'safe'],
         ];
     }
 
@@ -53,6 +53,8 @@ class TrainingPdfSearch extends TrainingPdf
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'designations', $this->designations])
+            ->andFilterWhere(['like', 'message', $this->message])
             ->andFilterWhere(['like', 'file_import', $this->file_import])
             ->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'created_by', $this->created_by])

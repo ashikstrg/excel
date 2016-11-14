@@ -6,6 +6,12 @@ use yii\widgets\ActiveForm;
 use kartik\datetime\DateTimePicker;
 // Custom Fileinput
 use kartik\file\FileInput;
+// Multiple Select
+use kartik\widgets\Select2;
+
+if(!empty($model->designations)) {
+    $model->designations = explode(',', $model->designations);
+}
 
 ?>
 
@@ -14,6 +20,16 @@ use kartik\file\FileInput;
     <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
     
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'designations')->widget(Select2::classname(), [
+    'data' => $designationModel,
+    'options' => ['placeholder' => 'Select Designation', 'multiple' => true],
+    'pluginOptions' => [
+        'allowClear' => true,
+    ],
+    ]); ?>
+    
+    <?= $form->field($model, 'message')->textInput(['maxlength' => true]) ?>
     
     <?= $form->field($model, 'training_datetime')->widget(DateTimePicker::classname(), [
                 'options' => ['placeholder' => 'Enter Training Date Time', 'autocomplete' => 'off'],

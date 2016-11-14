@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="training-pdf-update">
 
     <?= $this->render('_form', [
-        'model' => $model
+        'model' => $model,
+        'designationModel' => $designationModel
     ]) ?>
 
 </div>

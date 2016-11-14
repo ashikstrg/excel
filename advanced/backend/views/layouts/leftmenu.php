@@ -16,7 +16,7 @@ ksort($adminSiteMenu);
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="<?= $baseUrl; ?>/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?= Yii::$app->homeUrl. '/../uploads/hr/'. Yii::$app->session->get('image_web_filename'); ?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
             <p><?= Yii::$app->session->get('name'); ?></p>
