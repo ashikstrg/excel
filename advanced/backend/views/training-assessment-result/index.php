@@ -1,29 +1,35 @@
 <?php
 
-use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Training Notification';
-$this->miniTitle = 'Training Module';
-$this->subTitle = $read_status . ' Status';
+$this->title = 'Monthly Assessment Result';
+$this->miniTitle = 'Assessment Module';
+$this->subTitle = 'Report Data in Descending Order';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="notification-index">
+<div class="training-assessment-category-index">
 
     <?php 
+    
     $gridColumns = [
-
-        ['class' => 'yii\grid\SerialColumn'], 
-
-            'name',
-            'message',
-            'hr_employee_id',
-            'hr_designation',
-            'hr_name',
-            'created_at',
-            'seen',
+        ['class' => 'yii\grid\SerialColumn'], // 0
+        'hr_employee_id',
+        'hr_name',
+        'hr_designation',
+        'right_answer',
+        'wrong_answer',
+        'un_answer',
+        'score_percent',
+        'total_time',
+        [
+            'attribute' => 'participation_datetime',
+            'value' => function ($data) {
+                    return date('Y-m-d h:i:s A', strtotime($data->participation_datetime));
+            },
+        ],
+        'date_month',
     ];
 
     $fullExportMenu = ExportMenu::widget([
@@ -31,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
-//        'hiddenColumns'=>[0, 1],
-//        'noExportColumns'=>[0, 1],
+        //'hiddenColumns'=>[0, 1],
+        //'noExportColumns'=>[0, 1],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,
@@ -63,46 +69,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'toolbar' =>  [
                 '{export}',
                 $fullExportMenu,
-                ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [strtolower($read_status)], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
-                ],
             ],
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> Notifications',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> Test Report',
             ],
         ]); ?>
     <?php Pjax::end(); ?>
     
 </div>
-
-<div class="box-footer">
-    <div class="row">
-        <div class="col-md-12">
-            <i>* In descending order.</i>
-        </div>
-    </div>
-</div>
-
-<?php 
-
-    $this->registerJs(' 
-
-    $(document).ready(function(){
-    $(\'.mdelete\').click(function(){
-
-        var keys = $(\'#w4\').yiiGridView(\'getSelectedRows\');
-          $.ajax({
-            type: \'POST\',
-            url : \'mdelete\',
-            data : {row_id: keys},
-            success : function() {
-              $(this).closest(\'tr\').remove(); //or whatever html you use for displaying rows
-            }
-        });
-
-    });
-    });', \yii\web\View::POS_READY);
-
-?>

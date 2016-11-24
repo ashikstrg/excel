@@ -143,7 +143,7 @@ class SiteController extends Controller
             
             if(Yii::$app->session->get('userRole') == 'FSM') {
                 
-                $hrModel = \backend\models\Hr::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                $hrModel = \backend\models\Hr::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date', 'image_web_filename'])->where(['user_id' => Yii::$app->user->identity->id])->one();
                 Yii::$app->session->set('isFSM', 1);
                 Yii::$app->session->set('isSales', 0);
                 Yii::$app->session->set('isAdmin', 0);

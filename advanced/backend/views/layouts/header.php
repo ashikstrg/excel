@@ -1,5 +1,25 @@
 <?php
 use yii\helpers\Html;
+
+use backend\models\Notification;
+use backend\components\Common;
+
+$employeeID = Yii::$app->session->get('employee_id');
+
+$notificationModel = Notification::find()->where(
+        'hr_employee_id=:hr_employee_id AND read_status=:read_status', 
+        [':hr_employee_id' => $employeeID, ':read_status' => 'Unread'])
+        ->limit(11)
+        ->orderBy(['id' => SORT_DESC])
+        ->all();
+
+$notificationCount = count($notificationModel);
+if($notificationCount > 10) {
+    $notificationTotal = '10+';
+} else {
+    $notificationTotal = $notificationCount;
+}
+
 ?>
 
 <header class="main-header">
@@ -17,117 +37,68 @@ use yii\helpers\Html;
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-success"><?= $notificationTotal; ?></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
+              <li class="header">You have <?= $notificationTotal; ?> notifications</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="<?= $baseUrl; ?>/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+                    <?php 
+                    
+                    foreach ($notificationModel as $notification) {
+                        
+                        ?>
+
+                    <li><!-- start message -->
+                      <a href="<?= Yii::$app->homeUrl. $notification->url . '&ntid=' . $notification->id; ?>">
+                        <div class="pull-left">
+                          <img src="<?= Yii::$app->homeUrl. '/../uploads/hr/'. $notification->image_web_filename; ?>" class="img-circle" alt="User Image">
+                        </div>
+                        <h4>
+                          <?= $notification->created_by_name; ?>
+                            <small><i class="fa fa-clock-o"></i> <?= Common::get_timeago(strtotime($notification->created_at)); ?></small>
+                        </h4>
+                        <p><?= $notification->message; ?></p>
+                      </a>
+                    </li>
                   <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="<?= $baseUrl; ?>/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="<?= $baseUrl; ?>/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="<?= $baseUrl; ?>/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="<?= $baseUrl; ?>/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+                  <?php 
+                  
+                    }
+                  
+                  ?>
                 </ul>
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+              <li class="footer"><?= Html::a('View All', ['/notification/all']) ?></li>
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <i class="fa fa-envelope-o"></i>
+              <span class="label label-warning"><?= $notificationTotal; ?></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">You have <?= $notificationTotal; ?> messages</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
+                    <?php
+                    foreach ($notificationModel as $notification) {
+                        
+                        ?>
+                    <li>
+                      <a href="<?= Yii::$app->homeUrl. $notification->url; ?>">
+                        <i class="fa fa-users text-aqua"></i> <?= $notification->message; ?>
+                      </a>
+                    </li>
+                    <?php
+                      
+                    }
+                    ?>
+                    
                 </ul>
               </li>
               <li class="footer"><a href="#">View all</a></li>

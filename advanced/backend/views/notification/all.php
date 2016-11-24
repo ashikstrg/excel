@@ -5,9 +5,9 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Training Notification';
-$this->miniTitle = 'Training Module';
-$this->subTitle = $read_status . ' Status';
+$this->title = 'Notification Summary';
+$this->miniTitle = 'Notification Module';
+$this->subTitle = 'All Notifications';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="notification-index">
@@ -16,14 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
     $gridColumns = [
 
         ['class' => 'yii\grid\SerialColumn'], 
-
-            'name',
-            'message',
-            'hr_employee_id',
-            'hr_designation',
-            'hr_name',
-            'created_at',
-            'seen',
+        
+        [
+            'header' => 'View',
+            'format' => 'raw',
+            'hAlign' => 'center',
+            'vAlign' => 'middle',
+            'value'=>function ($data) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', [$data->url . '&ntid=' . $data->id]);
+            },
+        ],
+        [
+            'attribute' => 'image_web_filename',
+            'format' => 'raw',
+            'value' => function ($model) {   
+            if ($model->image_web_filename!='')
+              return '<img src="'.Yii::$app->homeUrl. '/../uploads/hr/'.$model->image_web_filename.'" width="40px" height="40px">'; else return 'no image';
+            },
+        ], 
+        'module_name',
+        'created_by_name',
+        'name',
+        'message',
+        'created_at',
+        'seen',
     ];
 
     $fullExportMenu = ExportMenu::widget([
@@ -31,8 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
-//        'hiddenColumns'=>[0, 1],
-//        'noExportColumns'=>[0, 1],
+        'hiddenColumns'=>[1],
+        'noExportColumns'=>[1],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,
@@ -52,6 +68,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>    
     <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'rowOptions'=>function($model){
+                if($model->read_status == 'Unread'){
+                    return ['class' => 'info'];
+                }
+            },
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'pjax' => true,
@@ -64,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', [strtolower($read_status)], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['all'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 
@@ -80,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-footer">
     <div class="row">
         <div class="col-md-12">
-            <i>* In descending order.</i>
+            <i>* Your reading status will be monitored.</i>
         </div>
     </div>
 </div>

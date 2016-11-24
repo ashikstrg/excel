@@ -14,7 +14,7 @@ class NotificationSearch extends Notification
     {
         return [
             [['id', 'hr_id'], 'integer'],
-            [['name', 'module_name', 'url', 'hr_employee_id', 'hr_designation', 'hr_employee_type', 'hr_name', 'message', 'read_status', 'seen', 'created_at', 'created_by'], 'safe'],
+            [['name', 'module_name', 'url', 'hr_employee_id', 'hr_designation', 'hr_employee_type', 'hr_name', 'message', 'read_status', 'seen', 'created_at', 'created_by', 'created_by_name'], 'safe'],
         ];
     }
 
@@ -132,6 +132,39 @@ class NotificationSearch extends Notification
             ->andFilterWhere(['like', 'hr_name', $this->hr_name])
             ->andFilterWhere(['like', 'message', $this->message])
             ->andFilterWhere(['like', 'created_by', $this->created_by]);
+
+        return $dataProvider;
+    }
+    
+    public function all($params)
+    {
+        $query = Notification::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'hr_employee_id' => Yii::$app->session->get('employee_id'),
+            'seen' => $this->seen,
+            'created_at' => $this->created_at,
+            'read_status' => $this->read_status,
+        ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'url', $this->url])
+            ->andFilterWhere(['like', 'module_name', $this->module_name])
+            ->andFilterWhere(['like', 'message', $this->message])
+            ->andFilterWhere(['like', 'created_by', $this->created_by])
+            ->andFilterWhere(['like', 'created_by_name', $this->created_by_name]);
 
         return $dataProvider;
     }

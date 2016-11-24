@@ -4,45 +4,22 @@ namespace backend\models;
 
 use Yii;
 
-/**
- * This is the model class for table "notification".
- *
- * @property string $id
- * @property string $name
- * @property string $module_name
- * @property string $url
- * @property string $hr_id
- * @property string $hr_employee_id
- * @property string $hr_designation
- * @property string $hr_employee_type
- * @property string $hr_name
- * @property string $message
- * @property string $read_status
- * @property string $seen
- * @property string $created_at
- * @property string $created_by
- */
 class Notification extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+
     public static function tableName()
     {
         return 'notification';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['name', 'module_name', 'url', 'hr_id', 'hr_employee_id', 'hr_designation', 'hr_employee_type', 'hr_name', 'message', 'created_by'], 'required'],
-            [['hr_id'], 'integer'],
+            [['name', 'module_name', 'url', 'hr_id', 'hr_employee_id', 'hr_designation', 'hr_employee_type', 'hr_name', 'message', 'created_by', 'image_web_filename', 'created_by_name', 'batch'], 'required'],
+            [['hr_id', 'batch'], 'integer'],
             [['read_status'], 'string'],
             [['seen', 'created_at'], 'safe'],
-            [['name', 'url', 'created_by'], 'string', 'max' => 255],
+            [['name', 'url', 'created_by', 'image_web_filename', 'created_by_name'], 'string', 'max' => 255],
             [['module_name', 'hr_designation', 'hr_employee_type'], 'string', 'max' => 100],
             [['hr_employee_id'], 'string', 'max' => 50],
             [['hr_name'], 'string', 'max' => 80],
@@ -50,26 +27,26 @@ class Notification extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Notification',
             'module_name' => 'Module Name',
-            'url' => 'Url',
-            'hr_id' => 'Hr ID',
-            'hr_employee_id' => 'Hr Employee ID',
-            'hr_designation' => 'Hr Designation',
-            'hr_employee_type' => 'Hr Employee Type',
-            'hr_name' => 'Hr Name',
+            'url' => 'URL',
+            'hr_id' => 'HR ID',
+            'hr_employee_id' => 'HR Employee ID',
+            'hr_designation' => 'HR Designation',
+            'hr_employee_type' => 'HR Employee Type',
+            'hr_name' => 'HR Name',
             'message' => 'Message',
             'read_status' => 'Read Status',
-            'seen' => 'Seen',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
+            'seen' => 'Seen At',
+            'created_at' => 'Sent At',
+            'created_by' => 'Sent By',
+            'image_web_filename' =>'Image',
+            'created_by_name' => 'Sent By',
+            'batch' => 'Batch'
         ];
     }
 }

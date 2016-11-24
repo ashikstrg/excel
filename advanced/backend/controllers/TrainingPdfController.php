@@ -44,6 +44,23 @@ class TrainingPdfController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    
+    public function actionNotification_view($id, $ntid)
+    {
+        $notificationModel = \backend\models\Notification::find()
+                ->where('id=:id AND read_status=:read_status', 
+                [':id' => $ntid, ':read_status' => 'Unread'])
+                ->one();
+        if(!empty($notificationModel)) {
+            $notificationModel->read_status = 'Read';
+            $notificationModel->seen = new Expression('NOW()');
+            $notificationModel->save(false);
+        }
+        
+        return $this->render('notification_view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
     public function actionCreate()
     {
@@ -256,6 +273,7 @@ class TrainingPdfController extends Controller
                 foreach ($hrModel as $hr) {
                     
                     $bulkInsertArray[]=[
+                        'batch' => $traingPDFModel->batch,
                         'name' => $traingPDFModel->name,
                         'module_name' => 'Training',
                         'url' => '/training-pdf/notification_view?id=' . $id,
@@ -267,7 +285,9 @@ class TrainingPdfController extends Controller
                         'message' => $traingPDFModel->message,
                         'read_status' => 'Unread',
                         'created_at' => $now,
-                        'created_by' => $username
+                        'created_by' => $username,
+                        'image_web_filename' => Yii::$app->session->get('image_web_filename'),
+                        'created_by_name' => Yii::$app->session->get('name')
                     ];
                     
                 }
@@ -278,6 +298,7 @@ class TrainingPdfController extends Controller
         
         $tableName = 'notification';
         $columnNameArray=[
+            'batch',
             'name',
             'module_name',
             'url',
@@ -289,7 +310,9 @@ class TrainingPdfController extends Controller
             'message',
             'read_status',
             'created_at',
-            'created_by'
+            'created_by',
+            'image_web_filename',
+            'created_by_name'
         ];
         Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
         

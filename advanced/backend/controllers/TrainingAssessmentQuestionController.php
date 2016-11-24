@@ -3,13 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Notification;
-use backend\models\NotificationSearch;
+use backend\models\TrainingAssessmentQuestion;
+use backend\models\TrainingAssessmentQuestionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-class NotificationController extends Controller
+class TrainingAssessmentQuestionController extends Controller
 {
     public function behaviors()
     {
@@ -25,47 +25,12 @@ class NotificationController extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new NotificationSearch();
+        $searchModel = new TrainingAssessmentQuestionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-    }
-    
-    public function actionAll()
-    {
-        $searchModel = new NotificationSearch();
-        $dataProvider = $searchModel->all(Yii::$app->request->queryParams);
-
-        return $this->render('all', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-    
-    public function actionRead()
-    {
-        $searchModel = new NotificationSearch();
-        $dataProvider = $searchModel->read(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'read_status' => 'Read'
-        ]);
-    }
-    
-    public function actionUnread()
-    {
-        $searchModel = new NotificationSearch();
-        $dataProvider = $searchModel->unread(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'read_status' => 'Unread'
         ]);
     }
 
@@ -75,10 +40,38 @@ class NotificationController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    
+    public function actionAdd($id)
+    {
+        $model = new TrainingAssessmentQuestion();
+        $trainingAssessmentCategoryModel = \backend\models\TrainingAssessmentCategory::findOne($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->category_id = $id;
+            
+            if($model->save()) {
+
+                $trainingAssessmentCategoryModel->status = 'Pending';
+                $trainingAssessmentCategoryModel->save();
+                
+                Yii::$app->session->setFlash('success', 'The question has successfully been added.');
+                
+            } else{
+                Yii::$app->session->setFlash('error', 'Invalid Character SET !!! Please try again.');
+            }
+            
+        }
+        
+        return $this->render('add', [
+            'model' => $model,
+            'trainingAssessmentCategoryModel' => $trainingAssessmentCategoryModel
+        ]);
+    }
 
     public function actionCreate()
     {
-        $model = new Notification();
+        $model = new TrainingAssessmentQuestion();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -111,7 +104,7 @@ class NotificationController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Notification::findOne($id)) !== null) {
+        if (($model = TrainingAssessmentQuestion::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

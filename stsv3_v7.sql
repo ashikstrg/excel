@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2016 at 04:23 PM
+-- Generation Time: Nov 24, 2016 at 03:15 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `hr` (
 
 INSERT INTO `hr` (`id`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_channel_type`, `retail_type`, `retail_zone`, `retail_area`, `retail_territory`, `designation_id`, `designation`, `employee_type_id`, `employee_type`, `employee_id`, `tm_parent`, `tm_employee_id`, `tm_name`, `am_parent`, `am_employee_id`, `am_name`, `csm_parent`, `csm_employee_id`, `csm_name`, `name`, `status`, `joining_date`, `leaving_date`, `image`, `image_src_filename`, `image_web_filename`, `contact_no_official`, `contact_no_personal`, `name_immergency_contact_person`, `relation_immergency_contact_person`, `contact_no_immergency`, `email_address`, `email_address_official`, `bank_name`, `bank_ac_name`, `bank_ac_no`, `bkash_no`, `blood_group`, `graduation_status`, `educational_qualification`, `educational_institute`, `educational_qualification_second_last`, `educational_institute_second_last`, `previous_experience`, `previous_experience_two`, `permanent_address`, `present_address`, `created_at`, `created_by`, `updated_at`, `updated_by`, `user_id`) VALUES
 (10, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 5, 'SEC', 0, 'FSM', 'S12458', 4, '3546456', 'Test Name TM', 3, '98765', 'Test Name AM', 2, '123567', 'Ashikur Rahman', 'Ashikur Rahman', 'Active', '2016-09-08', NULL, '', '1.png', 'hdAKk8OdQF4dc1Mxzp4bdsQibUXcWzqT.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik@analyzenbd.com', 'ashik@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'A+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-09-28 06:42:53', 'admin1', NULL, NULL, 7),
-(11, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 6, 'RSA-G', 0, 'FSM', 'R12458', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 'Test Name RSAG', 'Active', '2016-10-01', NULL, '', 'numericalpuzzle1.png', 'vIXZBcFFCVnCZRPj7JSQLWTYkzxSjE0u.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik5@analyzenbd.com', 'ashik5@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'B+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 08:58:45', 'admin1', '2016-10-16 05:14:06', 'admin1', 12);
+(11, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 6, 'RSA-G', 0, 'FSM', 'R12458', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 'Test Name RSAG', 'Active', '2016-10-01', NULL, '', 'ashik.jpg', '8No1F9R-IFlcUw7FTsMtGlVrIA9uL16L.jpg', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik5@analyzenbd.com', 'ashik5@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'B+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 08:58:45', 'admin1', '2016-11-24 07:21:29', 'admin1', 12);
 
 -- --------------------------------------------------------
 
@@ -530,99 +530,106 @@ CREATE TABLE IF NOT EXISTS `left_menu` (
   `icon` varchar(255) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `used_by` varchar(64) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `left_menu`
 --
 
 INSERT INTO `left_menu` (`id`, `name`, `parent_id`, `label`, `icon`, `url`, `used_by`) VALUES
-(1, 'Admin Dashboard', 0, 'Dashboard', 'fa fa-dashboard', '#', 'admin'),
-(2, 'Admin Home', 1, 'Home', 'fa fa-home', '/site/index', 'admin'),
-(4, 'Retail Utility', 0, 'Retail Utility', 'fa fa-wrench', '#', 'admin'),
-(5, 'Channel Type Add', 4, 'Channel Type Add', 'fa fa-square-o', '/channel-type/create', 'admin'),
-(6, 'Channel Type Control Panel', 4, 'Channel Type Config', 'fa fa-square-o', '/channel-type/index', 'admin'),
-(7, 'Retail Type Add', 4, 'Retail Type Add', 'fa fa-square-o', '/retail-type/create', 'admin'),
-(8, 'Retail Type Index', 4, 'Retail Type Config', 'fa fa-square-o', '/retail-type/index', 'admin'),
-(9, 'Retail Zone Create', 4, 'Retail Zone Add', 'fa fa-square-o', '/retail-zone/create', 'admin'),
-(10, 'Retail Zone Index', 4, 'Retail Zone Config', 'fa fa-square-o', '/retail-zone/index', 'admin'),
-(11, 'Retail Area Create', 4, 'Retail Area Add', 'fa fa-square-o', '/retail-area/create', 'admin'),
-(12, 'Retail Area Index', 4, 'Retail Area Config', 'fa fa-square-o', '/retail-area/index', 'admin'),
-(13, 'Retail Location Create', 4, 'Retail Location Add', 'fa fa-square-o', '/retail-location/create', 'admin'),
-(14, 'Retail Location Index', 4, 'Retail Location Config', 'fa fa-square-o', '/retail-location/index', 'admin'),
-(15, 'Utility Settings', 0, 'Utility Settings', 'fa fa-cog', '#', 'admin'),
-(17, 'Division Index', 15, 'Division Config', 'fa fa-square-o', '/divisions/index', 'admin'),
-(18, 'Districts Index', 15, 'District Config', 'fa fa-square-o', '/districts/index', 'admin'),
-(19, 'Upazilas Index', 15, 'Upazila Config', 'fa fa-square-o', '/upazilas/index', 'admin'),
-(20, 'Retail Hash', 0, 'Retail Module', 'fa fa-bullseye', '#', 'admin'),
-(21, 'Retail Create', 20, 'Retail Add', 'fa fa-square-o', '/retail/create', 'admin'),
-(22, 'Retail Index', 20, 'Retail Config', 'fa fa-square-o', '/retail/index', 'admin'),
-(23, 'HR Utility', 0, 'HR Utility', 'fa fa-user-plus', '#', 'admin'),
-(24, 'HR | Employee Type Create', 23, 'Employee Type Add', 'fa fa-square-o', '/hr-employee-type/create', 'admin'),
-(25, 'HR | Employee Type Index', 23, 'Employee Type Conf', 'fa fa-square-o', '/hr-employee-type/index', 'admin'),
-(26, 'HR | Designation Create', 23, 'Designation Add', 'fa fa-square-o', '/hr-designation/create', 'admin'),
-(27, 'HR | Designation Index', 23, 'Designation Config', 'fa fa-square-o', '/hr-designation/index', 'admin'),
-(28, 'HR Hash', 0, 'HR Module', 'fa fa-user', '#', 'admin'),
-(29, 'HR Create', 28, 'HR Add (FSM)', 'fa fa-square-o', '/hr/create', 'admin'),
-(30, 'HR Index', 28, 'HR Config (FSM)', 'fa fa-square-o', '/hr/index', 'admin'),
-(33, 'HR-Sales Create', 28, 'HR Add (Sales)', 'fa fa-square-o', '/hr-sales/create', 'admin'),
-(34, 'HR-Sales Index', 28, 'HR Config (Sales)', 'fa fa-square-o', '/hr-sales/index', 'admin'),
-(35, 'Product Utility Hash', 0, 'Product Utility', 'fa fa-product-hunt', '#', 'admin'),
-(36, 'Product-Type Create', 35, 'Product Type Add', 'fa fa-square-o', '/product-type/create', 'admin'),
-(37, 'Product-Type Index', 35, 'Product Type Config', 'fa fa-square-o', '/product-type/index', 'admin'),
-(38, 'Product Hash', 0, 'Product Module', 'fa fa-gift', '#', 'admin'),
-(39, 'Product Create', 38, 'Product Add', 'fa fa-square-o', '/product/create', 'admin'),
-(40, 'Product Index', 38, 'Product Config', 'fa fa-square-o', '/product/index', 'admin'),
-(41, 'Product-Color Create', 35, 'Product Color Add', 'fa fa-square-o', '/product-color/create', 'admin'),
-(42, 'Product-Color Index', 35, 'Product Color Config', 'fa fa-square-o', '/product-color/index', 'admin'),
-(43, 'User Hash', 0, 'User Module', 'fa fa-users', '#', 'admin'),
-(44, 'User Index', 43, 'User Config', 'fa fa-square-o', '/user/index', 'admin'),
-(45, 'FSM Dashboard', 0, 'Dashboard', 'fa fa-dashboard', '#', 'FSM'),
-(46, 'FSM Home Index', 45, 'Home', 'fa fa-home', '/site/index', 'FSM'),
-(47, 'FSM Sales Operation', 0, 'Sales Operation', 'fa fa-gift', '#', 'FSM'),
-(48, 'FSM Sales Create', 47, 'Sales Data Upload', 'fa fa-circle', '/sales-batch/create', 'FSM'),
-(49, 'FSM SALES BATCH INDEX', 47, 'Sales Batch File', 'fa fa-circle', '/sales-batch/index', 'FSM'),
-(50, 'FSM Slaes Index', 47, 'Sales Raw Data', 'fa fa-circle', '/sales/index', 'FSM'),
-(51, 'Sales Hash', 0, 'Sales FSM', 'fa fa-gift', '#', 'Sales'),
-(52, 'Sales Batch Index', 51, 'Sales Batch File', 'fa fa-circle', '/sales-batch/index', 'Sales'),
-(53, 'Slaes Index', 51, 'Sales Raw Data', 'fa fa-circle', '/sales/index', 'Sales'),
-(54, 'Target Hash', 0, 'Target Operation', 'fa fa-arrows', '#', 'admin'),
-(55, 'Target Create', 54, 'Upload Target', 'fa fa-circle', '/target-batch/create', 'admin'),
-(56, 'Target Batch Index', 54, 'Target Batch File', 'fa fa-circle', '/target-batch/index', 'admin'),
-(57, 'Target Index', 54, 'Target Raw Data', 'fa fa-circle', '/target/index', 'admin'),
-(58, 'Target Hash', 0, 'Target Operation', 'fa fa-arrows', '#', 'Sales'),
-(59, 'Target Create', 58, 'Upload Target', 'fa fa-circle', '/target-batch/upload', 'Sales'),
-(60, 'Target Batch Index', 58, 'Target Batch File', 'fa fa-circle', '/target-batch/index', 'Sales'),
-(61, 'Target Index', 58, 'Target Raw Data', 'fa fa-circle', '/target/index', 'Sales'),
-(62, 'Sales National Hash', 0, 'National Sales', 'fa fa-mobile', '#', 'Sales'),
-(63, 'Slaes National', 62, 'Sales Volume', 'fa fa-circle', '/sales/national', 'Sales'),
-(64, 'Stock Hash', 0, 'Stock Operation', 'fa fa-hdd-o', '#', 'FSM'),
-(65, 'Stock Batch Create', 64, 'Upload Stock', 'fa fa-circle', '/stock-batch/create', 'FSM'),
-(66, 'Stock Batch Index', 64, 'Stock Batch Data', 'fa fa-circle', '/stock-batch/index', 'FSM'),
-(67, 'Stock Index', 64, 'Stock Raw Data', 'fa fa-circle', '/stock/index', 'FSM'),
-(68, 'Slaes National', 62, 'Sales Value', 'fa fa-circle', '/sales/national_val', 'Sales'),
-(69, 'Stock Daily Hash', 0, 'Stock Module', 'fa fa-hdd-o', '#', 'Sales'),
-(70, 'Stock Index', 69, 'Stock Raw Data', 'fa fa-circle', '/stock/index', 'Sales'),
-(71, 'Stock Daily', 69, 'Daily Stock', 'fa fa-circle', '/stock/daily', 'Sales'),
-(72, 'Leaderboard', 0, 'Leaderboard', 'fa fa-arrow-circle-up', '#', 'Sales'),
-(73, 'Leaderboard', 72, 'Volume', 'fa fa-circle', '/target/leaderboard', 'Sales'),
-(74, 'Leaderboard Module Value', 72, 'Value', 'fa fa-circle', '/target/leaderboard_value', 'Sales'),
-(75, 'Sales Hash', 0, 'Sales Module', 'fa fa-shopping-basket ', '#', 'Sales'),
-(76, 'Sales FSM Model', 75, 'F/M Report (Vol)', 'fa fa-circle', '/sales/retail_model', 'Sales'),
-(77, 'Sales FSM Model Value', 75, 'F/M Report (Val)', 'fa fa-circle', '/sales/retail_model_value', 'Sales'),
-(78, 'Sales FSM National', 75, 'F/D Report (Vol)', 'fa fa-circle', '/sales/national_retail', 'Sales'),
-(79, 'Sales FSM National Value', 75, 'F/D Report (Val)', 'fa fa-circle', '/sales/national_fsm_value', 'Sales'),
-(80, 'Target Trend Hash', 0, 'Target Trend', 'fa fa-bar-chart', '#', 'Sales'),
-(81, 'Target VS Achievement', 80, 'TGT VS ACHV (Vol)', 'fa fa-circle', '/target/trend_achievement', 'Sales'),
-(82, 'Target VS Achievement', 80, 'TGT VS ACHV (Val)', 'fa fa-circle', '/target/trend_achievement_value', 'Sales'),
-(83, 'HR-Trainer Create', 28, 'HR Add (Trainer)', 'fa fa-square-o', '/hr-trainer/create', 'admin'),
-(84, 'HR-Trainer Index', 28, 'HR Config (Trainer)', 'fa fa-square-o', '/hr-trainer/index', 'admin'),
-(85, 'Training Module Hash', 0, 'Training Module', 'fa fa-calendar-check-o', '#', 'Trainer'),
-(86, 'Training PDF Create', 85, 'Add Training PDF', 'fa fa-square-o', '/training-pdf/create', 'Trainer'),
-(87, 'Training PDF Index', 85, 'Training PDF Config', 'fa fa-square-o', '/training-pdf/index', 'Trainer'),
-(90, 'Notification Module Hash', 0, 'Training Notification', 'fa fa-bell', '#', 'Trainer'),
-(91, 'Notification Read', 90, 'Read', 'fa fa-square-o', '/notification/read', 'Trainer'),
-(92, 'Notification Unread', 90, 'Unread', 'fa fa-square-o', '/notification/unread', 'Trainer');
+(1, 'Trainer Dashboard', 0, 'Dashboard', 'fa fa-dashboard', '#', 'Trainer'),
+(201, 'Admin Dashboard', 0, 'Dashboard', 'fa fa-dashboard', '#', 'admin'),
+(202, 'Admin Home', 201, 'Home', 'fa fa-home', '/site/index', 'admin'),
+(204, 'Retail Utility', 0, 'Retail Utility', 'fa fa-wrench', '#', 'admin'),
+(205, 'Channel Type Add', 204, 'Channel Type Add', 'fa fa-square-o', '/channel-type/create', 'admin'),
+(206, 'Channel Type Control Panel', 204, 'Channel Type Config', 'fa fa-square-o', '/channel-type/index', 'admin'),
+(207, 'Retail Type Add', 204, 'Retail Type Add', 'fa fa-square-o', '/retail-type/create', 'admin'),
+(208, 'Retail Type Index', 204, 'Retail Type Config', 'fa fa-square-o', '/retail-type/index', 'admin'),
+(209, 'Retail Zone Create', 204, 'Retail Zone Add', 'fa fa-square-o', '/retail-zone/create', 'admin'),
+(210, 'Retail Zone Index', 204, 'Retail Zone Config', 'fa fa-square-o', '/retail-zone/index', 'admin'),
+(211, 'Retail Area Create', 204, 'Retail Area Add', 'fa fa-square-o', '/retail-area/create', 'admin'),
+(212, 'Retail Area Index', 204, 'Retail Area Config', 'fa fa-square-o', '/retail-area/index', 'admin'),
+(213, 'Retail Location Create', 204, 'Retail Location Add', 'fa fa-square-o', '/retail-location/create', 'admin'),
+(214, 'Retail Location Index', 204, 'Retail Location Config', 'fa fa-square-o', '/retail-location/index', 'admin'),
+(215, 'Utility Settings', 0, 'Utility Settings', 'fa fa-cog', '#', 'admin'),
+(217, 'Division Index', 215, 'Division Config', 'fa fa-square-o', '/divisions/index', 'admin'),
+(218, 'Districts Index', 215, 'District Config', 'fa fa-square-o', '/districts/index', 'admin'),
+(219, 'Upazilas Index', 215, 'Upazila Config', 'fa fa-square-o', '/upazilas/index', 'admin'),
+(220, 'Retail Hash', 0, 'Retail Module', 'fa fa-bullseye', '#', 'admin'),
+(221, 'Retail Create', 220, 'Retail Add', 'fa fa-square-o', '/retail/create', 'admin'),
+(222, 'Retail Index', 220, 'Retail Config', 'fa fa-square-o', '/retail/index', 'admin'),
+(223, 'HR Utility', 0, 'HR Utility', 'fa fa-user-plus', '#', 'admin'),
+(224, 'HR | Employee Type Create', 223, 'Employee Type Add', 'fa fa-square-o', '/hr-employee-type/create', 'admin'),
+(225, 'HR | Employee Type Index', 223, 'Employee Type Conf', 'fa fa-square-o', '/hr-employee-type/index', 'admin'),
+(226, 'HR | Designation Create', 223, 'Designation Add', 'fa fa-square-o', '/hr-designation/create', 'admin'),
+(227, 'HR | Designation Index', 223, 'Designation Config', 'fa fa-square-o', '/hr-designation/index', 'admin'),
+(228, 'HR Hash', 0, 'HR Module', 'fa fa-user', '#', 'admin'),
+(229, 'HR Create', 228, 'HR Add (FSM)', 'fa fa-square-o', '/hr/create', 'admin'),
+(230, 'HR Index', 228, 'HR Config (FSM)', 'fa fa-square-o', '/hr/index', 'admin'),
+(233, 'HR-Sales Create', 228, 'HR Add (Sales)', 'fa fa-square-o', '/hr-sales/create', 'admin'),
+(234, 'HR-Sales Index', 228, 'HR Config (Sales)', 'fa fa-square-o', '/hr-sales/index', 'admin'),
+(235, 'Product Utility Hash', 0, 'Product Utility', 'fa fa-product-hunt', '#', 'admin'),
+(236, 'Product-Type Create', 235, 'Product Type Add', 'fa fa-square-o', '/product-type/create', 'admin'),
+(237, 'Product-Type Index', 235, 'Product Type Config', 'fa fa-square-o', '/product-type/index', 'admin'),
+(238, 'Product Hash', 0, 'Product Module', 'fa fa-gift', '#', 'admin'),
+(239, 'Product Create', 238, 'Product Add', 'fa fa-square-o', '/product/create', 'admin'),
+(240, 'Product Index', 238, 'Product Config', 'fa fa-square-o', '/product/index', 'admin'),
+(241, 'Product-Color Create', 235, 'Product Color Add', 'fa fa-square-o', '/product-color/create', 'admin'),
+(242, 'Product-Color Index', 235, 'Product Color Config', 'fa fa-square-o', '/product-color/index', 'admin'),
+(243, 'User Hash', 0, 'User Module', 'fa fa-users', '#', 'admin'),
+(244, 'User Index', 243, 'User Config', 'fa fa-square-o', '/user/index', 'admin'),
+(245, 'FSM Dashboard', 0, 'Dashboard', 'fa fa-dashboard', '#', 'FSM'),
+(246, 'FSM Home Index', 245, 'Home', 'fa fa-home', '/site/index', 'FSM'),
+(247, 'FSM Sales Operation', 0, 'Sales Operation', 'fa fa-gift', '#', 'FSM'),
+(248, 'FSM Sales Create', 247, 'Sales Data Upload', 'fa fa-circle', '/sales-batch/create', 'FSM'),
+(249, 'FSM SALES BATCH INDEX', 247, 'Sales Batch File', 'fa fa-circle', '/sales-batch/index', 'FSM'),
+(250, 'FSM Slaes Index', 247, 'Sales Raw Data', 'fa fa-circle', '/sales/index', 'FSM'),
+(251, 'Sales Hash', 0, 'Sales FSM', 'fa fa-gift', '#', 'Sales'),
+(252, 'Sales Batch Index', 251, 'Sales Batch File', 'fa fa-circle', '/sales-batch/index', 'Sales'),
+(253, 'Slaes Index', 251, 'Sales Raw Data', 'fa fa-circle', '/sales/index', 'Sales'),
+(254, 'Target Hash', 0, 'Target Operation', 'fa fa-arrows', '#', 'admin'),
+(255, 'Target Create', 254, 'Upload Target', 'fa fa-circle', '/target-batch/create', 'admin'),
+(256, 'Target Batch Index', 254, 'Target Batch File', 'fa fa-circle', '/target-batch/index', 'admin'),
+(257, 'Target Index', 254, 'Target Raw Data', 'fa fa-circle', '/target/index', 'admin'),
+(258, 'Target Hash', 0, 'Target Operation', 'fa fa-arrows', '#', 'Sales'),
+(259, 'Target Create', 258, 'Upload Target', 'fa fa-circle', '/target-batch/upload', 'Sales'),
+(260, 'Target Batch Index', 258, 'Target Batch File', 'fa fa-circle', '/target-batch/index', 'Sales'),
+(261, 'Target Index', 258, 'Target Raw Data', 'fa fa-circle', '/target/index', 'Sales'),
+(262, 'Sales National Hash', 0, 'National Sales', 'fa fa-mobile', '#', 'Sales'),
+(263, 'Slaes National', 262, 'Sales Volume', 'fa fa-circle', '/sales/national', 'Sales'),
+(264, 'Stock Hash', 0, 'Stock Operation', 'fa fa-hdd-o', '#', 'FSM'),
+(265, 'Stock Batch Create', 264, 'Upload Stock', 'fa fa-circle', '/stock-batch/create', 'FSM'),
+(266, 'Stock Batch Index', 264, 'Stock Batch Data', 'fa fa-circle', '/stock-batch/index', 'FSM'),
+(267, 'Stock Index', 264, 'Stock Raw Data', 'fa fa-circle', '/stock/index', 'FSM'),
+(268, 'Slaes National', 262, 'Sales Value', 'fa fa-circle', '/sales/national_val', 'Sales'),
+(269, 'Stock Daily Hash', 0, 'Stock Module', 'fa fa-hdd-o', '#', 'Sales'),
+(270, 'Stock Index', 269, 'Stock Raw Data', 'fa fa-circle', '/stock/index', 'Sales'),
+(271, 'Stock Daily', 269, 'Daily Stock', 'fa fa-circle', '/stock/daily', 'Sales'),
+(272, 'Leaderboard', 0, 'Leaderboard', 'fa fa-arrow-circle-up', '#', 'Sales'),
+(273, 'Leaderboard', 272, 'Volume', 'fa fa-circle', '/target/leaderboard', 'Sales'),
+(274, 'Leaderboard Module Value', 272, 'Value', 'fa fa-circle', '/target/leaderboard_value', 'Sales'),
+(275, 'Sales Hash', 0, 'Sales Module', 'fa fa-shopping-basket ', '#', 'Sales'),
+(276, 'Sales FSM Model', 275, 'F/M Report (Vol)', 'fa fa-circle', '/sales/retail_model', 'Sales'),
+(277, 'Sales FSM Model Value', 275, 'F/M Report (Val)', 'fa fa-circle', '/sales/retail_model_value', 'Sales'),
+(278, 'Sales FSM National', 275, 'F/D Report (Vol)', 'fa fa-circle', '/sales/national_retail', 'Sales'),
+(279, 'Sales FSM National Value', 275, 'F/D Report (Val)', 'fa fa-circle', '/sales/national_fsm_value', 'Sales'),
+(280, 'Target Trend Hash', 0, 'Target Trend', 'fa fa-bar-chart', '#', 'Sales'),
+(281, 'Target VS Achievement', 280, 'TGT VS ACHV (Vol)', 'fa fa-circle', '/target/trend_achievement', 'Sales'),
+(282, 'Target VS Achievement', 280, 'TGT VS ACHV (Val)', 'fa fa-circle', '/target/trend_achievement_value', 'Sales'),
+(283, 'HR-Trainer Create', 228, 'HR Add (Trainer)', 'fa fa-square-o', '/hr-trainer/create', 'admin'),
+(284, 'HR-Trainer Index', 228, 'HR Config (Trainer)', 'fa fa-square-o', '/hr-trainer/index', 'admin'),
+(285, 'Training Module Hash', 0, 'Training Module', 'fa fa-calendar-check-o', '#', 'Trainer'),
+(286, 'Training PDF Create', 285, 'Add Training', 'fa fa-square-o', '/training-pdf/create', 'Trainer'),
+(287, 'Training PDF Index', 285, 'Training Config', 'fa fa-square-o', '/training-pdf/index', 'Trainer'),
+(290, 'Notification Module Hash', 0, 'Training Notification', 'fa fa-bell', '#', 'Trainer'),
+(291, 'Notification Read', 290, 'Read', 'fa fa-square-o', '/notification/read', 'Trainer'),
+(292, 'Notification Unread', 290, 'Unread', 'fa fa-square-o', '/notification/unread', 'Trainer'),
+(293, 'Training Assessment Questin Module Hash', 0, 'Assessment Module', 'fa fa-question-circle-o ', '#', 'Trainer'),
+(294, 'Trainer Home', 1, 'Home', 'fa fa-home', '/site/index', 'Trainer'),
+(295, 'Trainer Assessment Category Create', 293, 'Add Assessment', 'fa fa-square-o', '/training-assessment-category/create', 'Trainer'),
+(296, 'Trainer Assessment Category Index', 293, 'Assessment Config', 'fa fa-square-o', '/training-assessment-category/index', 'Trainer'),
+(297, 'Assessment', 0, 'Monthly Assessment', 'fa fa-calendar-check-o', '#', 'FSM'),
+(298, 'Assessment Check', 297, 'Assessment Check', 'fa fa-square-o', '/training-assessment-category/assessment', 'FSM');
 
 -- --------------------------------------------------------
 
@@ -652,6 +659,7 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 
 CREATE TABLE IF NOT EXISTS `notification` (
   `id` int(8) unsigned NOT NULL,
+  `batch` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `module_name` varchar(100) NOT NULL,
   `url` varchar(255) NOT NULL,
@@ -664,17 +672,59 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `read_status` enum('Read','Unread') NOT NULL DEFAULT 'Unread',
   `seen` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
-  `created_by` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `created_by` varchar(255) NOT NULL,
+  `created_by_name` varchar(255) NOT NULL,
+  `image_web_filename` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `notification`
 --
 
-INSERT INTO `notification` (`id`, `name`, `module_name`, `url`, `hr_id`, `hr_employee_id`, `hr_designation`, `hr_employee_type`, `hr_name`, `message`, `read_status`, `seen`, `created_at`, `created_by`) VALUES
-(1, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'This Is test', 'Unread', NULL, '2016-11-14 19:09:15', 'TRIN1234'),
-(2, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 8, '12456', 'AM', 'Sales', 'Test Name AM', 'This Is test', 'Unread', NULL, '2016-11-14 19:09:15', 'TRIN1234'),
-(3, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'This Is test', 'Read', NULL, '2016-11-14 19:09:15', 'TRIN1234');
+INSERT INTO `notification` (`id`, `batch`, `name`, `module_name`, `url`, `hr_id`, `hr_employee_id`, `hr_designation`, `hr_employee_type`, `hr_name`, `message`, `read_status`, `seen`, `created_at`, `created_by`, `created_by_name`, `image_web_filename`) VALUES
+(1, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:37', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(2, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:37', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(3, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:42', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(4, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-15 19:56:51', '2016-11-15 18:19:42', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(5, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:48', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(6, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-15 19:32:10', '2016-11-15 18:19:48', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(7, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:53', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(8, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', NULL, '2016-11-15 18:19:53', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(9, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:58', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(10, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 8, '12456', 'AM', 'Sales', 'Test Name AM', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:58', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(11, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:58', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(12, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'This Is test', 'Unread', NULL, '2016-11-15 18:20:07', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(13, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 8, '12456', 'AM', 'Sales', 'Test Name AM', 'This Is test', 'Unread', NULL, '2016-11-15 18:20:07', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(14, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'This Is test', 'Unread', NULL, '2016-11-15 18:20:07', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(15, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'This Is test', 'Unread', NULL, '2016-11-15 18:20:26', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(16, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 8, '12456', 'AM', 'Sales', 'Test Name AM', 'This Is test', 'Unread', NULL, '2016-11-15 18:20:26', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(17, 18446744073709551615, 'Test Training Seven', 'Training', '/training-pdf/notification_view?id=22', 7, 'TM123456', 'TM', 'Sales', 'Test NameTM', 'This Is test', 'Unread', NULL, '2016-11-15 18:20:26', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(18, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 19:08:24', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(19, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-15 19:31:19', '2016-11-15 19:08:24', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(20, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 19:08:33', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(21, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-15 19:24:30', '2016-11-15 19:08:33', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(22, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 19:08:39', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(23, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', NULL, '2016-11-15 19:08:39', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(24, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-23 14:42:18', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(25, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-23 16:28:09', '2016-11-23 14:42:18', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(26, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 13:31:30', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(27, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 13:31:59', '2016-11-24 13:31:30', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(28, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 16:39:00', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(29, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 17:41:07', '2016-11-24 16:39:00', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(30, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 17:42:12', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(31, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 17:42:27', '2016-11-24 17:42:12', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(32, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 17:45:30', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(33, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 17:45:41', '2016-11-24 17:45:30', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(34, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 17:47:00', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(35, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 17:47:10', '2016-11-24 17:47:00', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(36, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 17:49:47', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(37, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 17:49:53', '2016-11-24 17:49:47', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(38, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 17:50:52', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(39, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 17:51:10', '2016-11-24 17:50:52', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(40, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 19:09:25', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(41, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 19:09:37', '2016-11-24 19:09:25', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(42, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'New Assessment on S9 Edge', 'Unread', NULL, '2016-11-24 19:49:36', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(43, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'New Assessment on S9 Edge', 'Read', '2016-11-24 19:49:48', '2016-11-24 19:49:36', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg');
 
 -- --------------------------------------------------------
 
@@ -1249,9 +1299,27 @@ INSERT INTO `target_batch` (`id`, `batch`, `file_import`, `status`, `created_by`
 CREATE TABLE IF NOT EXISTS `training_assessment_category` (
   `id` int(11) unsigned NOT NULL,
   `batch` bigint(20) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `message` varchar(550) NOT NULL,
   `designations` varchar(550) NOT NULL,
-  `date_month` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `qlimit` int(8) unsigned NOT NULL,
+  `estimated_time` int(8) unsigned NOT NULL,
+  `date_month` date NOT NULL,
+  `status` enum('Active','Inactive','Pending','Finish') NOT NULL DEFAULT 'Inactive',
+  `notification_count` int(8) unsigned NOT NULL DEFAULT '0',
+  `created_by` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `training_assessment_category`
+--
+
+INSERT INTO `training_assessment_category` (`id`, `batch`, `name`, `message`, `designations`, `qlimit`, `estimated_time`, `date_month`, `status`, `notification_count`, `created_by`, `created_at`) VALUES
+(5, 18446744073709551615, 'Sample Assessment FSM', 'New Assessment on Note 7', 'SEC,RSA-G,RSA-R,RSA-Y', 0, 1800, '2016-11-01', 'Inactive', 0, 'TRIN1234', '2016-11-23 14:31:52'),
+(6, 18446744073709551615, 'Sample Assessment Two', 'Assessment on S9', 'TM', 0, 6000, '2016-12-01', 'Active', 0, 'TRIN1234', '2016-11-23 14:32:14'),
+(7, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Sample Assessment on Technology ', 'SEC,RSA-G,RSA-R,RSA-Y', 4, 20, '2016-12-01', 'Active', 9, 'TRIN1234', '2016-11-24 16:37:39'),
+(8, 14799940753816, 'True Sample Assessment', 'New Assessment on S9 Edge', 'SEC,RSA-G,RSA-R', 5, 6, '2016-11-01', 'Active', 1, 'TRIN1234', '2016-11-24 19:27:55');
 
 -- --------------------------------------------------------
 
@@ -1261,15 +1329,34 @@ CREATE TABLE IF NOT EXISTS `training_assessment_category` (
 
 CREATE TABLE IF NOT EXISTS `training_assessment_question` (
   `id` int(11) unsigned NOT NULL,
-  `batch` bigint(20) unsigned NOT NULL,
   `question_name` text CHARACTER SET utf8 NOT NULL,
   `answer1` varchar(250) CHARACTER SET utf8 NOT NULL,
   `answer2` varchar(250) CHARACTER SET utf8 NOT NULL,
   `answer3` varchar(250) CHARACTER SET utf8 NOT NULL,
   `answer4` varchar(250) CHARACTER SET utf8 NOT NULL,
   `answer` int(8) unsigned NOT NULL,
+  `choice` enum('Single','Multiple') NOT NULL DEFAULT 'Single',
   `category_id` int(11) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `training_assessment_question`
+--
+
+INSERT INTO `training_assessment_question` (`id`, `question_name`, `answer1`, `answer2`, `answer3`, `answer4`, `answer`, `choice`, `category_id`) VALUES
+(1, 'What is the capital of Bangladsh?', 'Khulna', 'Barisal', 'Dhaka', 'Sylhet', 3, 'Single', 7),
+(2, 'What is the center of Bangladsh?', 'Khulna', 'Barisal', 'Dhaka', 'Sylhet', 3, 'Single', 7),
+(3, 'How many districts in Bangladsh?', '54', '44', '34', '64', 4, 'Single', 7),
+(4, 'What karnel used by most of the os?', 'Windows', 'MAC', 'Android', 'Linux', 4, 'Single', 7),
+(5, 'What is VLAN?', 'Static LAN', 'Physical LAN', 'Logical LAN', 'None of the above', 3, 'Single', 7),
+(6, 'In what purpose ICMP used for?', 'To show error message', 'To solve error', 'Both of above', 'None of above', 1, 'Single', 7),
+(7, 'What is the color of SKY?', 'Blue', 'Green', 'Red', 'White', 1, 'Single', 8),
+(8, 'What is the color of Ocean?', 'Red', 'Blue', 'Geen', 'White', 2, 'Single', 8),
+(9, 'What is the color of hair?', 'White', 'Blue', 'Black', 'Gray', 3, 'Single', 8),
+(10, 'What is the color of lip?', 'White', 'Blue', 'Black', 'Red', 4, 'Single', 8),
+(11, 'What is the color of leaf?', 'Green', 'Blue', 'Black', 'Red', 1, 'Single', 8),
+(12, 'What is the color of Panda?', 'White', 'Blue', 'Black', '1 & 3 Both', 4, 'Single', 8),
+(13, 'What is the color of cloud?', 'White', 'Blue', 'Black', 'Green', 3, 'Single', 8);
 
 -- --------------------------------------------------------
 
@@ -1279,20 +1366,29 @@ CREATE TABLE IF NOT EXISTS `training_assessment_question` (
 
 CREATE TABLE IF NOT EXISTS `training_assessment_result` (
   `id` int(11) unsigned NOT NULL,
-  `batch` bigint(20) unsigned NOT NULL,
   `category_id` int(11) unsigned NOT NULL,
   `hr_employee_id` varchar(50) NOT NULL,
   `hr_name` varchar(80) NOT NULL,
   `hr_designation` varchar(100) NOT NULL,
   `hr_employee_type` varchar(100) NOT NULL,
-  `retail_dms_code` varchar(100) NOT NULL,
-  `retail_name` varchar(150) NOT NULL,
   `score` int(11) unsigned NOT NULL,
+  `right_answer` int(8) unsigned NOT NULL,
+  `wrong_answer` int(8) unsigned NOT NULL,
+  `un_answer` int(8) unsigned NOT NULL,
   `score_percent` decimal(10,2) unsigned NOT NULL,
-  `total_time` int(11) unsigned NOT NULL,
+  `total_time` decimal(10,2) unsigned NOT NULL,
   `date_month` date NOT NULL,
-  `participation_datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `participation_datetime` datetime NOT NULL,
+  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Inactive'
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `training_assessment_result`
+--
+
+INSERT INTO `training_assessment_result` (`id`, `category_id`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `score`, `right_answer`, `wrong_answer`, `un_answer`, `score_percent`, `total_time`, `date_month`, `participation_datetime`, `status`) VALUES
+(3, 7, 'R12458', 'Test Name RSAG', 'RSA-G', 'FSM', 1, 1, 3, 0, '25.00', '0.18', '2016-12-01', '2016-11-24 18:57:11', 'Active'),
+(4, 8, 'R12458', 'Test Name RSAG', 'RSA-G', 'FSM', 3, 3, 1, 1, '60.00', '0.47', '2016-11-01', '2016-11-24 19:50:18', 'Active');
 
 -- --------------------------------------------------------
 
@@ -1324,8 +1420,8 @@ INSERT INTO `training_pdf` (`id`, `batch`, `name`, `file_import`, `status`, `des
 (19, '27051956392025137016', 'Test Training Ten', 'uploads/files/training/pdf/27051956392025137016-CaMnTiO3.pdf', 'Inactive', '', '', 0, 'TRIN1234', NULL, '2016-11-14 20:15:07', NULL, '2016-11-07 09:40 PM'),
 (20, '27051956392025432016', 'Test Training Eleven', 'uploads/files/training/pdf/27051956392025432016-CaMnTiO3.pdf', 'Active', '', '', 0, 'TRIN1234', NULL, '2016-11-07 16:43:42', NULL, '2016-11-07 09:40 PM'),
 (21, '29074174600335138616', 'hshcfua', 'uploads/files/training/pdf/29074174600335138616-CaMnTiO3_ch3.pdf', 'Active', '', '', 2, 'TRIN1234', NULL, '2016-11-13 16:24:38', NULL, '2016-11-13 04:10 PM'),
-(22, '25044491490207171816', 'Test Training Seven', 'uploads/files/training/pdf/25044491490207171816-CaMnTiO3_ch3.pdf', 'Active', 'AM,TM', 'This Is test', 5, 'TRIN1234', NULL, '2016-11-14 18:25:59', NULL, '2016-11-14 02:55 PM'),
-(23, '24044491490707155116', 'hshcfua', 'uploads/files/training/pdf/24044491490707155116-CaMnTiO3.pdf', 'Active', 'SEC,RSA-G,RSA-R', 'This Is test', 0, 'TRIN1234', NULL, '2016-11-14 20:16:59', NULL, '2016-11-13 04:10 PM');
+(22, '25044491490207171816', 'Test Training Seven', 'uploads/files/training/pdf/25044491490207171816-CaMnTiO3_ch3.pdf', 'Active', 'AM,TM', 'This Is test', 11, 'TRIN1234', NULL, '2016-11-14 18:25:59', NULL, '2016-11-14 02:55 PM'),
+(23, '24044491490707155116', 'hshcfua', 'uploads/files/training/pdf/24044491490707155116-CaMnTiO3.pdf', 'Active', 'SEC,RSA-G,RSA-R', 'This Is test', 13, 'TRIN1234', NULL, '2016-11-14 20:16:59', NULL, '2016-11-13 04:10 PM');
 
 -- --------------------------------------------------------
 
@@ -2106,8 +2202,7 @@ ALTER TABLE `target_batch`
 -- Indexes for table `training_assessment_category`
 --
 ALTER TABLE `training_assessment_category`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `category_name` (`batch`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `training_assessment_question`
@@ -2198,12 +2293,12 @@ ALTER TABLE `hr_trainer`
 -- AUTO_INCREMENT for table `left_menu`
 --
 ALTER TABLE `left_menu`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=301;
 --
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT for table `post`
 --
@@ -2293,17 +2388,17 @@ ALTER TABLE `target_batch`
 -- AUTO_INCREMENT for table `training_assessment_category`
 --
 ALTER TABLE `training_assessment_category`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `training_assessment_question`
 --
 ALTER TABLE `training_assessment_question`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `training_assessment_result`
 --
 ALTER TABLE `training_assessment_result`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `training_pdf`
 --

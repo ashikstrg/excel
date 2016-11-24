@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 // Custom Datepicker
 use kartik\datetime\DateTimePicker;
-// Custom Fileinput
-use kartik\file\FileInput;
 // Multiple Select
 use kartik\widgets\Select2;
 
