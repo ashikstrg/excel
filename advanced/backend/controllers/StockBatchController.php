@@ -21,6 +21,7 @@ use backend\models\Product;
 
 // Custom Helpers
 use yii\helpers\HtmlPurifier;
+use backend\models\Sales;
 
 
 class StockBatchController extends Controller
@@ -113,24 +114,30 @@ class StockBatchController extends Controller
                                 $rowNumber++;
                                 $productModelCode = HtmlPurifier::process(trim($line[0]));
                                 $productColor = HtmlPurifier::process(trim($line[1]));
-                                $stockAmount = (int)HtmlPurifier::process(trim($line[2]));
+                                $stockIMEI = HtmlPurifier::process(trim($line[2]));
 
                                 if($rowNumber == 1) {
                                     continue;
                                 }
 
-                                if (is_int($stockAmount)) {
+                                if (strlen($stockIMEI) == 15) {
 
                                     $stockSubmission = Stock::find()
                                             ->select('id')
-                                            ->where('product_model_code=:product_model_code AND product_color=:product_color AND submission_date=:submission_date', 
-                                                    [':product_model_code' => $productModelCode, ':product_color' => $productColor, ':submission_date' => $today])
+                                            ->where('imei_no=:imei_no', 
+                                                    [':imei_no' => $stockIMEI])
+                                            ->one();
+                                    
+                                    $salesData = Sales::find()
+                                            ->select('id')
+                                            ->where('imei_no=:imei_no', 
+                                                    [':imei_no' => $stockIMEI])
                                             ->one();
 
-                                    if($stockSubmission === null) {
+                                    if($stockSubmission === null && $salesData === null) {
 
                                         $productModel = Product::find()
-                                        ->select(['id', 'name', 'model_code', 'model_name', 'color', 'type'])
+                                        ->select(['id', 'name', 'model_code', 'model_name', 'color', 'type', 'rrp', 'lifting_price', 'status'])
                                         ->where('model_code=:model_code and color=:color', 
                                                 [':model_code' => $productModelCode, ':color' => $productColor])
                                         ->one();   
@@ -153,8 +160,10 @@ class StockBatchController extends Controller
                                                 'product_model_name' => $productModel->model_name,
                                                 'product_color' => $productModel->color,
                                                 'product_type' => $productModel->type,
-                                                'status' => 'Active',
-                                                'volume' => $stockAmount,
+                                                'rrp' => $productModel->rrp,
+                                                'lifting_price' => $productModel->lifting_price,
+                                                'status' => $productModel->status,
+                                                'imei_no' => $stockIMEI,
                                                 'submission_date' => $today,
                                                 'created_at' => $now,
                                                 'created_by' => $username
@@ -170,13 +179,13 @@ class StockBatchController extends Controller
 
                                     } else {
 
-                                        $errorsArray[] = 'Row Number ' . $rowNumber . ':Stock has already been submitted.';
+                                        $errorsArray[] = 'Row Number ' . $rowNumber . ': This IMEI Number has already been used.';
 
                                     }
 
                                 } else {
-
-                                    $errorsArray[] = 'Row Number ' . $rowNumber . ':Stock Amount must be an integer.';
+                                    
+                                    $errorsArray[] = 'Row Number ' . $rowNumber . ':IMEI number must be 15 characters long.';
 
                                 }
 
@@ -184,7 +193,7 @@ class StockBatchController extends Controller
 
                         } else {
 
-                            $errorsArray[] = 'System Error:Uploader is not a valid a user.';
+                            $errorsArray[] = 'System Error: Uploader is not a valid a user.';
 
                         }
                     }
@@ -208,8 +217,10 @@ class StockBatchController extends Controller
                         'product_model_name',
                         'product_color',
                         'product_type',
+                        'rrp',
+                        'lifting_price',
                         'status',
-                        'volume',
+                        'imei_no',
                         'submission_date',
                         'created_at',
                         'created_by'

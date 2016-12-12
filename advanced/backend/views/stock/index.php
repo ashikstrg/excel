@@ -27,11 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'retail_zone', // 6
         'retail_area', // 7
         'retail_territory', // 8
-        'product_model_code', // 9
-        'product_model_name', // 10
-        'product_color', // 11
-        'product_type', // 12
-        'volume', // 13
+        'imei_no', // 9
+        'product_model_code', // 10
+        'product_model_name', // 11
+        'product_color', // 12
+        'product_type', // 13
+        'rrp',
+        'lifting_price',
         'status', // 14
         'submission_date', // 15
         'created_at', // 16

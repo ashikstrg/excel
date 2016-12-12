@@ -3,61 +3,43 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\Stock */
-/* @var $form yii\widgets\ActiveForm */
+// For dropdown
+use kartik\widgets\DepDrop;
+use yii\helpers\Url; 
+
 ?>
 
 <div class="stock-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'batch')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'product_model_code')->dropDownList($productModel, [
+            'prompt' => 'Select Product Model'
+            ]); ?>
 
-    <?= $form->field($model, 'retail_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'product_color')->widget(DepDrop::classname(), [
+        'options'=>['placeholder'=>'At First Select Product Model'],
+        'data'=>[$model->product_color => $model->product_color],
+        'pluginOptions'=>[
+            'depends'=>['stock-product_model_code'],
+            'placeholder'=>'Select Product Color',
+            'url'=>Url::to(['/stock/find_color'])
+        ]
+    ]); ?>
 
-    <?= $form->field($model, 'retail_dms_code')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'imei_no')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
 
-    <?= $form->field($model, 'retail_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'retail_type')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'retail_channel_type')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'retail_zone')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'retail_area')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'retail_territory')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'product_id')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'product_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'product_model_code')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'product_model_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'product_color')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'product_type')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'volume')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'submission_date')->textInput() ?>
-
-    <?= $form->field($model, 'cretated_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="box-footer">
+        <div class="row">
+            <div class="col-md-6">
+                <?= Html::submitButton($model->isNewRecord ? 'Add Stock' : 'Update Stock', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <div class="col-md-6">
+                <div class="pull-right">
+                <?= Html::resetButton('Reset Form', ['class' => 'btn btn-danger']) ?>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

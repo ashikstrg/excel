@@ -1,17 +1,17 @@
 <?php
 
-use yii\helpers\Html;
+$this->title = 'Stock Add';
+$this->miniTitle = 'Stock Module';
+$this->subTitle = 'Stock Form';
 
-$this->title = 'Create Stock';
-$this->params['breadcrumbs'][] = ['label' => 'Stocks', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Stock Raw Data', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stock-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
+        'productModel' => $productModel
     ]) ?>
 
 </div>

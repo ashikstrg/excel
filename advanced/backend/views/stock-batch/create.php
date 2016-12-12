@@ -29,12 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tr>
                   <th style="width: 30%">Product Model Code</th>
                   <th style="width: 30%">Color</th>
-                  <th style="width: 40%">Stock</th>
+                  <th style="width: 40%">IMEI Number</th>
                 </tr>
                 <tr>
                   <td>XXXXXXXXXXX</td>
                   <td>XXXXX</td>
-                  <td>XXXXX</td>
+                  <td>XXXXXXXXXXXXXXX</td>
                 </tr>
               </table>
             </div>
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="content-header"><b>Conditions</b></div>
               <ul>
                  <li>Product Model Code &amp; Color must be exist in the product list.</li>
-                 <li>Stock Amount must be integer.</li>
+                 <li><b>IMEI Number</b> must be 15 characters long.</li>
               </ul>
             </div>
           </div>

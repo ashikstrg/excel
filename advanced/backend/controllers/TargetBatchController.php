@@ -47,6 +47,17 @@ class TargetBatchController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionDeleted()
+    {
+        $searchModel = new TargetBatchSearch();
+        $dataProvider = $searchModel->deleted(Yii::$app->request->queryParams);
+
+        return $this->render('deleted', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionView($id)
     {
@@ -201,14 +212,14 @@ class TargetBatchController extends Controller
             
             if($model->file){
                 
-                $filePath = 'uploads/files/targets/';
-                $model->file_import = $filePath .rand(10,100).'-'.str_replace('','-',$model->file->name);
-
                 $bulkInsertArray = array();
                 $random_date = Yii::$app->formatter->asDatetime(date("dmyyhis"), "php:dmYHis");
                 $random = $random_date.rand(10,100).$userId;
                 $now = new Expression('NOW()');
                 $today = date('Y-m-d', time());
+                
+                $filePath = 'uploads/files/targets/';
+                $model->file_import = $filePath .$random.'.csv';
 
                 $uploadExists = 1;
             }
@@ -230,173 +241,157 @@ class TargetBatchController extends Controller
                         
                         if($model->save()){
                             
-                            $hrSalesModel = HrSales::find()
-                                    ->select(['id'])
-                                    ->where(['designation' => 'CSM'])
-                                    ->one();
-                            
-                            $hrSalesAmCount = HrSales::find()
-                                    ->where(['designation' => 'AM'])
-                                    ->count();
-                            
                             $hrModel = Hr::find()
                                     ->select(['id', 'retail_id', 'retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 
                                         'retail_area', 'retail_territory', 'designation', 'employee_id', 'name', 'tm_parent', 'tm_employee_id', 
                                         'tm_name', 'am_parent', 'am_employee_id', 'am_name', 'csm_parent', 'csm_employee_id', 'csm_name'])
-                                    ->where(['csm_parent' => $hrSalesModel->id, 'status' => 'Active'])
+                                    ->where('status=:status', [':status' => 'Active'])
                                     ->all();
                             
-                            if($hrModel !== null) {
+                            $productModel = Product::find()
+                                    ->select(['name', 'model_code', 'model_name', 'type', 'rrp'])
+                                    ->where('status=:status', [':status' => 'Active'])
+                                    ->groupBy(['model_code'])
+                                    ->all(); 
+                            
+                            if($hrModel !== null && $productModel !== null) {
                                 
                                 $rowNumber = 0;
+                                $employeeModelCode[] = array();
+                                $rowArray[] = array();
+                                $modelCodes = array();
+                                $employeeIDs = array();
                                 while( ($line = fgetcsv($handle, 1000, ",")) != FALSE) {
                                 
-                                    $rowNumber++;
-                                    if($rowNumber == 1) {
-                                        continue;
-                                    }
-                                    
-                                    $productModelCode = HtmlPurifier::process(trim($line[0]));
-                                    $targetVolume = (int)HtmlPurifier::process(trim($line[1]));  
-                                    
-                                    if (is_int($targetVolume)) {
-                                        
-                                        $targetVolumeAm = ceil($targetVolume/$hrSalesAmCount);
-                                        
-                                        $targetModelEntry = Target::find()
-                                                ->select('id')
-                                                ->where('product_model_code=:product_model_code AND target_date=:target_date', [':product_model_code' => $productModelCode, ':target_date' => $model->target_date])
-                                                ->one();
-                                        
-                                        if($targetModelEntry === null) {
+                                    $rowNumber++;  
+                                    if($rowNumber == 1) {     
+                                        $x = 1;
+                                        for ($i = 1; $i <= 1000; $i++) {
                                             
-                                            $productModel = Product::find()
-                                            ->select(['name', 'model_code', 'model_name', 'type', 'rrp'])
-                                            ->where('model_code=:model_code', 
-                                                    [':model_code' => $productModelCode])
-                                            ->one();   
-                                    
-                                            if($productModel !== null) {
-                                                
-                                                $targetValue = $productModel->rrp;
-                                                $targetValueAm = number_format(($targetValue / $hrSalesAmCount), 2);
-
-                                                foreach($hrModel as $hr) { 
-                                                    
-                                                    $hrId = $hr->id;
-                                                    $tmParent = $hr->tm_parent;
-                                                    $amParent = $hr->am_parent;
-                                                    $csmParent = $hr->csm_parent;
-                                                    
-                                                    $sales = (new \yii\db\Query())
-                                                            ->select([
-                                                                "sum(case when `hr_id`='$hrId' then 1 else 0 end) fsm_vol",
-                                                                "sum(case when `hr_id`='$hrId' then price else 0 end) fsm_val",
-                                                                "sum(case when `tm_parent`='$tmParent' then 1 else 0 end) tm_vol",
-                                                                "sum(case when `tm_parent`='$tmParent' then price else 0 end) tm_val",
-                                                                "sum(case when `am_parent`='$amParent' then 1 else 0 end) am_vol",
-                                                                "sum(case when `am_parent`='$amParent' then price else 0 end) am_val",
-                                                                "sum(case when `csm_parent`='$csmParent' then 1 else 0 end) csm_vol",
-                                                                "sum(case when `csm_parent`='$csmParent' then price else 0 end) csm_val"])
-                                                            ->from('sales')
-                                                            ->where([
-                                                                'product_model_code' => $productModelCode, 
-                                                                'YEAR(sales_date)' => $monthYear[0], 
-                                                                'MONTH(sales_date)' => $monthYear[1]])
-                                                            ->one();
-                                                    
-//                                                    $salesVol = Sales::find()
-//                                                            ->where('product_model_code=:product_model_code AND csm_parent=:csm_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
-//                                                                    [':product_model_code' => $productModelCode, ':csm_parent' => $hr->csm_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
-//                                                            ->count();
-//                                                    $salesVal = Sales::find()
-//                                                            ->where('product_model_code=:product_model_code AND csm_parent=:csm_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
-//                                                                    [':product_model_code' => $productModelCode, ':csm_parent' => $hr->csm_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
-//                                                            ->sum('price');
-//                                                    $salesVolAm = Sales::find()
-//                                                            ->where('product_model_code=:product_model_code AND am_parent=:am_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
-//                                                                    [':product_model_code' => $productModelCode, ':am_parent' => $hr->am_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
-//                                                            ->count();
-//                                                    $salesValAm = Sales::find()
-//                                                            ->where('product_model_code=:product_model_code AND am_parent=:am_parent AND (MONTH(sales_date)=:sales_date_month AND YEAR(sales_date)=:sales_date_year)', 
-//                                                                    [':product_model_code' => $productModelCode, ':am_parent' => $hr->am_parent, ':sales_date_month' => $monthYear[1], ':sales_date_year' => $monthYear[0]])
-//                                                            ->sum('price');
-                                                    
-                                                    $bulkInsertArray[]=[
-                                                        'batch' => $model->batch,
-                                                        'retail_id' => $hr->retail_id,
-                                                        'retail_dms_code' => $hr->retail_dms_code,
-                                                        'retail_name' => $hr->retail_name,
-                                                        'retail_channel_type' => $hr->retail_channel_type,
-                                                        'retail_type' => $hr->retail_type,
-                                                        'retail_zone' => $hr->retail_zone,
-                                                        'retail_area' => $hr->retail_area,
-                                                        'retail_territory' => $hr->retail_territory,
-                                                        'hr_id' => $hrId,
-                                                        'designation' => $hr->designation,
-                                                        'employee_id' => $hr->employee_id,
-                                                        'employee_name' => $hr->name,
-                                                        'fsm_vol' => 0,
-                                                        'fsm_val' => 0.00,
-                                                        'fsm_vol_sales' => $sales['fsm_vol'],
-                                                        'fsm_val_sales' => $sales['fsm_val'],
-                                                        'tm_parent' => $tmParent,
-                                                        'tm_employee_id' => $hr->tm_employee_id,
-                                                        'tm_name' => $hr->tm_name,
-                                                        'tm_vol' => 0,
-                                                        'tm_val' => 0.0,
-                                                        'tm_vol_sales' => $sales['tm_vol'],
-                                                        'tm_val_sales' => $sales['tm_val'],
-                                                        'am_parent' => $amParent,
-                                                        'am_employee_id' => $hr->am_employee_id,
-                                                        'am_name' => $hr->am_name,
-                                                        'am_vol' => $targetVolumeAm,
-                                                        'am_val' => $targetValueAm,
-                                                        'am_vol_sales' => $sales['am_vol'],
-                                                        'am_val_sales' => $sales['am_val'],
-                                                        'csm_parent' => $csmParent,
-                                                        'csm_employee_id' => $hr->csm_employee_id,
-                                                        'csm_name' => $hr->csm_name,
-                                                        'csm_vol' => $targetVolume,
-                                                        'csm_val' => $targetValue,
-                                                        'csm_vol_sales' => $sales['csm_vol'],
-                                                        'csm_val_sales' => $sales['csm_val'],
-                                                        'product_name' => $productModel->name,
-                                                        'product_model_code' => $productModel->model_code,
-                                                        'product_model_name' => $productModel->model_name,
-                                                        'product_type' => $productModel->type,
-                                                        'target_date' => $model->target_date,
-                                                        'created_at' => $now,
-                                                        'created_by' => $username
-                                                    ];
-                                                    
-                                                }
-                                                
-                                                $successArray[] = 'Row Number ' . $rowNumber . ':Target Data has successfully been uploaded.';
-
+                                            if (isset($line[$i]) && !empty($line[$i])) {
+                                                $modelCodes[$i] = HtmlPurifier::process(trim($line[$i]));                                            
                                             } else {
-
-                                                $errorsArray[] = 'Row Number ' . $rowNumber . ':Product Model is invalid.';
-
+                                                break;
                                             }
                                             
-                                        } else {
+                                        } continue;      
+                                    }
+                                    
+                                    $employeeID = HtmlPurifier::process(trim($line[0])); 
+                                    foreach($modelCodes as $key => $value) {
+                                        $employeeIDs[$key] = $employeeID;
+                                        $employeeModelCode[$employeeID][$value] = (int)$line[$key];
+                                        $rowArray[$employeeID][$value] = $rowNumber;
+                                    }
+                                }
+                                
+                                foreach ($hrModel as $hr) {
+                                    
+                                    $hrId = $hr->id;
+                                    $hrEmployeeID = $hr->employee_id;
+                                    $tmParent = $hr->tm_parent;
+                                    $amParent = $hr->am_parent;
+                                    $csmParent = $hr->csm_parent;
+                                    
+                                    foreach ($productModel as $product) {
+                                        
+                                        $productModelCode = $product->model_code;
+                                        
+                                        if(isset($employeeModelCode[$hrEmployeeID][$productModelCode])) {
                                             
-                                            $errorsArray[] = 'Row Number ' . $rowNumber . ':Target has already been set for this model.';
+                                            $targetModelEntry = Target::find()
+                                                ->select('id')
+                                                ->where('employee_id=:employee_id AND product_model_code=:product_model_code AND target_date=:target_date', 
+                                                        [':employee_id' => $hrEmployeeID, ':product_model_code' => $productModelCode, ':target_date' => $model->target_date])
+                                                ->one();
+                                            
+                                            if($targetModelEntry === null) {
+                                                
+                                                $targetVolume = $employeeModelCode[$hrEmployeeID][$productModelCode];
+                                                $targetValue = $product->rrp * $employeeModelCode[$hrEmployeeID][$productModelCode];    
+
+                                                $sales = (new \yii\db\Query())
+                                                        ->select([
+                                                            "sum(case when `hr_id`='$hrId' then 1 else 0 end) fsm_vol",
+                                                            "sum(case when `hr_id`='$hrId' then price else 0 end) fsm_val",
+                                                            "sum(case when `tm_parent`='$tmParent' then 1 else 0 end) tm_vol",
+                                                            "sum(case when `tm_parent`='$tmParent' then price else 0 end) tm_val",
+                                                            "sum(case when `am_parent`='$amParent' then 1 else 0 end) am_vol",
+                                                            "sum(case when `am_parent`='$amParent' then price else 0 end) am_val",
+                                                            "sum(case when `csm_parent`='$csmParent' then 1 else 0 end) csm_vol",
+                                                            "sum(case when `csm_parent`='$csmParent' then price else 0 end) csm_val"])
+                                                        ->from('sales')
+                                                        ->where([
+                                                            'product_model_code' => $productModelCode, 
+                                                            'YEAR(sales_date)' => $monthYear[0], 
+                                                            'MONTH(sales_date)' => $monthYear[1]])
+                                                        ->one();
+
+                                                $bulkInsertArray[]=[
+                                                    'batch' => $model->batch,
+                                                    'retail_id' => $hr->retail_id,
+                                                    'retail_dms_code' => $hr->retail_dms_code,
+                                                    'retail_name' => $hr->retail_name,
+                                                    'retail_channel_type' => $hr->retail_channel_type,
+                                                    'retail_type' => $hr->retail_type,
+                                                    'retail_zone' => $hr->retail_zone,
+                                                    'retail_area' => $hr->retail_area,
+                                                    'retail_territory' => $hr->retail_territory,
+                                                    'hr_id' => $hrId,
+                                                    'designation' => $hr->designation,
+                                                    'employee_id' => $hr->employee_id,
+                                                    'employee_name' => $hr->name,
+                                                    'fsm_vol' => $targetVolume,
+                                                    'fsm_val' => $targetValue,
+                                                    'fsm_vol_sales' => $sales['fsm_vol'],
+                                                    'fsm_val_sales' => $sales['fsm_val'],
+                                                    'tm_parent' => $tmParent,
+                                                    'tm_employee_id' => $hr->tm_employee_id,
+                                                    'tm_name' => $hr->tm_name,
+                                                    'tm_vol' => $targetVolume,
+                                                    'tm_val' => $targetValue,
+                                                    'tm_vol_sales' => $sales['tm_vol'],
+                                                    'tm_val_sales' => $sales['tm_val'],
+                                                    'am_parent' => $amParent,
+                                                    'am_employee_id' => $hr->am_employee_id,
+                                                    'am_name' => $hr->am_name,
+                                                    'am_vol' => $targetVolume,
+                                                    'am_val' => $targetValue,
+                                                    'am_vol_sales' => $sales['am_vol'],
+                                                    'am_val_sales' => $sales['am_val'],
+                                                    'csm_parent' => $csmParent,
+                                                    'csm_employee_id' => $hr->csm_employee_id,
+                                                    'csm_name' => $hr->csm_name,
+                                                    'csm_vol' => $targetVolume,
+                                                    'csm_val' => $targetValue,
+                                                    'csm_vol_sales' => $sales['csm_vol'],
+                                                    'csm_val_sales' => $sales['csm_val'],
+                                                    'product_name' => $product->name,
+                                                    'product_model_code' => $product->model_code,
+                                                    'product_model_name' => $product->model_name,
+                                                    'product_type' => $product->type,
+                                                    'target_date' => $model->target_date,
+                                                    'created_at' => $now,
+                                                    'created_by' => $username
+                                                ];
+                                                
+                                                $successArray[] = 'Row Number ' . $rowArray[$hrEmployeeID][$productModelCode] . ' [' . $product->model_code . ']' . ':Target Data has successfully been uploaded.';
+                                                
+                                            } else {
+                                                
+                                                $errorsArray[] = 'Row Number ' . $rowArray[$hrEmployeeID][$productModelCode] . ':Target has already been set for this model.';
+                                                
+                                            }
                                             
                                         }
                                         
-                                    } else {
-                                        
-                                        $errorsArray[] = 'Row Number ' . $rowNumber . ':Target Volume is not an integer.';
-                                        
                                     }
-
+                                    
                                 }
-                                
+        
                             } else {
                                 
-                                $errorsArray[] = 'System Error:CSM not found.';
+                                $errorsArray[] = 'Server is down. Please contact with system administrator.';
                                 
                             }
                         }
@@ -498,7 +493,11 @@ class TargetBatchController extends Controller
         $model->deleted_by = Yii::$app->user->identity->username;
         $model->deleted_at = new Expression('NOW()');
         $model->save(false);
+        if(is_writable(getcwd() . '/' . $model->file_import)){
+            unlink(getcwd() . '/' . $model->file_import); 
+        }
         
+        Yii::$app->session->setFlash('success', 'Selected item has successfully been deleted with all raw data.');
         return $this->redirect(['index']);
     }
     
@@ -516,8 +515,13 @@ class TargetBatchController extends Controller
             $model->deleted_by = Yii::$app->user->identity->username;
             $model->deleted_at = new Expression('NOW()');
             $model->save(false);
+            
+            if(is_writable(getcwd() . '/' . $model->file_import)){
+                unlink(getcwd() . '/' . $model->file_import); 
+            }
         }
 
+        Yii::$app->session->setFlash('success', 'List of selected items has successfully been deleted with all raw data.');
         return $this->redirect(['index']);
 
     }

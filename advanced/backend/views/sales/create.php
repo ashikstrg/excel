@@ -1,21 +1,16 @@
 <?php
 
-use yii\helpers\Html;
+$this->title = 'Add Sales Data';
+$this->miniTitle = 'Sales Module';
+$this->subTitle = 'Sales Form';
 
-
-/* @var $this yii\web\View */
-/* @var $model backend\models\Sales */
-
-$this->title = 'Create Sales';
-$this->params['breadcrumbs'][] = ['label' => 'Sales', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Sales Raw Data', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sales-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model
     ]) ?>
 
 </div>

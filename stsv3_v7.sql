@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2016 at 03:15 PM
+-- Generation Time: Dec 12, 2016 at 02:29 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -40,6 +40,10 @@ INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
 ('admin', '1', 1472039807),
 ('author', '2', 1472042727),
 ('FSM', '12', 1475413127),
+('FSM', '17', 1481457511),
+('FSM', '18', 1481457582),
+('FSM', '20', 1481466881),
+('FSM', '21', 1481466950),
 ('FSM', '7', 1472042727),
 ('Sales', '10', 1475412843),
 ('Sales', '11', 1475413034),
@@ -299,15 +303,17 @@ CREATE TABLE IF NOT EXISTS `hr` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL,
   `user_id` int(11) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `hr`
 --
 
 INSERT INTO `hr` (`id`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_channel_type`, `retail_type`, `retail_zone`, `retail_area`, `retail_territory`, `designation_id`, `designation`, `employee_type_id`, `employee_type`, `employee_id`, `tm_parent`, `tm_employee_id`, `tm_name`, `am_parent`, `am_employee_id`, `am_name`, `csm_parent`, `csm_employee_id`, `csm_name`, `name`, `status`, `joining_date`, `leaving_date`, `image`, `image_src_filename`, `image_web_filename`, `contact_no_official`, `contact_no_personal`, `name_immergency_contact_person`, `relation_immergency_contact_person`, `contact_no_immergency`, `email_address`, `email_address_official`, `bank_name`, `bank_ac_name`, `bank_ac_no`, `bkash_no`, `blood_group`, `graduation_status`, `educational_qualification`, `educational_institute`, `educational_qualification_second_last`, `educational_institute_second_last`, `previous_experience`, `previous_experience_two`, `permanent_address`, `present_address`, `created_at`, `created_by`, `updated_at`, `updated_by`, `user_id`) VALUES
-(10, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 5, 'SEC', 0, 'FSM', 'S12458', 4, '3546456', 'Test Name TM', 3, '98765', 'Test Name AM', 2, '123567', 'Ashikur Rahman', 'Ashikur Rahman', 'Active', '2016-09-08', NULL, '', '1.png', 'hdAKk8OdQF4dc1Mxzp4bdsQibUXcWzqT.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik@analyzenbd.com', 'ashik@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'A+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-09-28 06:42:53', 'admin1', NULL, NULL, 7),
-(11, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 6, 'RSA-G', 0, 'FSM', 'R12458', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 'Test Name RSAG', 'Active', '2016-10-01', NULL, '', 'ashik.jpg', '8No1F9R-IFlcUw7FTsMtGlVrIA9uL16L.jpg', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik5@analyzenbd.com', 'ashik5@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'B+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 08:58:45', 'admin1', '2016-11-24 07:21:29', 'admin1', 12);
+(10, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 5, 'SEC', 0, 'FSM', 'S12458', 4, '3546456', 'Test Name TM', 3, '98765', 'Test Name AM', 2, '123567', 'Ashikur Rahman', 'Ashikur Rahman', 'Active', '2016-09-08', NULL, '', '1.png', 'hdAKk8OdQF4dc1Mxzp4bdsQibUXcWzqT.png', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik@analyzenbd.com', 'ashik@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'A+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-09-28 00:42:53', 'admin1', NULL, NULL, 7),
+(11, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 6, 'RSA-G', 0, 'FSM', 'R12458', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 'Test Name RSAG', 'Active', '2016-10-01', NULL, '', 'ashik.jpg', '8No1F9R-IFlcUw7FTsMtGlVrIA9uL16L.jpg', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik5@analyzenbd.com', 'ashik5@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'B+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-10-02 02:58:45', 'admin1', '2016-11-24 01:21:29', 'admin1', 12),
+(12, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 5, 'SEC', 0, 'FSM', 'S0987', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 'Ashikur Rahman', 'Active', '2016-12-31', NULL, '', 'ashik.jpg', 'rSQsF7DXol6JWjs2_vyzjhVkdXl1OwfJ.jpg', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik@analyzenbd.com', 'ashik_sec1@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'A-', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-12-11 14:34:38', 'admin1', NULL, NULL, 20),
+(13, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 5, 'SEC', 0, 'FSM', 'S10912', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 'Ashikur Rahman', 'Active', '2016-12-01', NULL, '', 'ashik.jpg', 'd1nXCqWFpxJXqs-gOlhSB1thejyp9U4c.jpg', '11111111111', '11111111111', 'Ashikur Rahman', 'Sibling', '11111111111', 'ashik@analyzenbd.com', 'ashik_sec2@analyzenbd.com', 'Brac Bank', 'Test Name', '11111111111111111111', '11111111111', 'B+', 'Graduated', 'HSC', 'Amrita Lal De', 'SSC', 'Zilla School', 6, 2, 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', 'House No: 44, Road No: 9, Nikunja - 2, Khilkhet, Dhaka', '2016-12-11 14:35:48', 'admin1', '2016-12-12 11:34:38', 'admin1', 21);
 
 -- --------------------------------------------------------
 
@@ -530,7 +536,7 @@ CREATE TABLE IF NOT EXISTS `left_menu` (
   `icon` varchar(255) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `used_by` varchar(64) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `left_menu`
@@ -589,11 +595,9 @@ INSERT INTO `left_menu` (`id`, `name`, `parent_id`, `label`, `icon`, `url`, `use
 (253, 'Slaes Index', 251, 'Sales Raw Data', 'fa fa-circle', '/sales/index', 'Sales'),
 (254, 'Target Hash', 0, 'Target Operation', 'fa fa-arrows', '#', 'admin'),
 (255, 'Target Create', 254, 'Upload Target', 'fa fa-circle', '/target-batch/create', 'admin'),
-(256, 'Target Batch Index', 254, 'Target Batch File', 'fa fa-circle', '/target-batch/index', 'admin'),
+(256, 'Target Batch Index', 254, 'Active Batch File', 'fa fa-circle', '/target-batch/index', 'admin'),
 (257, 'Target Index', 254, 'Target Raw Data', 'fa fa-circle', '/target/index', 'admin'),
 (258, 'Target Hash', 0, 'Target Operation', 'fa fa-arrows', '#', 'Sales'),
-(259, 'Target Create', 258, 'Upload Target', 'fa fa-circle', '/target-batch/upload', 'Sales'),
-(260, 'Target Batch Index', 258, 'Target Batch File', 'fa fa-circle', '/target-batch/index', 'Sales'),
 (261, 'Target Index', 258, 'Target Raw Data', 'fa fa-circle', '/target/index', 'Sales'),
 (262, 'Sales National Hash', 0, 'National Sales', 'fa fa-mobile', '#', 'Sales'),
 (263, 'Slaes National', 262, 'Sales Volume', 'fa fa-circle', '/sales/national', 'Sales'),
@@ -629,7 +633,24 @@ INSERT INTO `left_menu` (`id`, `name`, `parent_id`, `label`, `icon`, `url`, `use
 (295, 'Trainer Assessment Category Create', 293, 'Add Assessment', 'fa fa-square-o', '/training-assessment-category/create', 'Trainer'),
 (296, 'Trainer Assessment Category Index', 293, 'Assessment Config', 'fa fa-square-o', '/training-assessment-category/index', 'Trainer'),
 (297, 'Assessment', 0, 'Monthly Assessment', 'fa fa-calendar-check-o', '#', 'FSM'),
-(298, 'Assessment Check', 297, 'Assessment Check', 'fa fa-square-o', '/training-assessment-category/assessment', 'FSM');
+(298, 'Assessment Check', 297, 'Assessment Check', 'fa fa-square-o', '/training-assessment-category/assessment', 'FSM'),
+(299, 'MI Module', 0, 'MI Module', 'fa fa-database', '#', 'Sales'),
+(300, 'MI Product Create', 299, 'Add Product', 'fa fa-square-o', '/mi-product/create', 'Sales'),
+(301, 'MI Product Index', 299, 'Product Config', 'fa fa-square-o', '/mi-product/index', 'Sales'),
+(302, 'MI Infra Create', 299, 'Add Infra', 'fa fa-square-o', '/mi-infra/create', 'Sales'),
+(303, 'MI Infra Index', 299, 'Infra Config', 'fa fa-square-o', '/mi-infra/index', 'Sales'),
+(304, 'MI Tpcp Create', 299, 'Add TP&CP', 'fa fa-square-o', '/mi-tpcp/create', 'Sales'),
+(305, 'MI Tpcp Index', 299, 'TP&CP Config', 'fa fa-square-o', '/mi-tpcp/index', 'Sales'),
+(306, 'MI Visibility Create', 299, 'Add Visibility', 'fa fa-square-o', '/mi-visibility/create', 'Sales'),
+(307, 'MI Visibility Index', 299, 'Visibility Config', 'fa fa-square-o', '/mi-visibility/index', 'Sales'),
+(308, 'Travel Module', 0, 'Travel Module', 'fa fa-subway', '#', 'Sales'),
+(309, 'Travel Create', 308, 'Travel Application', 'fa fa-square-o', '/travel/create', 'Sales'),
+(310, 'Travel Index', 308, 'Application Status', 'fa fa-square-o', '/travel/index', 'Sales'),
+(311, 'Travel Manage', 308, 'Managerial Data', 'fa fa-square-o', '/travel/manage', 'Sales'),
+(312, 'Travel Config', 308, 'Application Config', 'fa fa-square-o', '/travel/config', 'Sales'),
+(313, 'Stock Create', 264, 'Add Stock', 'fa fa-circle', '/stock/create', 'FSM'),
+(314, 'FSM Sales Create', 247, 'Add Sales', 'fa fa-circle', '/sales/create', 'FSM'),
+(315, 'Target Batch Deleted', 254, 'Deleted Batch File', 'fa fa-circle', '/target-batch/deleted', 'admin');
 
 -- --------------------------------------------------------
 
@@ -650,6 +671,166 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m000000_000000_base', 1471863108),
 ('m130524_201442_init', 1471863113),
 ('m140506_102106_rbac_init', 1472023374);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mi_infra`
+--
+
+CREATE TABLE IF NOT EXISTS `mi_infra` (
+  `id` int(11) unsigned NOT NULL,
+  `brand` varchar(100) NOT NULL,
+  `retail_type` enum('Brandshop','SIS','Priority Store') NOT NULL,
+  `store_size` varchar(10) NOT NULL,
+  `owner` enum('Company','Franchise') NOT NULL,
+  `distributor_type` enum('RD','Distributor') NOT NULL,
+  `sales_team` varchar(50) NOT NULL,
+  `rsa` varchar(50) NOT NULL,
+  `fsm_type` enum('SEC','BP') NOT NULL,
+  `region` varchar(100) NOT NULL,
+  `district` varchar(100) NOT NULL,
+  `town` varchar(100) NOT NULL,
+  `hr_id` int(11) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `am_employee_id` varchar(50) NOT NULL,
+  `am_name` varchar(80) NOT NULL,
+  `csm_employee_id` varchar(50) NOT NULL,
+  `csm_name` varchar(80) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mi_infra`
+--
+
+INSERT INTO `mi_infra` (`id`, `brand`, `retail_type`, `store_size`, `owner`, `distributor_type`, `sales_team`, `rsa`, `fsm_type`, `region`, `district`, `town`, `hr_id`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `am_employee_id`, `am_name`, `csm_employee_id`, `csm_name`, `created_at`, `updated_at`) VALUES
+(1, 'Nokia', 'Brandshop', '1200', 'Company', 'RD', 'ABC', 'Test RSA', 'SEC', 'Dhanmondi', 'Dhaka', 'Dhaka', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 15:17:48', NULL),
+(3, 'Nokia 2', 'Brandshop', '1200', 'Franchise', 'RD', 'ABC', 'Test RSA', 'SEC', 'Dhanmondi', 'Dhaka', 'Dhaka', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 15:26:18', '2016-12-08 15:28:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mi_product`
+--
+
+CREATE TABLE IF NOT EXISTS `mi_product` (
+  `id` int(11) unsigned NOT NULL,
+  `brand` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  `display_size` varchar(10) NOT NULL,
+  `display_type` varchar(100) NOT NULL,
+  `generation` enum('2G','3G','4G') NOT NULL,
+  `sim` enum('Single','Dual') NOT NULL,
+  `weight` varchar(10) NOT NULL,
+  `ram` varchar(10) NOT NULL,
+  `rom` varchar(10) NOT NULL,
+  `processor` varchar(50) NOT NULL,
+  `battery` varchar(10) NOT NULL,
+  `camera_rear` varchar(20) NOT NULL,
+  `camera_front` varchar(20) NOT NULL,
+  `special_feature` varchar(100) NOT NULL,
+  `price` decimal(10,2) unsigned NOT NULL,
+  `sale_out_vol` int(11) unsigned NOT NULL,
+  `region` varchar(100) NOT NULL,
+  `district` varchar(100) NOT NULL,
+  `town` varchar(100) NOT NULL,
+  `hr_id` int(11) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `am_employee_id` varchar(50) NOT NULL,
+  `am_name` varchar(80) NOT NULL,
+  `csm_employee_id` varchar(50) NOT NULL,
+  `csm_name` varchar(80) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mi_product`
+--
+
+INSERT INTO `mi_product` (`id`, `brand`, `model`, `display_size`, `display_type`, `generation`, `sim`, `weight`, `ram`, `rom`, `processor`, `battery`, `camera_rear`, `camera_front`, `special_feature`, `price`, `sale_out_vol`, `region`, `district`, `town`, `hr_id`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `am_employee_id`, `am_name`, `csm_employee_id`, `csm_name`, `created_at`, `updated_at`) VALUES
+(2, 'Nokia', 'Lumia', '5', 'Amoled', '2G', 'Single', '12', '2', '2', 'Dual Core', '2500', '12', '5', 'None', '12000.00', 12, 'Dhanmondi', 'Dhaka', 'Dhaka', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 14:19:53', NULL),
+(3, 'Nokia 2', 'Lumia 2', '5', 'Amoled', '2G', 'Dual', '12', '2', '2', 'Dual Core', '2500', '12', '5', 'None', '12000.00', 12, 'Dhanmondi', 'Dhaka', 'Dhaka', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 14:20:31', '2016-12-08 15:15:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mi_tpcp`
+--
+
+CREATE TABLE IF NOT EXISTS `mi_tpcp` (
+  `id` int(11) unsigned NOT NULL,
+  `brand` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  `trade_promo` varchar(100) NOT NULL,
+  `consumer_promo` varchar(100) NOT NULL,
+  `fsm_incentive_plan` varchar(100) NOT NULL,
+  `other_scheme` varchar(100) NOT NULL,
+  `region` varchar(100) NOT NULL,
+  `district` varchar(100) NOT NULL,
+  `town` varchar(100) NOT NULL,
+  `hr_id` int(11) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `am_employee_id` varchar(50) NOT NULL,
+  `am_name` varchar(80) NOT NULL,
+  `csm_employee_id` varchar(50) NOT NULL,
+  `csm_name` varchar(80) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mi_tpcp`
+--
+
+INSERT INTO `mi_tpcp` (`id`, `brand`, `model`, `trade_promo`, `consumer_promo`, `fsm_incentive_plan`, `other_scheme`, `region`, `district`, `town`, `hr_id`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `am_employee_id`, `am_name`, `csm_employee_id`, `csm_name`, `created_at`, `updated_at`) VALUES
+(1, 'Nokia', 'Lumia', 'Yes', 'Yes', 'Yes', 'Yes', 'Dhanmondi', 'Dhaka', 'Dhaka', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 15:46:05', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mi_visibility`
+--
+
+CREATE TABLE IF NOT EXISTS `mi_visibility` (
+  `id` int(11) unsigned NOT NULL,
+  `brand` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  `posm` varchar(100) NOT NULL,
+  `image` varchar(100) DEFAULT NULL,
+  `image_src_filename` varchar(255) DEFAULT NULL,
+  `image_web_filename` varchar(255) DEFAULT NULL,
+  `hr_id` int(11) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `am_employee_id` varchar(50) NOT NULL,
+  `am_name` varchar(80) NOT NULL,
+  `csm_employee_id` varchar(50) NOT NULL,
+  `csm_name` varchar(80) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mi_visibility`
+--
+
+INSERT INTO `mi_visibility` (`id`, `brand`, `model`, `posm`, `image`, `image_src_filename`, `image_web_filename`, `hr_id`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `am_employee_id`, `am_name`, `csm_employee_id`, `csm_name`, `created_at`, `updated_at`) VALUES
+(1, 'Nokia', 'Lumia', 'Yes', '', 'elf.jpg', 'rCJ7lcMhvO2QxSjb8R1xi3g6AYG2dKKp.jpg', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 16:12:51', NULL),
+(2, 'Nokia 2', 'Lumia 2', 'Yes', '', 'giftCM.jpg', '0olxS78Fxu9gTgMf3qpe5ticqTHZUkgJ.jpg', 7, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'AM123456', 'Test Name CSM', 'MS1234', 'Test Name CSM', '2016-12-08 16:15:56', '2016-12-08 16:18:09');
 
 -- --------------------------------------------------------
 
@@ -675,7 +856,7 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `created_by` varchar(255) NOT NULL,
   `created_by_name` varchar(255) NOT NULL,
   `image_web_filename` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `notification`
@@ -683,7 +864,7 @@ CREATE TABLE IF NOT EXISTS `notification` (
 
 INSERT INTO `notification` (`id`, `batch`, `name`, `module_name`, `url`, `hr_id`, `hr_employee_id`, `hr_designation`, `hr_employee_type`, `hr_name`, `message`, `read_status`, `seen`, `created_at`, `created_by`, `created_by_name`, `image_web_filename`) VALUES
 (1, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:37', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
-(2, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:37', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(2, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-29 18:11:20', '2016-11-15 18:19:37', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
 (3, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:42', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
 (4, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-15 19:56:51', '2016-11-15 18:19:42', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
 (5, 18446744073709551615, 'hshcfua', 'Training', '/training-pdf/notification_view?id=23', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-15 18:19:48', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
@@ -724,7 +905,16 @@ INSERT INTO `notification` (`id`, `batch`, `name`, `module_name`, `url`, `hr_id`
 (40, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'Sample Assessment on Technology ', 'Unread', NULL, '2016-11-24 19:09:25', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
 (41, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Assessment', '/training-assessment-category/notification_view?id=7', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'Sample Assessment on Technology ', 'Read', '2016-11-24 19:09:37', '2016-11-24 19:09:25', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
 (42, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'New Assessment on S9 Edge', 'Unread', NULL, '2016-11-24 19:49:36', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
-(43, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'New Assessment on S9 Edge', 'Read', '2016-11-24 19:49:48', '2016-11-24 19:49:36', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg');
+(43, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'New Assessment on S9 Edge', 'Read', '2016-11-24 19:49:48', '2016-11-24 19:49:36', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(44, 18446744073709551615, 'Test Training Twelve', 'Training', '/training-pdf/notification_view?id=26', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'This Is test', 'Unread', NULL, '2016-11-29 17:50:17', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(45, 18446744073709551615, 'Test Training Twelve', 'Training', '/training-pdf/notification_view?id=26', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'This Is test', 'Read', '2016-11-29 17:51:50', '2016-11-29 17:50:17', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(46, 18446744073709551615, 'Sample Assessment FSM on New Handset', 'Assessment', '/training-assessment-category/notification_view?id=9', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'New Assessment on New Handset', 'Read', '2016-11-29 18:04:42', '2016-11-29 18:04:21', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(47, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 10, 'S12458', 'SEC', 'FSM', 'Ashikur Rahman', 'New Assessment on S9 Edge', 'Unread', NULL, '2016-11-29 18:10:40', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(48, 14799940753816, 'True Sample Assessment', 'Assessment', '/training-assessment-category/notification_view?id=8', 11, 'R12458', 'RSA-G', 'FSM', 'Test Name RSAG', 'New Assessment on S9 Edge', 'Read', '2016-11-29 18:10:57', '2016-11-29 18:10:40', 'TRIN1234', 'Test Name', '7dDRyD2PQ083_GAG6aA2b7JSWA4DU8Xe.jpg'),
+(49, 8102593330427083911, 'Travel Request', 'Travel', '/travel/notification_view?id=1', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'I am going for a training program', 'Read', '2016-12-08 19:11:20', '2016-12-08 18:48:28', 'TM123456', 'Test NameTM', '_BbpI72choM7Kd2FORuQ2sIkQI-p1H0a.png'),
+(50, 8102593330643469311, 'Travel Request', 'Travel', '/travel/notification_view?id=2', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'I am going for a vacation', 'Read', '2016-12-08 19:37:56', '2016-12-08 19:30:26', 'TM123456', 'Test NameTM', '_BbpI72choM7Kd2FORuQ2sIkQI-p1H0a.png'),
+(51, 8102593330713563311, 'Travel Request', 'Travel', '/travel/notification_view?id=3', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'I am going for a new survey', 'Read', '2016-12-08 19:56:20', '2016-12-08 19:48:36', 'TM123456', 'Test NameTM', '_BbpI72choM7Kd2FORuQ2sIkQI-p1H0a.png'),
+(52, 8102593330725387511, 'Travel Request', 'Travel', '/travel/notification_view?id=4', 6, 'AM123456', 'AM', 'Sales', 'Test Name CSM', 'I am going for a new training', 'Read', '2016-12-08 19:56:06', '2016-12-08 19:55:38', 'TM123456', 'Test NameTM', '_BbpI72choM7Kd2FORuQ2sIkQI-p1H0a.png');
 
 -- --------------------------------------------------------
 
@@ -765,7 +955,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `created_by` varchar(255) NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `product`
@@ -774,7 +964,8 @@ CREATE TABLE IF NOT EXISTS `product` (
 INSERT INTO `product` (`id`, `name`, `model_code`, `model_name`, `color`, `type`, `lifting_price`, `rrp`, `status`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
 (1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', '50000.00', '60000.00', 'Active', '2016-09-27 08:23:24', 'admin1', NULL, NULL),
 (2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '50000.00', '60000.00', 'Active', '2016-09-27 08:24:34', 'admin1', '2016-09-27 08:36:00', 'admin1'),
-(3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '60000.00', '70000.00', 'Active', '2016-09-27 08:25:45', 'admin1', NULL, NULL);
+(3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '60000.00', '70000.00', 'Active', '2016-09-27 08:25:45', 'admin1', NULL, NULL),
+(4, 'Galaxy Note 7', 'N7777', 'N7', 'White', 'Smart', '50000.00', '60000.00', 'Active', '2016-09-27 08:23:24', 'admin1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1053,24 +1244,28 @@ CREATE TABLE IF NOT EXISTS `sales` (
   `product_type` varchar(50) NOT NULL,
   `imei_no` varchar(20) NOT NULL,
   `price` decimal(10,2) unsigned NOT NULL,
+  `lifting_price` decimal(10,2) unsigned NOT NULL,
+  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
   `sales_date` date NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `created_by` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_channel_type`, `retail_type`, `retail_zone`, `retail_area`, `retail_territory`, `hr_id`, `designation`, `employee_id`, `employee_name`, `tm_parent`, `tm_employee_id`, `tm_name`, `am_parent`, `am_employee_id`, `am_name`, `csm_parent`, `csm_employee_id`, `csm_name`, `product_id`, `product_name`, `product_model_code`, `product_model_name`, `product_color`, `product_type`, `imei_no`, `price`, `sales_date`, `created_at`, `created_by`) VALUES
-(1, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', '123456789123555', '60000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
-(2, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '123456789123666', '60000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
-(3, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R1245', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '123456789123777', '70000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
-(4, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R1245', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '123456789123787', '70000.00', '2016-10-19', '2016-10-19 13:29:35', 'R12458'),
-(7, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123111', '60000.00', '2016-10-18', '2016-10-19 13:29:35', 'R12458'),
-(8, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123323', '60000.00', '2016-11-02', '2016-11-01 13:29:35', 'R12458'),
-(9, 223372036844777777, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Bar', '123456789123333', '60000.00', '2016-11-02', '2016-11-01 13:29:35', 'R12458'),
-(10, 922337203685477580, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '123456789126666', '60000.00', '2016-11-11', '2016-10-11 13:29:35', 'R12458');
+INSERT INTO `sales` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_channel_type`, `retail_type`, `retail_zone`, `retail_area`, `retail_territory`, `hr_id`, `designation`, `employee_id`, `employee_name`, `tm_parent`, `tm_employee_id`, `tm_name`, `am_parent`, `am_employee_id`, `am_name`, `csm_parent`, `csm_employee_id`, `csm_name`, `product_id`, `product_name`, `product_model_code`, `product_model_name`, `product_color`, `product_type`, `imei_no`, `price`, `lifting_price`, `status`, `sales_date`, `created_at`, `created_by`) VALUES
+(1, 0, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', '111111111111111', '60000.00', '50000.00', 'Active', '2016-12-10', '2016-12-10 12:53:07', 'R12458'),
+(2, 0, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', '222222222222222', '60000.00', '50000.00', 'Active', '2016-12-10', '2016-12-10 12:53:48', 'R12458'),
+(3, 0, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '333333333333333', '60000.00', '50000.00', 'Active', '2016-12-10', '2016-12-10 12:54:04', 'R12458'),
+(4, 0, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '444444444444444', '70000.00', '60000.00', 'Active', '2016-12-10', '2016-12-10 12:54:25', 'R12458'),
+(5, 0, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 4, 'Galaxy Note 7', 'N7777', 'N7', 'White', 'Smart', '555555555555555', '60000.00', '50000.00', 'Active', '2016-12-10', '2016-12-10 12:54:35', 'R12458'),
+(6, 0, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 4, 'Galaxy Note 7', 'N7777', 'N7', 'White', 'Smart', '666666666666666', '60000.00', '50000.00', 'Active', '2016-12-10', '2016-12-10 13:18:08', 'R12458'),
+(14, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', 'B20000000000000', '60000.00', '50000.00', 'Active', '2016-12-10', '2016-12-10 14:50:04', 'R12458'),
+(15, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', 'C30000000000000', '70000.00', '60000.00', 'Active', '2016-12-10', '2016-12-10 14:50:04', 'R12458'),
+(16, 9223372036854775807, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'RSA-G', 'R12458', 'Test Name RSAG', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', 'E11111111111111', '70000.00', '60000.00', 'Active', '2016-12-10', '2016-12-10 14:50:04', 'R12458'),
+(24, 0, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 13, 'SEC', 'S10912', 'Ashikur Rahman', 7, 'TM123456', 'Test NameTM', 6, 'AM123456', 'Test Name CSM', 5, 'MS1234', 'Test Name CSM', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', '358548062849969', '60000.00', '50000.00', 'Active', '2016-12-12', '2016-12-12 16:29:43', 'S10912');
 
 -- --------------------------------------------------------
 
@@ -1087,7 +1282,7 @@ CREATE TABLE IF NOT EXISTS `sales_batch` (
   `deleted_by` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sales_batch`
@@ -1102,7 +1297,17 @@ INSERT INTO `sales_batch` (`id`, `batch`, `file_import`, `status`, `created_by`,
 (16, 9223372036854775807, 'uploads/files/sales/42-2992016.csv', 'Active', 'R12458', NULL, '2016-10-17 18:45:35', NULL),
 (17, 9223372036854775807, 'uploads/files/sales/15-2992016.csv', 'Active', 'R12458', NULL, '2016-10-17 18:46:52', NULL),
 (18, 9223372036854775807, 'uploads/files/sales/33-2992016.csv', 'Deleted', 'R12458', 'TM123456', '2016-10-18 13:33:00', '2016-10-18 18:45:02'),
-(19, 9223372036854775807, 'uploads/files/sales/94-2992016.csv', 'Active', 'R12458', NULL, '2016-10-19 13:29:34', NULL);
+(19, 9223372036854775807, 'uploads/files/sales/94-2992016.csv', 'Active', 'R12458', NULL, '2016-10-19 13:29:34', NULL),
+(20, 9223372036854775807, 'uploads/files/sales/28-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:16:43', NULL),
+(21, 9223372036854775807, 'uploads/files/sales/72-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:19:05', NULL),
+(22, 9223372036854775807, 'uploads/files/sales/44-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:19:40', NULL),
+(23, 9223372036854775807, 'uploads/files/sales/41-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:20:55', NULL),
+(24, 9223372036854775807, 'uploads/files/sales/70-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:22:33', NULL),
+(25, 9223372036854775807, 'uploads/files/sales/92-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:29:02', NULL),
+(26, 9223372036854775807, 'uploads/files/sales/68-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:32:45', NULL),
+(27, 9223372036854775807, 'uploads/files/sales/30-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:39:40', NULL),
+(28, 9223372036854775807, 'uploads/files/sales/44-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:50:02', NULL),
+(29, 9223372036854775807, 'uploads/files/sales/42-2992016.csv', 'Active', 'S10912', NULL, '2016-12-12 16:31:31', NULL);
 
 -- --------------------------------------------------------
 
@@ -1122,28 +1327,34 @@ CREATE TABLE IF NOT EXISTS `stock` (
   `retail_area` varchar(250) NOT NULL,
   `retail_territory` varchar(250) NOT NULL,
   `product_id` int(11) unsigned NOT NULL,
+  `imei_no` varchar(20) NOT NULL,
   `product_name` varchar(80) NOT NULL,
   `product_model_code` varchar(50) NOT NULL,
   `product_model_name` varchar(50) NOT NULL,
   `product_color` varchar(50) NOT NULL,
   `product_type` varchar(50) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `volume` int(8) unsigned NOT NULL,
+  `lifting_price` decimal(10,2) unsigned NOT NULL,
+  `rrp` decimal(10,2) unsigned NOT NULL,
+  `status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
   `submission_date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `created_by` varchar(255) NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stock`
 --
 
-INSERT INTO `stock` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_type`, `retail_channel_type`, `retail_zone`, `retail_area`, `retail_territory`, `product_id`, `product_name`, `product_model_code`, `product_model_name`, `product_color`, `product_type`, `status`, `volume`, `submission_date`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-(1, 14011319452018205312, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 1, 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', 0, 10, '2016-10-04', '2016-10-04 13:43:00', 'R12458', NULL, NULL),
-(2, 14011319452018205312, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 2, 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', 0, 20, '2016-10-04', '2016-10-04 13:43:00', 'R12458', NULL, NULL),
-(3, 14011319452018205312, 7, 'TST4', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 3, 'Galaxy S7', 'S7777', 'S7', 'Black', 'Tab', 0, 30, '2016-10-04', '2016-10-04 13:43:00', 'R12458', NULL, NULL);
+INSERT INTO `stock` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_type`, `retail_channel_type`, `retail_zone`, `retail_area`, `retail_territory`, `product_id`, `imei_no`, `product_name`, `product_model_code`, `product_model_name`, `product_color`, `product_type`, `lifting_price`, `rrp`, `status`, `submission_date`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+(2, 0, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 2, '111111111111112', 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '50000.00', '60000.00', 'Active', '2016-12-09', '2016-12-08 20:45:30', 'R12458', NULL, NULL),
+(3, 0, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 3, '111111111111113', 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '60000.00', '70000.00', 'Active', '2016-12-09', '2016-12-08 20:45:43', 'R12458', NULL, NULL),
+(4, 0, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 4, '111111111111114', 'Galaxy Note 7', 'N7777', 'N7', 'White', 'Smart', '50000.00', '60000.00', 'Active', '2016-12-09', '2016-12-08 20:46:01', 'R12458', NULL, NULL),
+(10, 0, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 3, '777777777777777', 'Galaxy S7', 'S7777', 'S7', 'Black', 'Smart', '60000.00', '70000.00', 'Active', '2016-12-10', '2016-12-10 06:42:32', 'R12458', NULL, NULL),
+(11, 0, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 2, '888888888888888', 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '50000.00', '60000.00', 'Active', '2016-12-10', '2016-12-10 06:48:30', 'R12458', NULL, NULL),
+(12, 18446744073709551615, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 1, '100000000000000', 'Galaxy Note 7', 'N7777', 'N7', 'Black', 'Smart', '50000.00', '60000.00', 'Active', '2016-12-10', '2016-12-10 07:41:36', 'R12458', NULL, NULL),
+(13, 18446744073709551615, 7, 'TST3', 'dewqfw', 'RNG', 'X-Tel', 'East', 'Dhanmondi', 'ewvr', 2, '200000000000000', 'Galaxy S6', 'S6666', 'S6', 'Black', 'Smart', '50000.00', '60000.00', 'Active', '2016-12-10', '2016-12-10 07:41:36', 'R12458', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1161,7 +1372,7 @@ CREATE TABLE IF NOT EXISTS `stock_batch` (
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `stock_date` date NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stock_batch`
@@ -1177,7 +1388,22 @@ INSERT INTO `stock_batch` (`id`, `batch`, `file_import`, `status`, `created_by`,
 (7, 9223372036854775807, 'uploads/files/stock/18-2992016.csv', 'Active', 'R12458', NULL, '2016-10-04 19:44:05', NULL, '2016-10-04'),
 (8, 9223372036854775807, 'uploads/files/stock/81-2992016.csv', 'Active', 'R12458', NULL, '2016-10-04 19:45:02', NULL, '2016-10-04'),
 (9, 9223372036854775807, 'uploads/files/stock/28-2992016.csv', 'Active', 'R12458', NULL, '2016-10-04 19:45:24', NULL, '2016-10-04'),
-(10, 9223372036854775807, 'uploads/files/stock/43-2992016.csv', 'Active', 'R12458', NULL, '2016-10-04 19:54:05', NULL, '2016-10-04');
+(10, 9223372036854775807, 'uploads/files/stock/43-2992016.csv', 'Active', 'R12458', NULL, '2016-10-04 19:54:05', NULL, '2016-10-04'),
+(11, 9223372036854775807, 'uploads/files/stock/66-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:34:33', NULL, '2016-12-10'),
+(12, 9223372036854775807, 'uploads/files/stock/87-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:35:38', NULL, '2016-12-10'),
+(13, 9223372036854775807, 'uploads/files/stock/85-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:36:31', NULL, '2016-12-10'),
+(14, 9223372036854775807, 'uploads/files/stock/21-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:36:56', NULL, '2016-12-10'),
+(15, 9223372036854775807, 'uploads/files/stock/90-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:39:03', NULL, '2016-12-10'),
+(16, 9223372036854775807, 'uploads/files/stock/56-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:40:18', NULL, '2016-12-10'),
+(17, 9223372036854775807, 'uploads/files/stock/65-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:41:35', NULL, '2016-12-10'),
+(18, 9223372036854775807, 'uploads/files/stock/83-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:43:29', NULL, '2016-12-10'),
+(19, 9223372036854775807, 'uploads/files/stock/15-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:44:43', NULL, '2016-12-10'),
+(20, 9223372036854775807, 'uploads/files/stock/13-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 13:47:36', NULL, '2016-12-10'),
+(21, 9223372036854775807, 'uploads/files/stock/73-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:30:46', NULL, '2016-12-10'),
+(22, 9223372036854775807, 'uploads/files/stock/36-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:32:05', NULL, '2016-12-10'),
+(23, 9223372036854775807, 'uploads/files/stock/20-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:46:16', NULL, '2016-12-10'),
+(24, 9223372036854775807, 'uploads/files/stock/63-2992016.csv', 'Active', 'R12458', NULL, '2016-12-10 14:48:32', NULL, '2016-12-10'),
+(25, 9223372036854775807, 'uploads/files/stock/35-2992016.csv', 'Active', 'S10912', NULL, '2016-12-12 16:30:44', NULL, '2016-12-12');
 
 -- --------------------------------------------------------
 
@@ -1234,21 +1460,22 @@ CREATE TABLE IF NOT EXISTS `target` (
   `created_by` varchar(255) NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `target`
 --
 
 INSERT INTO `target` (`id`, `batch`, `retail_id`, `retail_dms_code`, `retail_name`, `retail_channel_type`, `retail_type`, `retail_zone`, `retail_area`, `retail_territory`, `hr_id`, `employee_id`, `employee_name`, `designation`, `fsm_vol`, `fsm_vol_sales`, `fsm_val`, `fsm_val_sales`, `tm_parent`, `tm_employee_id`, `tm_name`, `tm_vol`, `tm_vol_sales`, `tm_val`, `tm_val_sales`, `am_parent`, `am_employee_id`, `am_name`, `am_vol`, `am_vol_sales`, `am_val`, `am_val_sales`, `csm_parent`, `csm_employee_id`, `csm_name`, `csm_vol`, `csm_vol_sales`, `csm_val`, `csm_val_sales`, `product_name`, `product_model_code`, `product_model_name`, `product_type`, `target_date`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-(1, 2108543898131154431, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 90, 6, '5400000.00', '360000.00', 7, 'TM123456', 'Test NameTM', 190, 6, '11400000.00', '360000.00', 6, 'AM123456', 'Test Name CSM', 45, 6, '30.00', '360000.00', 5, 'MS1234', 'Test Name CSM', 90, 6, '60000.00', '360000.00', 'Galaxy Note 7', 'N7777', 'N7', 'Smart', '2016-10-01', '2016-10-17 17:19:15', 'admin1', '2016-10-17 19:46:46', 'TM123456'),
-(2, 2108543898131154431, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 50, 5, '3000000.00', '300000.00', 7, 'TM123456', 'Test NameTM', 0, 5, '0.00', '300000.00', 6, 'AM123456', 'Test Name CSM', 25, 5, '30.00', '300000.00', 5, 'MS1234', 'Test Name CSM', 50, 5, '60000.00', '300000.00', 'Galaxy S6', 'S6666', 'S6', 'Smart', '2016-10-01', '2016-10-17 17:19:15', 'admin1', '2016-10-17 19:46:46', 'TM123456'),
-(3, 2108543898131154431, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 80, 8, '5600000.00', '560000.00', 7, 'TM123456', 'Test NameTM', 0, 8, '0.00', '560000.00', 6, 'AM123456', 'Test Name CSM', 40, 8, '35.00', '560000.00', 5, 'MS1234', 'Test Name CSM', 80, 8, '70000.00', '560000.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-10-01', '2016-10-17 17:19:15', 'admin1', '2016-10-17 19:46:46', 'TM123456'),
-(4, 2108543898131154431, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 12, '12456', 'Test Name RSAG', 'RSA-G', 80, 6, '5600000.00', '420000.00', 7, 'TM123456', 'Test NameTM', 0, 6, '0.00', '420000.00', 6, 'AM123456', 'Test Name CSM', 40, 6, '35.00', '420000.00', 5, 'MS1234', 'Test Name CSM', 80, 6, '70000.00', '420000.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-10-01', '2016-10-17 17:19:15', 'admin1', '2016-10-17 19:46:46', 'TM123456'),
-(5, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 450, 0, '30.00', '0.00', 5, 'MS1234', 'Test Name CSM', 900, 0, '60000.00', '0.00', 'Galaxy Note 7', 'N7777', 'N7', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL),
-(6, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 250, 0, '30.00', '0.00', 5, 'MS1234', 'Test Name CSM', 500, 0, '60000.00', '0.00', 'Galaxy S6', 'S6666', 'S6', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL),
-(7, 1504829097064234371, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 400, 0, '35.00', '0.00', 5, 'MS1234', 'Test Name CSM', 800, 0, '70000.00', '0.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-11-01', '2016-10-26 14:37:57', 'admin1', NULL, NULL),
-(8, 150482909706423437, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 0, 0, '0.00', '0.00', 7, 'TM123456', 'Test NameTM', 0, 0, '0.00', '0.00', 6, 'AM123456', 'Test Name CSM', 400, 0, '35.00', '0.00', 5, 'MS1234', 'Test Name CSM', 800, 0, '70000.00', '0.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-11-01', '2016-11-01 14:37:57', 'admin1', NULL, NULL);
+(1, 2009386088050525911, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 910, 4, '54600000.00', '240000.00', 7, 'TM123456', 'Test NameTM', 910, 4, '54600000.00', '240000.00', 6, 'AM123456', 'Test Name CSM', 910, 4, '54600000.00', '240000.00', 5, 'MS1234', 'Test Name CSM', 910, 4, '54600000.00', '240000.00', 'Galaxy Note 7', 'N7777', 'N7', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(2, 2009386088050525911, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 920, 3, '55200000.00', '180000.00', 7, 'TM123456', 'Test NameTM', 920, 3, '55200000.00', '180000.00', 6, 'AM123456', 'Test Name CSM', 920, 3, '55200000.00', '180000.00', 5, 'MS1234', 'Test Name CSM', 920, 3, '55200000.00', '180000.00', 'Galaxy S6', 'S6666', 'S6', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(3, 2009386088050525911, 7, 'TST3', 'dewqfw', 'X-Tel', 'RNG', 'East', 'Dhanmondi', 'ewvr', 11, 'R12458', 'Test Name RSAG', 'RSA-G', 930, 3, '65100000.00', '210000.00', 7, 'TM123456', 'Test NameTM', 930, 3, '65100000.00', '210000.00', 6, 'AM123456', 'Test Name CSM', 930, 3, '65100000.00', '210000.00', 5, 'MS1234', 'Test Name CSM', 930, 3, '65100000.00', '210000.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(4, 2009386088050525911, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 12, 'S0987', 'Ashikur Rahman', 'SEC', 510, 0, '30600000.00', '0.00', 7, 'TM123456', 'Test NameTM', 510, 4, '30600000.00', '240000.00', 6, 'AM123456', 'Test Name CSM', 510, 4, '30600000.00', '240000.00', 5, 'MS1234', 'Test Name CSM', 510, 4, '30600000.00', '240000.00', 'Galaxy Note 7', 'N7777', 'N7', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(5, 2009386088050525911, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 12, 'S0987', 'Ashikur Rahman', 'SEC', 520, 0, '31200000.00', '0.00', 7, 'TM123456', 'Test NameTM', 520, 3, '31200000.00', '180000.00', 6, 'AM123456', 'Test Name CSM', 520, 3, '31200000.00', '180000.00', 5, 'MS1234', 'Test Name CSM', 520, 3, '31200000.00', '180000.00', 'Galaxy S6', 'S6666', 'S6', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(6, 2009386088050525911, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 12, 'S0987', 'Ashikur Rahman', 'SEC', 530, 0, '37100000.00', '0.00', 7, 'TM123456', 'Test NameTM', 530, 3, '37100000.00', '210000.00', 6, 'AM123456', 'Test Name CSM', 530, 3, '37100000.00', '210000.00', 5, 'MS1234', 'Test Name CSM', 530, 3, '37100000.00', '210000.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(7, 2009386088050525911, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 13, 'S10912', 'Ashikur Rahman', 'SEC', 810, 1, '48600000.00', '60000.00', 7, 'TM123456', 'Test NameTM', 810, 5, '48600000.00', '300000.00', 6, 'AM123456', 'Test Name CSM', 810, 5, '48600000.00', '300000.00', 5, 'MS1234', 'Test Name CSM', 810, 5, '48600000.00', '300000.00', 'Galaxy Note 7', 'N7777', 'N7', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(8, 2009386088050525911, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 13, 'S10912', 'Ashikur Rahman', 'SEC', 820, 0, '49200000.00', '0.00', 7, 'TM123456', 'Test NameTM', 820, 3, '49200000.00', '180000.00', 6, 'AM123456', 'Test Name CSM', 820, 3, '49200000.00', '180000.00', 5, 'MS1234', 'Test Name CSM', 820, 3, '49200000.00', '180000.00', 'Galaxy S6', 'S6666', 'S6', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL),
+(9, 2009386088050525911, 8, 'TST4', 'Test Retail One', 'P-SES', 'SES', 'East', 'Dhanmondi', 'Test Territory One', 13, 'S10912', 'Ashikur Rahman', 'SEC', 830, 0, '58100000.00', '0.00', 7, 'TM123456', 'Test NameTM', 830, 3, '58100000.00', '210000.00', 6, 'AM123456', 'Test Name CSM', 830, 3, '58100000.00', '210000.00', 5, 'MS1234', 'Test Name CSM', 830, 3, '58100000.00', '210000.00', 'Galaxy S7', 'S7777', 'S7', 'Smart', '2016-12-01', '2016-12-12 16:15:25', 'admin1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1266,7 +1493,7 @@ CREATE TABLE IF NOT EXISTS `target_batch` (
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `target_date` date NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `target_batch`
@@ -1274,21 +1501,61 @@ CREATE TABLE IF NOT EXISTS `target_batch` (
 
 INSERT INTO `target_batch` (`id`, `batch`, `file_import`, `status`, `created_by`, `deleted_by`, `created_at`, `deleted_at`, `target_date`) VALUES
 (1, 2004100256082321201, 'uploads/files/targets/13-210.csv', 'Deleted', 'admin1', 'admin1', '2016-10-03 12:42:01', '2016-10-03 13:18:56', '2016-09-01'),
-(2, 2004100256083041221, 'uploads/files/targets/14-210.csv', 'Active', 'admin1', NULL, '2016-10-03 12:46:41', NULL, '2016-09-01'),
-(3, 2004100256083411621, 'uploads/files/targets/63-210.csv', 'Active', 'admin1', NULL, '2016-10-03 12:48:51', NULL, '2016-09-01'),
-(4, 2004100256083701161, 'uploads/files/targets/57-210.csv', 'Active', 'admin1', NULL, '2016-10-03 12:50:21', NULL, '2016-09-01'),
-(5, 9223372036854775807, 'uploads/files/targets/99-210.csv', 'Active', '12456', NULL, '2016-10-03 16:21:22', NULL, '2016-09-01'),
-(6, 9223372036854775807, 'uploads/files/targets/40-210.csv', 'Active', '12456', NULL, '2016-10-03 16:23:30', NULL, '2016-09-01'),
-(7, 9223372036854775807, 'uploads/files/targets/85-210.csv', 'Active', 'TM123456', NULL, '2016-10-03 17:59:04', NULL, '2016-09-01'),
-(8, 2208543898202416911, 'uploads/files/targets/44-admin.csv', 'Active', 'admin1', NULL, '2016-10-17 16:42:56', NULL, '0000-00-00'),
-(9, 2208543898203041561, 'uploads/files/targets/88-admin.csv', 'Active', 'admin1', NULL, '2016-10-17 16:46:41', NULL, '0000-00-00'),
-(10, 2208543898203404791, 'uploads/files/targets/93-admin.csv', 'Active', 'admin1', NULL, '2016-10-17 16:48:44', NULL, '2016-09-01'),
-(11, 2108543898131154431, 'uploads/files/targets/12-admin.csv', 'Active', 'admin1', NULL, '2016-10-17 17:19:14', NULL, '2016-10-01'),
-(12, 2108543898134915411, 'uploads/files/targets/36-admin.csv', 'Active', 'admin1', NULL, '2016-10-17 17:41:55', NULL, '2016-10-01'),
-(13, 9223372036854775807, 'uploads/files/targets/60-tm.csv', 'Active', 'AM123456', NULL, '2016-10-17 19:42:00', NULL, '2016-10-01'),
-(14, 9223372036854775807, 'uploads/files/targets/47-fsm.csv', 'Active', 'TM123456', NULL, '2016-10-17 19:44:47', NULL, '2016-10-01'),
-(15, 9223372036854775807, 'uploads/files/targets/18-fsm.csv', 'Active', 'TM123456', NULL, '2016-10-17 19:46:45', NULL, '2016-10-01'),
-(16, 1504829097064234371, 'uploads/files/targets/99-admin.csv', 'Active', 'admin1', NULL, '2016-10-26 14:37:54', NULL, '2016-11-01');
+(2, 2004100256083041221, 'uploads/files/targets/14-210.csv', 'Deleted', 'admin1', 'admin1', '2016-10-03 12:46:41', '2016-12-12 15:32:41', '2016-09-01'),
+(3, 2004100256083411621, 'uploads/files/targets/63-210.csv', 'Deleted', 'admin1', 'admin1', '2016-10-03 12:48:51', '2016-12-12 15:32:41', '2016-09-01'),
+(4, 2004100256083701161, 'uploads/files/targets/57-210.csv', 'Deleted', 'admin1', 'admin1', '2016-10-03 12:50:21', '2016-12-12 15:32:29', '2016-09-01'),
+(5, 9223372036854775807, 'uploads/files/targets/99-210.csv', 'Deleted', '12456', 'admin1', '2016-10-03 16:21:22', '2016-12-12 15:32:29', '2016-09-01'),
+(6, 9223372036854775807, 'uploads/files/targets/40-210.csv', 'Deleted', '12456', 'admin1', '2016-10-03 16:23:30', '2016-12-12 15:32:29', '2016-09-01'),
+(7, 9223372036854775807, 'uploads/files/targets/85-210.csv', 'Deleted', 'TM123456', 'admin1', '2016-10-03 17:59:04', '2016-12-12 15:32:29', '2016-09-01'),
+(8, 2208543898202416911, 'uploads/files/targets/44-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-10-17 16:42:56', '2016-12-12 15:32:29', '0000-00-00'),
+(9, 2208543898203041561, 'uploads/files/targets/88-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-10-17 16:46:41', '2016-12-12 15:32:29', '0000-00-00'),
+(10, 2208543898203404791, 'uploads/files/targets/93-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-10-17 16:48:44', '2016-12-12 15:32:29', '2016-09-01'),
+(11, 2108543898131154431, 'uploads/files/targets/12-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-10-17 17:19:14', '2016-12-12 15:32:29', '2016-10-01'),
+(12, 2108543898134915411, 'uploads/files/targets/36-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-10-17 17:41:55', '2016-12-12 15:32:29', '2016-10-01'),
+(13, 9223372036854775807, 'uploads/files/targets/60-tm.csv', 'Deleted', 'AM123456', 'admin1', '2016-10-17 19:42:00', '2016-12-12 15:32:29', '2016-10-01'),
+(14, 9223372036854775807, 'uploads/files/targets/47-fsm.csv', 'Deleted', 'TM123456', 'admin1', '2016-10-17 19:44:47', '2016-12-12 15:32:29', '2016-10-01'),
+(15, 9223372036854775807, 'uploads/files/targets/18-fsm.csv', 'Deleted', 'TM123456', 'admin1', '2016-10-17 19:46:45', '2016-12-12 15:32:29', '2016-10-01'),
+(16, 1504829097064234371, 'uploads/files/targets/99-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-10-26 14:37:54', '2016-12-12 15:32:28', '2016-11-01'),
+(17, 2612354399041056261, 'uploads/files/targets/79-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 16:46:56', '2016-12-12 15:32:28', '2016-12-01'),
+(18, 2612354399041720701, 'uploads/files/targets/49-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 16:50:40', '2016-12-12 15:32:28', '2016-12-01'),
+(19, 2612354399041901311, 'uploads/files/targets/27-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 16:51:41', '2016-12-12 15:32:28', '2016-12-01'),
+(20, 2612354399042001751, 'uploads/files/targets/76-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 16:52:01', '2016-12-12 15:32:28', '2016-12-01'),
+(21, 2612354399043028371, 'uploads/files/targets/31-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 16:58:28', '2016-12-12 15:32:28', '2016-12-01'),
+(22, 2612354399043232501, 'uploads/files/targets/46-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 16:59:52', '2016-12-12 15:32:28', '2016-12-01'),
+(23, 2612354399062335961, 'uploads/files/targets/22-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 17:26:15', '2016-12-12 15:28:08', '2016-12-01'),
+(24, 2612354399070658561, 'uploads/files/targets/67-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 17:52:18', '2016-12-12 15:28:08', '2016-12-01'),
+(25, 9223372036854775807, 'uploads/files/targets/74-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 19:48:09', '2016-12-12 15:28:08', '2016-12-01'),
+(26, 2612354399140521431, 'uploads/files/targets/47-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:03:21', '2016-12-12 15:28:08', '2016-12-01'),
+(27, 2612354399140902341, 'uploads/files/targets/26-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:05:42', '2016-12-12 15:28:08', '2016-12-01'),
+(28, 2612354399141500851, 'uploads/files/targets/39-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:09:00', '2016-12-12 15:28:08', '2016-12-01'),
+(29, 2612354399141720491, 'uploads/files/targets/46-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:10:40', '2016-12-12 15:28:08', '2016-12-01'),
+(30, 2612354399143205161, 'uploads/files/targets/59-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:19:25', '2016-12-12 15:28:08', '2016-12-01'),
+(31, 2612354399143853121, 'uploads/files/targets/22-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:23:33', '2016-12-12 15:28:08', '2016-12-01'),
+(32, 2612354399144237511, 'uploads/files/targets/68-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:25:57', '2016-12-12 15:27:22', '2016-12-01'),
+(33, 2612354399144531331, 'uploads/files/targets/36-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:27:31', '2016-12-12 15:26:02', '2016-12-01'),
+(34, 2612354399150036971, 'uploads/files/targets/27-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:36:36', '2016-12-12 15:26:02', '2016-12-01'),
+(35, 2612354399150547711, 'uploads/files/targets/88-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:39:47', '2016-12-12 15:26:02', '2016-12-01'),
+(36, 2612354399152403231, 'uploads/files/targets/97-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:50:43', '2016-12-12 15:26:02', '2016-12-01'),
+(37, 2612354399152653671, 'uploads/files/targets/23-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:52:13', '2016-12-12 15:26:02', '2016-12-01'),
+(38, 2612354399153326851, 'uploads/files/targets/36-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:56:06', '2016-12-12 15:26:02', '2016-12-01'),
+(39, 2612354399153840231, 'uploads/files/targets/11-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 20:59:20', '2016-12-12 15:26:02', '2016-12-01'),
+(40, 2612354399165042701, 'uploads/files/targets/43-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:02:42', '2016-12-12 15:26:02', '2016-12-01'),
+(41, 2612354399165201601, 'uploads/files/targets/95-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:03:21', '2016-12-12 15:26:02', '2016-12-01'),
+(42, 2612354399165724651, 'uploads/files/targets/64-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:06:44', '2016-12-12 15:26:01', '2016-12-01'),
+(43, 2612354399165853561, 'uploads/files/targets/89-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:07:33', '2016-12-12 15:26:01', '2016-12-01'),
+(44, 2612354399170016641, 'uploads/files/targets/34-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:08:16', '2016-12-12 15:26:01', '2016-12-01'),
+(45, 2612354399170711931, 'uploads/files/targets/49-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:12:31', '2016-12-12 15:26:01', '2016-12-01'),
+(46, 2612354399170829171, 'uploads/files/targets/85-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:13:09', '2016-12-12 15:26:01', '2016-12-01'),
+(47, 2612354399170903171, 'uploads/files/targets/32-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:13:43', '2016-12-12 15:26:01', '2016-12-01'),
+(48, 2612354399171210921, 'uploads/files/targets/93-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:15:30', '2016-12-12 15:26:01', '2016-12-01'),
+(49, 2612354399171506841, 'uploads/files/targets/80-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:17:06', '2016-12-12 15:26:01', '2016-12-01'),
+(50, 2612354399171727521, 'uploads/files/targets/19-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-11 21:18:47', '2016-12-12 15:26:01', '2016-12-01'),
+(51, 2009386088001347141, 'uploads/files/targets/87-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-12 14:40:27', '2016-12-12 15:27:06', '2016-12-01'),
+(52, 2009386088001504321, 'uploads/files/targets/70-admin.csv', 'Deleted', 'admin1', 'admin1', '2016-12-12 14:41:04', '2016-12-12 15:07:55', '2016-12-01'),
+(53, 2009386088015415531, 'uploads/files/targets/2009386088015415531.csv', 'Deleted', 'admin1', 'admin1', '2016-12-12 15:00:55', '2016-12-12 16:23:47', '2016-12-01'),
+(54, 2009386088015554151, 'uploads/files/targets/2009386088015554151.csv', 'Deleted', 'admin1', 'admin1', '2016-12-12 15:01:54', '2016-12-12 15:06:23', '2016-12-01'),
+(55, 2009386088024907311, 'uploads/files/targets/2009386088024907311.csv', 'Deleted', 'admin1', 'admin1', '2016-12-12 15:33:47', '2016-12-12 15:33:53', '2016-12-01'),
+(56, 2009386088050525911, 'uploads/files/targets/2009386088050525911.csv', 'Active', 'admin1', NULL, '2016-12-12 16:15:25', NULL, '2016-12-01');
 
 -- --------------------------------------------------------
 
@@ -1309,7 +1576,7 @@ CREATE TABLE IF NOT EXISTS `training_assessment_category` (
   `notification_count` int(8) unsigned NOT NULL DEFAULT '0',
   `created_by` varchar(255) NOT NULL,
   `created_at` datetime DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `training_assessment_category`
@@ -1319,7 +1586,8 @@ INSERT INTO `training_assessment_category` (`id`, `batch`, `name`, `message`, `d
 (5, 18446744073709551615, 'Sample Assessment FSM', 'New Assessment on Note 7', 'SEC,RSA-G,RSA-R,RSA-Y', 0, 1800, '2016-11-01', 'Inactive', 0, 'TRIN1234', '2016-11-23 14:31:52'),
 (6, 18446744073709551615, 'Sample Assessment Two', 'Assessment on S9', 'TM', 0, 6000, '2016-12-01', 'Active', 0, 'TRIN1234', '2016-11-23 14:32:14'),
 (7, 17127343470149119016, 'Sample Assessment on Technology for FSM', 'Sample Assessment on Technology ', 'SEC,RSA-G,RSA-R,RSA-Y', 4, 20, '2016-12-01', 'Active', 9, 'TRIN1234', '2016-11-24 16:37:39'),
-(8, 14799940753816, 'True Sample Assessment', 'New Assessment on S9 Edge', 'SEC,RSA-G,RSA-R', 5, 6, '2016-11-01', 'Active', 1, 'TRIN1234', '2016-11-24 19:27:55');
+(8, 14799940753816, 'True Sample Assessment', 'New Assessment on S9 Edge', 'SEC,RSA-G,RSA-R', 5, 6, '2016-11-01', 'Active', 2, 'TRIN1234', '2016-11-24 19:27:55'),
+(9, 18446744073709551615, 'Sample Assessment FSM on New Handset', 'New Assessment on New Handset', 'RSA-G,RSA-R,RSA-Y', 3, 5, '2016-11-01', 'Finish', 1, 'TRIN1234', '2016-11-29 17:55:40');
 
 -- --------------------------------------------------------
 
@@ -1337,7 +1605,7 @@ CREATE TABLE IF NOT EXISTS `training_assessment_question` (
   `answer` int(8) unsigned NOT NULL,
   `choice` enum('Single','Multiple') NOT NULL DEFAULT 'Single',
   `category_id` int(11) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `training_assessment_question`
@@ -1356,7 +1624,11 @@ INSERT INTO `training_assessment_question` (`id`, `question_name`, `answer1`, `a
 (10, 'What is the color of lip?', 'White', 'Blue', 'Black', 'Red', 4, 'Single', 8),
 (11, 'What is the color of leaf?', 'Green', 'Blue', 'Black', 'Red', 1, 'Single', 8),
 (12, 'What is the color of Panda?', 'White', 'Blue', 'Black', '1 & 3 Both', 4, 'Single', 8),
-(13, 'What is the color of cloud?', 'White', 'Blue', 'Black', 'Green', 3, 'Single', 8);
+(13, 'What is the color of cloud?', 'White', 'Blue', 'Black', 'Green', 3, 'Single', 8),
+(14, 'What is the capital of Bangladsh?', 'Khulna', 'Barisal', 'Dhaka', 'Sylhet', 3, 'Single', 9),
+(15, 'What is the color of cloud?', 'White', 'Blue', 'Red', 'None of above', 2, 'Single', 9),
+(16, 'How many districts in Bangladsh?', '12', '14', '16', '64', 4, 'Single', 9),
+(17, 'How many districts in Bangladsh?', '12', '14', '16', '64', 4, 'Single', 9);
 
 -- --------------------------------------------------------
 
@@ -1380,7 +1652,7 @@ CREATE TABLE IF NOT EXISTS `training_assessment_result` (
   `date_month` date NOT NULL,
   `participation_datetime` datetime NOT NULL,
   `status` enum('Active','Inactive') NOT NULL DEFAULT 'Inactive'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `training_assessment_result`
@@ -1388,7 +1660,8 @@ CREATE TABLE IF NOT EXISTS `training_assessment_result` (
 
 INSERT INTO `training_assessment_result` (`id`, `category_id`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `score`, `right_answer`, `wrong_answer`, `un_answer`, `score_percent`, `total_time`, `date_month`, `participation_datetime`, `status`) VALUES
 (3, 7, 'R12458', 'Test Name RSAG', 'RSA-G', 'FSM', 1, 1, 3, 0, '25.00', '0.18', '2016-12-01', '2016-11-24 18:57:11', 'Active'),
-(4, 8, 'R12458', 'Test Name RSAG', 'RSA-G', 'FSM', 3, 3, 1, 1, '60.00', '0.47', '2016-11-01', '2016-11-24 19:50:18', 'Active');
+(4, 8, 'R12458', 'Test Name RSAG', 'RSA-G', 'FSM', 3, 3, 1, 1, '60.00', '0.47', '2016-11-01', '2016-11-24 19:50:18', 'Active'),
+(5, 9, 'R12458', 'Test Name RSAG', 'RSA-G', 'FSM', 1, 1, 1, 1, '33.33', '2.22', '2016-11-01', '2016-11-29 18:07:21', 'Active');
 
 -- --------------------------------------------------------
 
@@ -1410,7 +1683,7 @@ CREATE TABLE IF NOT EXISTS `training_pdf` (
   `created_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   `training_datetime` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `training_pdf`
@@ -1421,7 +1694,49 @@ INSERT INTO `training_pdf` (`id`, `batch`, `name`, `file_import`, `status`, `des
 (20, '27051956392025432016', 'Test Training Eleven', 'uploads/files/training/pdf/27051956392025432016-CaMnTiO3.pdf', 'Active', '', '', 0, 'TRIN1234', NULL, '2016-11-07 16:43:42', NULL, '2016-11-07 09:40 PM'),
 (21, '29074174600335138616', 'hshcfua', 'uploads/files/training/pdf/29074174600335138616-CaMnTiO3_ch3.pdf', 'Active', '', '', 2, 'TRIN1234', NULL, '2016-11-13 16:24:38', NULL, '2016-11-13 04:10 PM'),
 (22, '25044491490207171816', 'Test Training Seven', 'uploads/files/training/pdf/25044491490207171816-CaMnTiO3_ch3.pdf', 'Active', 'AM,TM', 'This Is test', 11, 'TRIN1234', NULL, '2016-11-14 18:25:59', NULL, '2016-11-14 02:55 PM'),
-(23, '24044491490707155116', 'hshcfua', 'uploads/files/training/pdf/24044491490707155116-CaMnTiO3.pdf', 'Active', 'SEC,RSA-G,RSA-R', 'This Is test', 13, 'TRIN1234', NULL, '2016-11-14 20:16:59', NULL, '2016-11-13 04:10 PM');
+(23, '24044491490707155116', 'hshcfua', 'uploads/files/training/pdf/24044491490707155116-CaMnTiO3.pdf', 'Active', 'SEC,RSA-G,RSA-R', 'This Is test', 13, 'TRIN1234', NULL, '2016-11-14 20:16:59', NULL, '2016-11-13 04:10 PM'),
+(24, '21059244802106519316', 'Test Training Twelve', 'uploads/files/training/pdf/21059244802106519316-Product PPT.pdf', 'Inactive', 'SEC,RSA-G,RSA-R,RSA-Y', 'This Is test', 0, 'TRIN1234', NULL, '2016-11-29 17:44:11', NULL, '2016-12-01 05:35 PM'),
+(25, '21059244802110028216', 'Test Training Twelve', 'uploads/files/training/pdf/21059244802110028216-Product PPT.pdf', 'Inactive', 'SEC,RSA-G,RSA-R,RSA-Y', 'This Is test', 0, 'TRIN1234', NULL, '2016-11-29 17:46:02', NULL, '2016-12-01 05:35 PM'),
+(26, '21059244802110484216', 'Test Training Twelve', 'uploads/files/training/pdf/21059244802110484216-ProductPPT.pdf', 'Active', 'SEC,RSA-G,RSA-R,RSA-Y', 'This Is test', 1, 'TRIN1234', NULL, '2016-11-29 17:48:39', NULL, '2016-12-01 05:35 PM');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `travel`
+--
+
+CREATE TABLE IF NOT EXISTS `travel` (
+  `id` int(11) unsigned NOT NULL,
+  `batch` bigint(20) unsigned NOT NULL,
+  `hr_employee_id` varchar(50) NOT NULL,
+  `hr_name` varchar(80) NOT NULL,
+  `hr_designation` varchar(100) NOT NULL,
+  `hr_employee_type` varchar(100) NOT NULL,
+  `reason` varchar(550) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `place` varchar(550) DEFAULT NULL,
+  `cost` decimal(10,2) unsigned NOT NULL,
+  `line_manager_hr_id` int(11) unsigned NOT NULL,
+  `line_manager_employee_id` varchar(255) NOT NULL,
+  `line_manager_name` varchar(80) NOT NULL,
+  `line_manager_designation` varchar(100) NOT NULL,
+  `line_manager_employee_type` varchar(100) NOT NULL,
+  `status` enum('Pending','Rejected','Approved') NOT NULL DEFAULT 'Pending',
+  `action_date` datetime DEFAULT NULL,
+  `action_by` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `travel`
+--
+
+INSERT INTO `travel` (`id`, `batch`, `hr_employee_id`, `hr_name`, `hr_designation`, `hr_employee_type`, `reason`, `start_date`, `end_date`, `place`, `cost`, `line_manager_hr_id`, `line_manager_employee_id`, `line_manager_name`, `line_manager_designation`, `line_manager_employee_type`, `status`, `action_date`, `action_by`, `created_at`) VALUES
+(1, 8102593330427083911, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'I am going for a training program', '2016-12-01', '2016-12-07', 'Barisal', '100.00', 6, 'AM123456', 'Test Name CSM', 'AM', 'Sales', 'Rejected', '2016-12-08 19:12:16', 'AM123456', '2016-12-08 18:48:28'),
+(2, 8102593330643469311, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'I am going for a vacation', '2016-12-07', '2016-12-14', 'Barisal', '0.00', 6, 'AM123456', 'Test Name CSM', 'AM', 'Sales', 'Approved', '2016-12-08 19:37:58', 'AM123456', '2016-12-08 19:30:26'),
+(3, 8102593330713563311, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'I am going for a new survey', '2016-12-14', '2016-12-21', 'Dhaka', '100.00', 6, 'AM123456', 'Test Name CSM', 'AM', 'Sales', 'Rejected', '2016-12-08 19:56:22', 'AM123456', '2016-12-08 19:48:36'),
+(4, 8102593330725387511, 'TM123456', 'Test NameTM', 'TM', 'Sales', 'I am going for a new training', '2016-12-03', '2016-12-10', 'Dhaka', '100.00', 6, 'AM123456', 'Test Name CSM', 'AM', 'Sales', 'Rejected', '2016-12-08 19:56:16', 'AM123456', '2016-12-08 19:55:38');
 
 -- --------------------------------------------------------
 
@@ -1950,7 +2265,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `status` smallint(6) NOT NULL DEFAULT '10',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
@@ -1967,7 +2282,9 @@ INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_act
 (13, '12456', '94OozewrBB-ZxSj1LSpCloAU8oDjMcGb', '$2y$13$laDBkygb4VoD0a4C4RSE7.glTKdVDwFqARHRhGUsi/BfIZw/8n8cm', 'sxF0cM', NULL, 'ashik123@analyzenbd.com', 10, 1475470918, 1475470918),
 (14, 'TR123456', 'rcbcHvFYbectU3h99h9cubfLDCOe6FYQ', '$2y$13$PbrLv7SO8Ir0WKKtHWsHT.31c2XFYWONfnC/12YDXjmQj/OzUCMvS', 'zJ9H64', NULL, 'ashik01111111111@analyzenbd.com', 10, 1477566821, 1477566821),
 (15, 'TR0976', 'uw1kUH3qoJ7QbAq1Ikr4TyQh_3A7jfVU', '$2y$13$WemNBgS4V6lU.MHcP4qoYe3TRot4RDAnkqb84a1d3rtgDIu6OkuZ2', 'F5fFkX', NULL, 'ashik222@analyzenbd.com', 10, 1477566997, 1477566997),
-(16, 'TRIN1234', 'hJscvVJZTZXOBrhZyG58j2H0P4TBOP_h', '$2y$13$spRPnYeaocTwYmB8ZKihaOmoVtJwsP/R6VtDWOPfeSb8AvI32Vzc.', 'TW2o7M', NULL, 'ashik12@analyzenbd.com', 10, 1477571474, 1477571474);
+(16, 'TRIN1234', 'hJscvVJZTZXOBrhZyG58j2H0P4TBOP_h', '$2y$13$spRPnYeaocTwYmB8ZKihaOmoVtJwsP/R6VtDWOPfeSb8AvI32Vzc.', 'TW2o7M', NULL, 'ashik12@analyzenbd.com', 10, 1477571474, 1477571474),
+(20, 'S0987', 'xZpTKcZrCAVsaXIW_MdMKGq02QV-NuMq', '$2y$13$I.IesQ9h4n98nd79/o5dRetruALj/pmWnJchAanRygVcILK5pS/Ue', 'zbH9M7', NULL, 'ashik_sec1@analyzenbd.com', 10, 1481466880, 1481466880),
+(21, 'S10912', '228Ufx08GmSiZNI1sh2n2kZbbjsc9vyI', '$2y$13$cYzUmcJqP3TastV8JDE/KeALn0ck5i49NJsFHOX7V6Nyd2jSHWfBe', '6PNMAk', NULL, 'ashik_sec2@analyzenbd.com', 10, 1481466950, 1481466950);
 
 -- --------------------------------------------------------
 
@@ -2087,6 +2404,30 @@ ALTER TABLE `migration`
   ADD PRIMARY KEY (`version`);
 
 --
+-- Indexes for table `mi_infra`
+--
+ALTER TABLE `mi_infra`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mi_product`
+--
+ALTER TABLE `mi_product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mi_tpcp`
+--
+ALTER TABLE `mi_tpcp`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mi_visibility`
+--
+ALTER TABLE `mi_visibility`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `notification`
 --
 ALTER TABLE `notification`
@@ -2178,7 +2519,8 @@ ALTER TABLE `sales_batch`
 -- Indexes for table `stock`
 --
 ALTER TABLE `stock`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `imei_no` (`imei_no`);
 
 --
 -- Indexes for table `stock_batch`
@@ -2224,6 +2566,12 @@ ALTER TABLE `training_pdf`
   ADD UNIQUE KEY `batch` (`batch`);
 
 --
+-- Indexes for table `travel`
+--
+ALTER TABLE `travel`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `upazilas`
 --
 ALTER TABLE `upazilas`
@@ -2263,7 +2611,7 @@ ALTER TABLE `divisions`
 -- AUTO_INCREMENT for table `hr`
 --
 ALTER TABLE `hr`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `hr_designation`
 --
@@ -2293,12 +2641,32 @@ ALTER TABLE `hr_trainer`
 -- AUTO_INCREMENT for table `left_menu`
 --
 ALTER TABLE `left_menu`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=301;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=316;
+--
+-- AUTO_INCREMENT for table `mi_infra`
+--
+ALTER TABLE `mi_infra`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `mi_product`
+--
+ALTER TABLE `mi_product`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `mi_tpcp`
+--
+ALTER TABLE `mi_tpcp`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `mi_visibility`
+--
+ALTER TABLE `mi_visibility`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
+  MODIFY `id` int(8) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `post`
 --
@@ -2308,7 +2676,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `product_color`
 --
@@ -2358,52 +2726,57 @@ ALTER TABLE `retail_zone`
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `sales_batch`
 --
 ALTER TABLE `sales_batch`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `stock_batch`
 --
 ALTER TABLE `stock_batch`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `target`
 --
 ALTER TABLE `target`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `target_batch`
 --
 ALTER TABLE `target_batch`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT for table `training_assessment_category`
 --
 ALTER TABLE `training_assessment_category`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `training_assessment_question`
 --
 ALTER TABLE `training_assessment_question`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `training_assessment_result`
 --
 ALTER TABLE `training_assessment_result`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `training_pdf`
 --
 ALTER TABLE `training_pdf`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+--
+-- AUTO_INCREMENT for table `travel`
+--
+ALTER TABLE `travel`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `upazilas`
 --
@@ -2413,7 +2786,7 @@ ALTER TABLE `upazilas`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `user_role`
 --

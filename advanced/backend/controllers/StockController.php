@@ -9,14 +9,16 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * StockController implements the CRUD actions for Stock model.
- */
+// Custom (Dropdown)
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+
+// db\Expression
+use yii\db\Expression;
+
 class StockController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+
     public function behaviors()
     {
         return [
@@ -57,31 +59,88 @@ class StockController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    
+    public static function getColor($parent) {
 
-    /**
-     * Creates a new Stock model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+        $data = \backend\models\Product::find()
+                ->where(['model_code'=> $parent])->select(['color as id', 'color as name'])->asArray()->all();
+        $value = (count($data) == 0) ? ['' => ''] : $data;
+
+        return $value;
+    }
+    
+    public function actionFind_color() 
+    {
+
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $product_model_code = $parents[0];
+                $out = self::getColor($product_model_code); 
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
     public function actionCreate()
     {
         $model = new Stock();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            
+            $model->batch = 0;
+            
+            $hrModelOne = \backend\models\Hr::find()
+                    ->select(['retail_id', 'retail_dms_code', 'retail_name', 'retail_type', 'retail_channel_type', 'retail_zone', 'retail_area', 'retail_territory'])
+                    ->where('employee_id=:employee_id', [':employee_id' => Yii::$app->session->get('employee_id')])
+                    ->orderBy(['id' => SORT_DESC])
+                    ->one();
+            $model->retail_id = $hrModelOne->retail_id;
+            $model->retail_dms_code = $hrModelOne->retail_dms_code;
+            $model->retail_name = $hrModelOne->retail_name;
+            $model->retail_type = $hrModelOne->retail_type;
+            $model->retail_channel_type = $hrModelOne->retail_channel_type;
+            $model->retail_zone = $hrModelOne->retail_zone;
+            $model->retail_area = $hrModelOne->retail_area;
+            $model->retail_territory = $hrModelOne->retail_territory;
+            
+            $productModelOne = \backend\models\Product::find()
+                    ->select(['id', 'name', 'model_name', 'type', 'lifting_price', 'rrp', 'status'])
+                    ->where('model_code=:model_code AND color=:color', [':model_code' => $model->product_model_code, ':color' => $model->product_color])
+                    ->one();
+            $model->product_id = $productModelOne->id;
+            $model->product_name = $productModelOne->name;
+            $model->product_model_name = $productModelOne->model_name;
+            $model->product_type = $productModelOne->type;
+            $model->lifting_price = $productModelOne->lifting_price;
+            $model->rrp = $productModelOne->rrp;
+            $model->status = $productModelOne->status;
+            
+            $model->submission_date = date('Y-m-d', time());
+            $model->created_at = new Expression('NOW()');
+            $model->created_by = Yii::$app->user->identity->username;
+            
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'The product has successfully been added in the stock.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
         } else {
+            
+            $productModel = ArrayHelper::map(\backend\models\Product::find()
+                    ->orderBy(['model_code' => SORT_ASC])->all(), 'model_code', 'model_code');
+            
             return $this->render('create', [
                 'model' => $model,
+                'productModel' => $productModel
             ]);
         }
     }
 
-    /**
-     * Updates an existing Stock model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -95,12 +154,6 @@ class StockController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing Stock model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -108,13 +161,6 @@ class StockController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Stock model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Stock the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Stock::findOne($id)) !== null) {

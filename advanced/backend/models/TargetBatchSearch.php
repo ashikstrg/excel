@@ -28,13 +28,13 @@ class TargetBatchSearch extends TargetBatch
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]]
         ]);
 
         $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!$this->validate()) 
+        {
             return $dataProvider;
         }
         
@@ -43,18 +43,55 @@ class TargetBatchSearch extends TargetBatch
             $query->andFilterWhere(['like', 'created_by', Yii::$app->user->identity->username]);
             
         }
-        
-        // grid filtering conditions
+
         $query->andFilterWhere([
             'id' => $this->id,
             'batch' => $this->batch,
             'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,
+            'status' => 'Active'
         ]);
 
         $query->andFilterWhere(['like', 'file_import', $this->file_import])
             ->andFilterWhere(['like', 'target_date', $this->target_date])
-            ->andFilterWhere(['like', 'status', $this->status])
+            ->andFilterWhere(['like', 'created_by', $this->created_by])
+            ->andFilterWhere(['like', 'deleted_by', $this->deleted_by]);
+
+        return $dataProvider;
+    }
+    
+    public function deleted($params)
+    {
+        $query = TargetBatch::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) 
+        {
+            return $dataProvider;
+        }
+        
+        if(!Yii::$app->session->get('isAdmin')) {
+            
+            $query->andFilterWhere(['like', 'created_by', Yii::$app->user->identity->username]);
+            
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'batch' => $this->batch,
+            'created_at' => $this->created_at,
+            'deleted_at' => $this->deleted_at,
+            'status' => 'Deleted'
+        ]);
+
+        $query->andFilterWhere(['like', 'file_import', $this->file_import])
+            ->andFilterWhere(['like', 'target_date', $this->target_date])
             ->andFilterWhere(['like', 'created_by', $this->created_by])
             ->andFilterWhere(['like', 'deleted_by', $this->deleted_by]);
 

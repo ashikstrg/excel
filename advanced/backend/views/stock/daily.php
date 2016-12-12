@@ -18,7 +18,7 @@ if(!empty($searchModel->submission_date)) {
 ?>
 <div class="stock-batch-index">
     
-    <?php echo $this->render('_search_daily', ['model' => $searchModel]); ?>
+    <?php //echo $this->render('_search_daily', ['model' => $searchModel]); ?>
 
     <?php 
 

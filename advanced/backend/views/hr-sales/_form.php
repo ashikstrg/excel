@@ -18,7 +18,7 @@ use kartik\widgets\FileInput;
         <div class="col-md-6">
 
             <?= $form->field($model, 'designation_id')->dropDownList($hrDesignationModel, [
-            'prompt' => 'Select Deignation'
+            'prompt' => 'Select Designation'
             ]); ?>
 
             <?= $form->field($model, 'manager_id')->widget(DepDrop::classname(), [

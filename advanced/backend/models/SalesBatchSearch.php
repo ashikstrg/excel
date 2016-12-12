@@ -19,9 +19,6 @@ class SalesBatchSearch extends SalesBatch
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class

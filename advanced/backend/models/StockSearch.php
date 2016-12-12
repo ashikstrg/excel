@@ -13,38 +13,22 @@ use backend\models\Hr;
 // Custom
 use yii\data\SqlDataProvider;
 
-/**
- * StockSearch represents the model behind the search form about `backend\models\Stock`.
- */
 class StockSearch extends Stock
 {
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
-            [['id', 'batch', 'retail_id', 'product_id', 'status', 'volume'], 'integer'],
-            [['retail_dms_code', 'retail_name', 'retail_type', 'retail_channel_type', 'retail_zone', 'retail_area', 'retail_territory', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'submission_date', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['id', 'batch', 'retail_id', 'product_id', 'status'], 'integer'],
+            [['retail_dms_code', 'retail_name', 'retail_type', 'retail_channel_type', 'retail_zone', 'retail_area', 'retail_territory', 'imei_no', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'submission_date', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $hrModel = null;
@@ -89,12 +73,8 @@ class StockSearch extends Stock
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'batch' => $this->batch,
-            'retail_id' => $this->retail_id,
-            'product_id' => $this->product_id,
             'status' => $this->status,
-            'volume' => $this->volume,
             'submission_date' => $this->submission_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -107,6 +87,7 @@ class StockSearch extends Stock
             ->andFilterWhere(['like', 'retail_zone', $this->retail_zone])
             ->andFilterWhere(['like', 'retail_area', $this->retail_area])
             ->andFilterWhere(['like', 'retail_territory', $this->retail_territory])
+            ->andFilterWhere(['like', 'imei_no', $this->imei_no])
             ->andFilterWhere(['like', 'product_name', $this->product_name])
             ->andFilterWhere(['like', 'product_model_code', $this->product_model_code])
             ->andFilterWhere(['like', 'product_model_name', $this->product_model_name])
@@ -180,9 +161,9 @@ class StockSearch extends Stock
             $this->retail_territory = null;
         }
         
-        if(empty($this->submission_date)) {
-            $this->submission_date = date('Y-m-d', time());
-        }
+//        if(empty($this->submission_date)) {
+//            $this->submission_date = date('Y-m-d', time());
+//        }
         
         $retailDmsCode = $this->retail_dms_code;
         $retailName = $this->retail_name;
@@ -191,7 +172,7 @@ class StockSearch extends Stock
         $retailZone = $this->retail_zone;
         $retailArea = $this->retail_area;
         $retailTerritory = $this->retail_territory;
-        $submissionDate = $this->submission_date;
+        //$submissionDate = $this->submission_date;
         
         $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT retail_dms_code) FROM stock')
 			->queryScalar();
@@ -200,9 +181,9 @@ class StockSearch extends Stock
             SELECT
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
-                        ''', volume, 0)) AS ',
+                        ''', 1, 0)) AS ',
                         product_model_code
                     )
                 ) INTO @sql
@@ -213,7 +194,7 @@ class StockSearch extends Stock
                     CONCAT(
                         'SUM(IF(product_type = ''',
                         product_type,
-                        ''', volume, 0)) AS ',
+                        ''', 1, 0)) AS ',
                         product_type
                     )
                 )
@@ -221,10 +202,10 @@ class StockSearch extends Stock
             FROM stock;
             SET @sql3 = NULL;
             SELECT 
-                SUM(volume) AS `total`
+                COUNT(imei_no) AS `total`
             INTO @sql3
             FROM stock;
-            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, retail_territory, ', @sql, ', ', @sql2, ', SUM(volume) AS total FROM stock, (SELECT @i:= 0) AS i WHERE 
+            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, retail_territory, ', @sql, ', ', @sql2, ', COUNT(imei_no) AS total FROM stock, (SELECT @i:= 0) AS i WHERE 
             (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
             AND (retail_type like :retail_type or :retail_type is null)
@@ -233,7 +214,6 @@ class StockSearch extends Stock
             AND (retail_area like :retail_area or :retail_area is null)
             AND (retail_territory like :retail_territory or :retail_territory is null)
             AND (retail_id IN (:retail_id))
-            AND (submission_date=:submission_date)
             GROUP BY retail_dms_code'); ";
 
         $cmd  = Yii::$app->db->createCommand($sql); 
@@ -253,8 +233,7 @@ class StockSearch extends Stock
                 ':retail_zone' => '%' . $retailZone . '%',
                 ':retail_area' => '%' . $retailArea . '%',
                 ':retail_territory' => '%' . $retailTerritory . '%',
-                ':retail_id' => $hrString,
-                ':submission_date' => $submissionDate
+                ':retail_id' => $hrString
             ],
             'totalCount' => $totalCount,
             //'sort' =>false, to remove the table header sorting

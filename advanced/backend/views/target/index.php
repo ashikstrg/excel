@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success']) . ' '.
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['target-batch/create'], ['class' => 'btn btn-success']) . ' '.
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],

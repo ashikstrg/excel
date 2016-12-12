@@ -14,7 +14,6 @@ use kartik\widgets\FileInput;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="row">
-
         <div class="col-md-6">
 
             <?= $form->field($model, 'designation_id')->dropDownList($hrDesignationModel, [

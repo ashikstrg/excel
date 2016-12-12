@@ -10,6 +10,7 @@ use kartik\file\FileInput;
 ?>
 
 <div class="target-form">
+    
 
     <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
     
@@ -56,3 +57,25 @@ use kartik\file\FileInput;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+
+$script = <<< JS
+$(document).ready(function(){
+        
+    $('#w0').on('beforeSubmit', function () {
+        var form = $(this);
+        // return false if form still have some validation errors
+        if (form.find('.has-error').length) {
+            $('.overlay').hide();
+            return false;
+        } else {
+            $('.overlay').show();
+            return true;
+        }
+    });
+
+});
+JS;
+
+$this->registerJs($script, \yii\web\View::POS_READY);

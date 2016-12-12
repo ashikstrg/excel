@@ -5,9 +5,9 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'HR Congiguration';
+$this->title = 'HR (FSM) Congiguration';
 $this->miniTitle = 'HR Module';
-$this->subTitle = 'HR Data';
+$this->subTitle = 'HR (FSM) Data';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hr-index">
@@ -132,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of HR',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of HR (FSM) in Descending Order',
                 'after' => html::button('<i class="glyphicon glyphicon-remove"></i> Delete Selected Data', ['class' => 'btn btn-danger mdelete pull-right']) . '<div class="clearfix"></div>'
             ],
         ]); ?>

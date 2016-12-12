@@ -75,7 +75,7 @@ if($notificationCount > 10) {
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
+<!--          <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-envelope-o"></i>
               <span class="label label-warning"><?= $notificationTotal; ?></span>
@@ -83,7 +83,7 @@ if($notificationCount > 10) {
             <ul class="dropdown-menu">
               <li class="header">You have <?= $notificationTotal; ?> messages</li>
               <li>
-                <!-- inner menu: contains the actual data -->
+                 inner menu: contains the actual data 
                 <ul class="menu">
                     <?php
                     foreach ($notificationModel as $notification) {
@@ -103,9 +103,9 @@ if($notificationCount > 10) {
               </li>
               <li class="footer"><a href="#">View all</a></li>
             </ul>
-          </li>
+          </li>-->
           <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
+<!--          <li class="dropdown tasks-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-flag-o"></i>
               <span class="label label-danger">9</span>
@@ -113,9 +113,9 @@ if($notificationCount > 10) {
             <ul class="dropdown-menu">
               <li class="header">You have 9 tasks</li>
               <li>
-                <!-- inner menu: contains the actual data -->
+                 inner menu: contains the actual data 
                 <ul class="menu">
-                  <li><!-- Task item -->
+                  <li> Task item 
                     <a href="#">
                       <h3>
                         Design some buttons
@@ -128,8 +128,8 @@ if($notificationCount > 10) {
                       </div>
                     </a>
                   </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
+                   end task item 
+                  <li> Task item 
                     <a href="#">
                       <h3>
                         Create a nice theme
@@ -142,8 +142,8 @@ if($notificationCount > 10) {
                       </div>
                     </a>
                   </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
+                   end task item 
+                  <li> Task item 
                     <a href="#">
                       <h3>
                         Some task I need to do
@@ -156,8 +156,8 @@ if($notificationCount > 10) {
                       </div>
                     </a>
                   </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
+                   end task item 
+                  <li> Task item 
                     <a href="#">
                       <h3>
                         Make beautiful transitions
@@ -170,14 +170,14 @@ if($notificationCount > 10) {
                       </div>
                     </a>
                   </li>
-                  <!-- end task item -->
+                   end task item 
                 </ul>
               </li>
               <li class="footer">
                 <a href="#">View all tasks</a>
               </li>
             </ul>
-          </li>
+          </li>-->
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -195,7 +195,7 @@ if($notificationCount > 10) {
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+<!--              <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Summery</a>
@@ -207,12 +207,24 @@ if($notificationCount > 10) {
                     <a href="#">Target</a>
                   </div>
                 </div>
-                <!-- /.row -->
-              </li>
+                 /.row 
+              </li>-->
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                    <?php
+                    
+                    if(Yii::$app->session->get('userRole') == 'Sales' || Yii::$app->session->get('userRole') == 'admin'){
+                        echo Html::a(
+                                'Profile', ['/hr-sales/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
+                        );
+                    } else if(Yii::$app->session->get('userRole') == 'FSM'){
+                        echo Html::a(
+                                'Profile', ['/hr/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
+                        );
+                    }
+                    
+                    ?>
                 </div>
                 <div class="pull-right">
                   <?= Html::a(
@@ -225,9 +237,9 @@ if($notificationCount > 10) {
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
-          <li>
+<!--          <li>
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
+          </li>-->
         </ul>
       </div>
     </nav>

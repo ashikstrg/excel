@@ -4,7 +4,7 @@ use miloschuman\highcharts\Highcharts;
 
 $this->title = 'Dashboard';
 $this->miniTitle = 'Control Panel';
-$this->subTitle = '<b>Summery Report: </b>' .  date('F', time());
+$this->subTitle = '<b>Summary Report: </b>' .  date('F', time());
 
 $this->params['breadcrumbs'][] = $this->title;
 

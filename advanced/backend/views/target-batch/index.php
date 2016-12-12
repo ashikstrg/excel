@@ -7,7 +7,7 @@ use kartik\export\ExportMenu;
 
 $this->title = 'Uploaded Data';
 $this->miniTitle = 'Target Module';
-$this->subTitle = 'Uploaded Target Data';
+$this->subTitle = 'List of Active Target Batch Data';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="target-batch-index">
@@ -19,24 +19,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'yii\grid\ActionColumn',
             'template' => '{view} {delete}',
         ], // 1
-        ['class' => 'yii\grid\SerialColumn'], // 2
+        [
+            'header' => 'Seach',
+            'format' => 'raw',
+            'hAlign' => 'center',
+            'vAlign' => 'middle',
+            'value'=>function ($data) {
+                return Html::a('<i class="fa fa-search"></i>', ['/target/index', 'TargetSearch[batch]' => $data->batch]);
+            },
+        ], //2
+        ['class' => 'yii\grid\SerialColumn'], // 3
 
-            'batch',
-            'target_date',
-            [
-		'header' => 'Seach',
-		'format' => 'raw',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-		'value'=>function ($data) {
-			return Html::a('<i class="fa fa-search"></i>', ['/target/index', 'TargetSearch', 'batch' => $data->batch]);
-		},
-            ],
-            'status',
-            'created_by',
-            'created_at',
-            'deleted_by',
-            'deleted_at',
+        'batch',
+        'target_date',
+        'created_by',
+        'created_at',
+        'deleted_by',
+        'deleted_at',
     ];
 
     $fullExportMenu = ExportMenu::widget([
@@ -44,8 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
-        'hiddenColumns'=>[0, 1],
-        'noExportColumns'=>[0, 1],
+        'hiddenColumns'=>[0, 1, 2],
+        'noExportColumns'=>[0, 1, 2],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,
@@ -84,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Uploaded Target Data',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Target Batch File in Descending Order',
                 'after' => html::button('<i class="glyphicon glyphicon-remove"></i> Delete Selected Data', ['class' => 'btn btn-danger mdelete pull-right']) . '<div class="clearfix"></div>'
             ],
         ]); ?>

@@ -2,21 +2,18 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\Hr */
+$this->title = 'Update HR';
+$this->miniTitle = 'HR Module';
+$this->subTitle = 'HR Form: ' . $model->name;
 
-$this->title = 'Update Hr: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Hrs', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => 'HR Config', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hr-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
-        'hrDesignationModel' => $hrDesignationModel,
+        'hrDesignationModel' => $hrDesignationModel, 
         'retailModel' => $retailModel
     ]) ?>
 

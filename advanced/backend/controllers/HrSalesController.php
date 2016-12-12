@@ -56,6 +56,13 @@ class HrSalesController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    
+    public function actionProfile($id)
+    {
+        return $this->render('profile', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
     public static function getDesignationParent($parent) {
 

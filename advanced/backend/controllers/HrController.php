@@ -58,6 +58,13 @@ class HrController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    
+    public function actionProfile($id)
+    {
+        return $this->render('profile', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
     public static function getDesignationParent($parent) {
 
@@ -127,7 +134,6 @@ class HrController extends Controller
             $model->created_by = Yii::$app->user->identity->username;
 
             $image = UploadedFile::getInstance($model, 'image');
-
             if (!is_null($image)) {
 
                 $model->image_src_filename = $image->name;
@@ -232,7 +238,6 @@ class HrController extends Controller
             $model->updated_by = Yii::$app->user->identity->username;
 
             $image = UploadedFile::getInstance($model, 'image');
-
             if (!is_null($image)) {
 
                 $model->image_src_filename = $image->name;

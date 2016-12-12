@@ -9,6 +9,7 @@ $this->subTitle = 'CSV Upload Form';
 $this->params['breadcrumbs'][] = ['label' => 'Target Batch Data', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="target-create">
 
     <?= $this->render('_form', [
@@ -27,12 +28,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body">
               <table class="table table-bordered">
                 <tr>
-                  <th style="width: 50%">Model Code</th>
-                  <th style="width: 50%">Target</th>
+                  <th style="width: 40%">Employee ID (FSM)</th>
+                  <th style="width: 30%">Model Code 1</th>
+                  <th style="width: 30%">Model Code 2</th>
                 </tr>
                 <tr>
-                  <td>XXXXXXXXXXX</td>
-                  <td>1XXXXX</td>
+                  <td>IDXXXX</td>
+                  <td>1XX</td>
+                  <td>1XX</td>
+                </tr>
+                <tr>
+                  <td>IDXXXX</td>
+                  <td>1XX</td>
+                  <td>1XX</td>
                 </tr>
               </table>
             </div>
@@ -40,7 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-footer clearfix">
                 <div class="content-header">Conditions</div>
               <ul>
-                <li>Product Model must be exist in the product list.</li>
+                <li>FSM Employee ID must exist in the database.</li>
+                <li>Product Model must exist in the product list.</li>
                 <li>Target must be an integer value.</li>
               </ul>
             </div>

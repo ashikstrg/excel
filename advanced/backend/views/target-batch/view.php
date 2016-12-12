@@ -72,12 +72,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-footer">
         <div class="row">
             <div class="col-md-6">
-                <?= Html::a('Add New', ['create'], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Add New', ['create'], ['class' => 'btn btn-success']) ?>
                 <?= Html::a('Configure', ['index'], ['class' => 'btn btn-primary']) ?>
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
-                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
                 <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [

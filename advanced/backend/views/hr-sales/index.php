@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of HR',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of HR (Sales) in Descending Order',
                 'after' => html::button('<i class="glyphicon glyphicon-remove"></i> Delete Selected Data', ['class' => 'btn btn-danger mdelete pull-right']) . '<div class="clearfix"></div>'
             ],
         ]); ?>

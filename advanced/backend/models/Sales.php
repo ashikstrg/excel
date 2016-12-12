@@ -49,24 +49,26 @@ class Sales extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['retail_id', 'batch', 'retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 'retail_area', 'retail_territory', 'designation', 'employee_id', 'employee_name', 'tm_parent', 'tm_employee_id', 'tm_name', 'am_parent', 'am_employee_id', 'am_name', 'csm_parent', 'csm_employee_id', 'csm_name', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'imei_no', 'price', 'sales_date', 'created_by'], 'required'],
+            [['imei_no'], 'required'],
             [['batch', 'retail_id', 'tm_parent', 'am_parent', 'csm_parent', 'product_id', 'hr_id'], 'integer'],
-            [['price'], 'number'],
+            [['price', 'lifting_price'], 'number'],
             [['sales_date', 'created_at'], 'safe'],
             [['retail_dms_code', 'retail_channel_type', 'retail_type', 'designation'], 'string', 'max' => 100],
             [['retail_name', 'retail_zone'], 'string', 'max' => 150],
             [['retail_area', 'retail_territory'], 'string', 'max' => 250],
             [['employee_id', 'tm_employee_id', 'am_employee_id', 'csm_employee_id', 'product_model_code', 'product_model_name', 'product_color', 'product_type'], 'string', 'max' => 50],
             [['employee_name', 'tm_name', 'am_name', 'csm_name', 'product_name'], 'string', 'max' => 80],
-            [['imei_no'], 'string', 'max' => 20],
-            [['created_by'], 'string', 'max' => 255],
+            
+            [['imei_no'], 'string', 'max' => 15, 'message' => '{attribute} must be 15 characters long.'],
+            [['imei_no'], 'string', 'min' => 15, 'message' => '{attribute} must be 15 characters long.'],
             [['imei_no'], 'unique'],
+            
+            [['status'], 'safe'],
+            
+            [['created_by'], 'string', 'max' => 255],    
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -100,6 +102,7 @@ class Sales extends \yii\db\ActiveRecord
             'product_type' => 'Product Type',
             'imei_no' => 'IMEI',
             'price' => 'Price',
+            'lifting_price' => 'Lifting Price',
             'sales_date' => 'Sales Date',
             'created_at' => 'Upload Date',
             'created_by' => 'Created By',

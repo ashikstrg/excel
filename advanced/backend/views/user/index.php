@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'User Congiguration';
+$this->title = 'User Configuration';
 $this->miniTitle = 'User Module';
 $this->subTitle = 'User Data';
 $this->params['breadcrumbs'][] = $this->title;
