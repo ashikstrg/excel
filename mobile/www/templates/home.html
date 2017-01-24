@@ -1,0 +1,33 @@
+<ion-view class="homeView" view-title="Login" hide-nav-bar="true">
+   <ion-content>
+      <div class="row row-center">
+         <div class="col col-center text-center">
+            <img style="width: 200px; height: 59px;" src="img/logo.png" />
+            <form ng-submit="submit()">
+            	<fieldset>
+                <div class="list list-inset">
+				  <label class="item item-input">
+				    <i class="icon ion-person placeholder-icon"></i>
+				    <input type="text" name="username" placeholder="Username" ng-model="data.username">
+				  </label>
+				</div>
+
+				<div class="list list-inset">
+				  <label class="item item-input">
+				    <i class="icon ion-locked placeholder-icon"></i>
+				    <input type="password" name="password" placeholder="Password" ng-model="data.password">
+				  </label>
+				</div>
+				</fieldset>
+
+               <button class="button button-outline button-block button-light animated bounceInUp" ui-sref="app.gallery">
+               	ENTER 
+               </button>
+
+
+            </form>
+            
+         </div>
+      </div>
+   </ion-content>
+</ion-view>
