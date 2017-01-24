@@ -24,7 +24,11 @@ class Retail extends \yii\db\ActiveRecord
             [['retail_area', 'territory', 'retail_location', 'market_name'], 'string', 'max' => 250],
             [['division', 'district', 'upazila'], 'string', 'max' => 30],
             [['Address'], 'string', 'max' => 550],
-            [['contact_no', 'owner_contact_no', 'store_contact_no', 'manager_contact_no', 'day_off'], 'string', 'max' => 20],
+            
+            [['day_off'], 'string', 'max' => 20],
+            [['contact_no', 'owner_contact_no', 'store_contact_no', 'manager_contact_no'], 'string', 'max' => 11],
+            [['contact_no', 'owner_contact_no', 'store_contact_no', 'manager_contact_no'], 'match', 'pattern' => '/^(01)(1|5|6|7|8|9)\d{8}$/'],
+            
             [['owner_name', 'manager_name'], 'string', 'max' => 60],
             [['owner_email', 'store_email'], 'string', 'max' => 80],
             [['created_by', 'updated_by'], 'string', 'max' => 255],

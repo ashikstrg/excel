@@ -7,8 +7,16 @@ use kartik\export\ExportMenu;
 
 $this->title = 'Uploaded Data';
 $this->miniTitle = 'Stock Module';
-$this->subTitle = 'Uploaded Stock Data';
+$this->subTitle = 'Uploaded Active Files';
 $this->params['breadcrumbs'][] = $this->title;
+
+$createUrl = '#';
+if(Yii::$app->session->get('userRole') == 'admin') {
+    $createUrl = 'multiple';
+} else {
+    $createUrl = 'create';
+}
+
 ?>
 <div class="stock-batch-index">
 
@@ -16,26 +24,23 @@ $this->params['breadcrumbs'][] = $this->title;
     $gridColumns = [
         ['class' => '\kartik\grid\CheckboxColumn'], // 0
         [
+            'header' => 'Seach',
+            'format' => 'raw',
+            'hAlign' => 'center',
+            'vAlign' => 'middle',
+            'value'=>function ($data) {
+                    return Html::a('<i class="fa fa-search"></i>', ['/stock/index', 'StockSearch[batch]' => $data->batch]);
+            },
+        ],
+        [
             'class' => 'yii\grid\ActionColumn',
             'template' => '{view} {delete}',
         ], // 1
         ['class' => 'yii\grid\SerialColumn'], // 2
-
-            'batch',
-            [
-		'header' => 'Seach',
-		'format' => 'raw',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-		'value'=>function ($data) {
-			return Html::a('<i class="fa fa-search"></i>', ['/stock/index', 'StockSearch', 'batch' => $data->batch]);
-		},
-            ],
-            'status',
-            'created_by',
-            'created_at',
-            'deleted_by',
-            'deleted_at',
+        'batch',
+        'total_row',
+        'created_by',
+        'created_at',
     ];
 
     $fullExportMenu = ExportMenu::widget([
@@ -76,14 +81,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success']) . ' '.
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', [$createUrl], ['class' => 'btn btn-success']) . ' '.
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Uploaded Stock Data',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Active Batch Files',
                 'after' => html::button('<i class="glyphicon glyphicon-remove"></i> Delete Selected Data', ['class' => 'btn btn-danger mdelete pull-right']) . '<div class="clearfix"></div>'
             ],
         ]); ?>
@@ -94,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-footer">
     <div class="row">
         <div class="col-md-12">
-            <i>* Stock Files are linked to the main stock data.</i>
+            <i>* Stock Files are listed in descending order.</i>
         </div>
     </div>
 </div>

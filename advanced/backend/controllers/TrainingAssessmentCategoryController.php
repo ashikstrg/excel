@@ -170,7 +170,7 @@ class TrainingAssessmentCategoryController extends Controller
                 ->one();
         
         if(empty($modelTrainingAssessMentCategory)) {
-            $this->render('/site/error', [
+            return $this->render('/site/error', [
                 'name' => 'Inactive',
                 'message' => 'No Assessment is active right now.'
             ]);
@@ -184,10 +184,10 @@ class TrainingAssessmentCategoryController extends Controller
         ->orderBy(['id' => SORT_DESC])
         ->one();
         
-        if(empty($modelTrainingAssessMentCategory)) {
-            $this->render('/site/error', [
+        if(empty($notificationModel)) {
+            return $this->render('/site/error', [
                 'name' => 'Inactive',
-                'message' => 'No Assessment is active right now.'
+                'message' => 'Sorry! No Assessment is active right now.'
             ]);
         }
         

@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 
 // Custom Models
 use backend\models\Stock;
+use backend\models\Inventory;
 use backend\models\Hr;
 
 // Custom DB Helper
@@ -65,8 +66,7 @@ class SalesController extends Controller
             if(!empty($hrModelOne)){
                 $stockModelOne = Stock::find()
                         ->select(['id', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'lifting_price', 'rrp', 'status'])
-                        ->where('retail_dms_code=:retail_dms_code AND imei_no=:imei_no', [':retail_dms_code' => $hrModelOne->retail_dms_code, ':imei_no' => $model->imei_no])
-                        ->orderBy(['id' => SORT_DESC])
+                        ->where('retail_dms_code=:retail_dms_code AND imei_no=:imei_no AND validity=:validity', [':retail_dms_code' => $hrModelOne->retail_dms_code, ':imei_no' => $model->imei_no, ':validity' => Stock::$validityIn])
                         ->one();
                 
                 if(!empty($stockModelOne)) {
@@ -124,13 +124,27 @@ class SalesController extends Controller
                             if(!empty($targetModel)) {
                                 $targetModel->updateCounters($targetUpdateCounter);
                             }
-                        $stockModelOne->delete();
+                        
+                        $stockModelOne->updated_at = $now;
+                        $stockModelOne->updated_by = $username;
+                        $stockModelOne->validity = Stock::$validityOut;
+                        $stockModelOne->save();
+                        
+                        $inventoryModelOne = Inventory::find()
+                            ->select(['id'])
+                            ->where('imei_no=:imei_no', [':imei_no' => $model->imei_no])
+                            ->one();
+                        $inventoryModelOne->updated_at = $now;
+                        $inventoryModelOne->updated_by = $username;
+                        $inventoryModelOne->stage = Inventory::$stageSold;
+                        $inventoryModelOne->save();
+                        
                         Yii::$app->session->setFlash('success', '<b>IMEI Number: ' . $model->imei_no . ' </b>has successfully been added.');
                         return $this->redirect(['view', 'id' => $model->id]);
                         
                     } else {
                         
-                        \Yii::$app->session->setFlash('error', 'Inserted data can not be processed due to security issue.');
+                        \Yii::$app->session->setFlash('error', 'Inserted data can not be processed due to invalid data.');
                         
                     }
                     

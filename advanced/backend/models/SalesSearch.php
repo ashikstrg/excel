@@ -860,7 +860,7 @@ class SalesSearch extends Sales
                         'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', 1, 0)) AS ',
-                        product_model_name
+                        CONCAT('`', `product_model_name`, '`')
                     )
                 )
             INTO @sql
@@ -1082,7 +1082,7 @@ class SalesSearch extends Sales
                         'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', price, 0)) AS ',
-                        product_model_name
+                        CONCAT('`', `product_model_name`, '`')
                     )
                 )
             INTO @sql

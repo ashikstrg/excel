@@ -21,12 +21,15 @@ use backend\models\Product;
 
 // Custom Helpers
 use yii\helpers\HtmlPurifier;
+
+//Custom Models
 use backend\models\Sales;
+use backend\models\Inventory;
 
 
 class StockBatchController extends Controller
 {
-
+    
     public function behaviors()
     {
         return [
@@ -49,6 +52,17 @@ class StockBatchController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionDeleted()
+    {
+        $searchModel = new StockBatchSearch();
+        $dataProvider = $searchModel->deleted(Yii::$app->request->queryParams);
+
+        return $this->render('deleted', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionView($id)
     {
@@ -63,6 +77,7 @@ class StockBatchController extends Controller
         
         $errorsArray = \Yii::$app->session['errorsArray'];
         $successArray = \Yii::$app->session['successArray'];
+        $successCount = 0;
         
         $userId = Yii::$app->user->identity->id;
         $username = Yii::$app->user->identity->username;
@@ -72,14 +87,205 @@ class StockBatchController extends Controller
 
         if($model->file){
 
-            $filePath = 'uploads/files/stock/';
-            $model->file_import = $filePath .rand(10,100).'-'.str_replace('','-',$model->file->name);
+            $bulkInsertArray = array();
+            $current_date = time();
+            $random = $current_date.rand(10,100).$userId;
+            $now = new Expression('NOW()');
+            $today = date('Y-m-d', time());
+            
+            $filePath = 'uploads/files/stock/admin/';
+            $model->file_import = $filePath . $random . str_replace($model->file->name, '', $model->file) . '.csv';
+
+            $uploadExists = 1;
+        }
+
+        if($uploadExists){
+
+            $model->file->saveAs($model->file_import) ;
+
+            $handle = fopen($model->file_import, 'r');
+
+            if ($handle) {
+
+                $model->batch = $random;
+                $model->status = 'Active';
+                $model->created_by = $username;
+                $model->created_at = $now;
+                $model->stock_date = $today;
+
+                if($model->validate()){
+
+                    $hrModel = Hr::find()
+                            ->select(['id', 'retail_id', 'retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 
+                                'retail_area', 'retail_territory'])
+                            ->where('user_id=:user_id AND employee_type=:employee_type', [':user_id' => $userId, ':employee_type' => Hr::$fsmEmployeeType])
+                            ->one();
+
+                    if($hrModel !== null) {
+
+                        $rowNumber = 0;
+                        while( ($line = fgetcsv($handle, 1000, ",")) != FALSE) {
+
+                            $rowNumber++;
+                            $stockIMEI = HtmlPurifier::process(trim($line[0]));
+
+                            if($rowNumber == 1) {
+                                continue;
+                            }
+
+                            if (strlen($stockIMEI) == 15) {
+
+                                $stockSubmission = Stock::find()
+                                    ->select('id')
+                                    ->where('imei_no=:imei_no', 
+                                            [':imei_no' => $stockIMEI])
+                                    ->one();
+
+                                if($stockSubmission === null) {
+
+                                    $inventoryModel = Inventory::find()
+                                        ->select(['imei_no', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 
+                                            'product_type', 'rrp', 'lifting_price', 'status'])
+                                        ->where('imei_no=:imei_no AND validity=:validity', 
+                                            [':imei_no' => $stockIMEI, ':validity' => Inventory::$validityIn])
+                                        ->one();   
+
+                                    if($inventoryModel !== null) {
+
+                                        $bulkInsertArray[]=[
+                                            'batch' => $model->batch,
+                                            'retail_id' => $hrModel->retail_id,
+                                            'retail_dms_code' => $hrModel->retail_dms_code,
+                                            'retail_name' => $hrModel->retail_name,
+                                            'retail_channel_type' => $hrModel->retail_channel_type,
+                                            'retail_type' => $hrModel->retail_type,
+                                            'retail_zone' => $hrModel->retail_zone,
+                                            'retail_area' => $hrModel->retail_area,
+                                            'retail_territory' => $hrModel->retail_territory,
+                                            'retail_location' => $hrModel->retail_location,
+                                            'product_id' => $inventoryModel->product_id,
+                                            'product_name' => $inventoryModel->product_name,
+                                            'product_model_code' => $inventoryModel->product_model_code,
+                                            'product_model_name' => $inventoryModel->product_model_name,
+                                            'product_color' => $inventoryModel->product_color,
+                                            'product_type' => $inventoryModel->product_type,
+                                            'rrp' => $inventoryModel->rrp,
+                                            'lifting_price' => $inventoryModel->lifting_price,
+                                            'status' => $inventoryModel->status,
+                                            'validity' => Stock::$validityIn,
+                                            'imei_no' => $inventoryModel->imei_no,
+                                            'submission_date' => $today,
+                                            'created_at' => $now,
+                                            'created_by' => $username
+                                        ];
+
+                                        $successArray[] = 'Row Number ' . $rowNumber . ':Stock Data has successfully been uploaded.';
+                                        $successCount++;
+
+                                    } else {
+
+                                        $errorsArray[] = 'Row Number ' . $rowNumber . ': This IMEI Number is not added in the inventory yet.';
+
+                                    }
+
+                                } else {
+
+                                    $errorsArray[] = 'Row Number ' . $rowNumber . ': This IMEI Number has already been used.';
+
+                                }
+
+                            } else {
+
+                                $errorsArray[] = 'Row Number ' . $rowNumber . ':IMEI number must be 15 characters long.';
+
+                            }
+
+                        }
+
+                    } else {
+
+                        $errorsArray[] = 'System Error: Uploader is not a valid a user.';
+
+                    }
+
+                    $model->total_row = $successCount;
+                    $model->save(false);
+                }
+
+                fclose($handle);
+
+                $tableName = 'stock';
+                $columnNameArray=[
+                    'batch', 
+                    'retail_id',
+                    'retail_dms_code',
+                    'retail_name',
+                    'retail_channel_type',
+                    'retail_type',
+                    'retail_zone',
+                    'retail_area',
+                    'retail_territory',
+                    'retail_location',
+                    'product_id',
+                    'product_name',
+                    'product_model_code',
+                    'product_model_name',
+                    'product_color',
+                    'product_type',
+                    'rrp',
+                    'lifting_price',
+                    'status',
+                    'validity',
+                    'imei_no',
+                    'submission_date',
+                    'created_at',
+                    'created_by'
+                ];
+                Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
+                #print_r($bulkInsertArray);
+            }
+        }
+
+        \Yii::$app->session['errorsArray'] = $errorsArray;
+        \Yii::$app->session['successArray'] = $successArray;
+        return $this->redirect(['view', 'id' => $model->id]);
+            
+    }
+
+    public function actionCreate()
+    {
+        $model = new StockBatch();
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+        
+    }
+    
+    public function actionUp()
+    {
+        $model = new StockBatch();
+        
+        $errorsArray = \Yii::$app->session['errorsArray'];
+        $successArray = \Yii::$app->session['successArray'];
+        $successCount = 0;
+        
+        $userId = Yii::$app->user->identity->id;
+        $username = Yii::$app->user->identity->username;
+
+        $model->file = UploadedFile::getInstance($model, 'file');
+        $uploadExists = 0;
+
+        if($model->file){
 
             $bulkInsertArray = array();
             $random_date = Yii::$app->formatter->asDatetime(date("dmyyhis"), "php:dmYHis");
             $random = $random_date.rand(10,100).$userId;
             $now = new Expression('NOW()');
             $today = date('Y-m-d', time());
+            
+            $filePath = 'uploads/files/stock/admin/';
+            $model->file_import = $filePath . $random . str_replace($model->file->name, '', $model->file) . '.csv';
 
             $uploadExists = 1;
         }
@@ -98,104 +304,109 @@ class StockBatchController extends Controller
                     $model->created_at = $now;
                     $model->stock_date = $today;
 
-                    if($model->save()){
+                    if($model->validate()){
 
-                        $hrModel = Hr::find()
-                                ->select(['id', 'retail_id', 'retail_dms_code', 'retail_name', 'retail_channel_type', 'retail_type', 'retail_zone', 
-                                    'retail_area', 'retail_territory'])
-                                ->where(['user_id' => $userId])
-                                ->one();
+                        $rowNumber = 0;
+                        while( ($line = fgetcsv($handle, 1000, ",")) != FALSE) {
 
-                        if($hrModel !== null) {
+                            $rowNumber++;      
+                            if($rowNumber == 1) {
+                                continue;
+                            }
 
-                            $rowNumber = 0;
-                            while( ($line = fgetcsv($handle, 1000, ",")) != FALSE) {
+                            $stockIMEI = HtmlPurifier::process(trim($line[0]));
+                            $retailDMSCode = HtmlPurifier::process(trim($line[1]));
 
-                                $rowNumber++;
-                                $productModelCode = HtmlPurifier::process(trim($line[0]));
-                                $productColor = HtmlPurifier::process(trim($line[1]));
-                                $stockIMEI = HtmlPurifier::process(trim($line[2]));
+                            if (strlen($stockIMEI) == 15) {
 
-                                if($rowNumber == 1) {
-                                    continue;
-                                }
+                                $stockSubmission = Stock::find()
+                                        ->select('id')
+                                        ->where('imei_no=:imei_no', 
+                                                [':imei_no' => $stockIMEI])
+                                        ->one();
 
-                                if (strlen($stockIMEI) == 15) {
+                                if($stockSubmission === null) {
 
-                                    $stockSubmission = Stock::find()
-                                            ->select('id')
-                                            ->where('imei_no=:imei_no', 
-                                                    [':imei_no' => $stockIMEI])
-                                            ->one();
-                                    
-                                    $salesData = Sales::find()
-                                            ->select('id')
-                                            ->where('imei_no=:imei_no', 
-                                                    [':imei_no' => $stockIMEI])
-                                            ->one();
-
-                                    if($stockSubmission === null && $salesData === null) {
-
-                                        $productModel = Product::find()
-                                        ->select(['id', 'name', 'model_code', 'model_name', 'color', 'type', 'rrp', 'lifting_price', 'status'])
-                                        ->where('model_code=:model_code and color=:color', 
-                                                [':model_code' => $productModelCode, ':color' => $productColor])
+                                    $inventoryModel = Inventory::find()
+                                        ->select(['imei_no', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 
+                                            'product_type', 'rrp', 'lifting_price', 'status'])
+                                        ->where('imei_no=:imei_no AND validity=:validity', 
+                                            [':imei_no' => $stockIMEI, ':validity' => Inventory::$validityIn])
                                         ->one();   
 
-                                        if($productModel !== null) {
+                                    if($inventoryModel !== null) {
+                                        
+                                        $retailModel = \backend\models\Retail::find()
+                                            ->select(['id', 'dms_code', 'name', 'channel_type', 'retail_type', 'retail_zone', 'retail_area', 'territory', 'retail_location'])
+                                            ->where('dms_code=:dms_code', 
+                                                    [':dms_code' => $retailDMSCode])
+                                            ->one();
 
+                                        if($retailModel !== null) {
+                                            
                                             $bulkInsertArray[]=[
                                                 'batch' => $model->batch,
-                                                'retail_id' => $hrModel->retail_id,
-                                                'retail_dms_code' => $hrModel->retail_dms_code,
-                                                'retail_name' => $hrModel->retail_name,
-                                                'retail_channel_type' => $hrModel->retail_channel_type,
-                                                'retail_type' => $hrModel->retail_type,
-                                                'retail_zone' => $hrModel->retail_zone,
-                                                'retail_area' => $hrModel->retail_area,
-                                                'retail_territory' => $hrModel->retail_territory,
-                                                'product_id' => $productModel->id,
-                                                'product_name' => $productModel->name,
-                                                'product_model_code' => $productModel->model_code,
-                                                'product_model_name' => $productModel->model_name,
-                                                'product_color' => $productModel->color,
-                                                'product_type' => $productModel->type,
-                                                'rrp' => $productModel->rrp,
-                                                'lifting_price' => $productModel->lifting_price,
-                                                'status' => $productModel->status,
-                                                'imei_no' => $stockIMEI,
+                                                'retail_id' => $retailModel->id,
+                                                'retail_dms_code' => $retailModel->dms_code,
+                                                'retail_name' => $retailModel->name,
+                                                'retail_channel_type' => $retailModel->channel_type,
+                                                'retail_type' => $retailModel->retail_type,
+                                                'retail_zone' => $retailModel->retail_zone,
+                                                'retail_area' => $retailModel->retail_area,
+                                                'retail_territory' => $retailModel->territory,
+                                                'retail_location' => $retailModel->retail_location,
+                                                'product_id' => $inventoryModel->product_id,
+                                                'product_name' => $inventoryModel->product_name,
+                                                'product_model_code' => $inventoryModel->product_model_code,
+                                                'product_model_name' => $inventoryModel->product_model_name,
+                                                'product_color' => $inventoryModel->product_color,
+                                                'product_type' => $inventoryModel->product_type,
+                                                'rrp' => $inventoryModel->rrp,
+                                                'lifting_price' => $inventoryModel->lifting_price,
+                                                'status' => $inventoryModel->status,
+                                                'validity' => Stock::$validityIn,
+                                                'imei_no' => $inventoryModel->imei_no,
                                                 'submission_date' => $today,
                                                 'created_at' => $now,
                                                 'created_by' => $username
                                             ];
 
-                                            $successArray[] = 'Row Number ' . $rowNumber . ':Stock Data has successfully been uploaded.';
-
+                                            $successArray[] = 'Row Number ' . $rowNumber . ': Stock Data has successfully been uploaded.';
+                                            $successCount++;
+                                            
+                                            $inventoryModel->validity = Inventory::$validityOut;
+                                            $inventoryModel->stage = Inventory::$stageStock;
+                                            $inventoryModel->save();
+                                            
                                         } else {
-
-                                            $errorsArray[] = 'Row Number ' . $rowNumber . ':Product Model/Color is invalid.';
-
+                                            
+                                            $errorsArray[] = 'Row Number ' . $rowNumber . ': Retail DMS Code is invalid.';
+                                            
                                         }
 
                                     } else {
 
-                                        $errorsArray[] = 'Row Number ' . $rowNumber . ': This IMEI Number has already been used.';
+                                        $errorsArray[] = 'Row Number ' . $rowNumber . ': IMEI Number is invalid.';
 
                                     }
 
                                 } else {
-                                    
-                                    $errorsArray[] = 'Row Number ' . $rowNumber . ':IMEI number must be 15 characters long.';
+
+                                    $errorsArray[] = 'Row Number ' . $rowNumber . ': This IMEI Number has already been used.';
 
                                 }
 
+                            } else {
+
+                                $errorsArray[] = 'Row Number ' . $rowNumber . ': IMEI number must be 15 characters long.';
+
                             }
 
-                        } else {
-
-                            $errorsArray[] = 'System Error: Uploader is not a valid a user.';
-
                         }
+                        
+                        $model->total_row = $successCount;
+                        $model->save();
+
                     }
 
                     fclose($handle);
@@ -211,6 +422,7 @@ class StockBatchController extends Controller
                         'retail_zone',
                         'retail_area',
                         'retail_territory',
+                        'retail_location',
                         'product_id',
                         'product_name',
                         'product_model_code',
@@ -220,6 +432,7 @@ class StockBatchController extends Controller
                         'rrp',
                         'lifting_price',
                         'status',
+                        'validity',
                         'imei_no',
                         'submission_date',
                         'created_at',
@@ -235,12 +448,12 @@ class StockBatchController extends Controller
         return $this->redirect(['view', 'id' => $model->id]);
             
     }
-
-    public function actionCreate()
+    
+    public function actionMultiple()
     {
         $model = new StockBatch();
 
-        return $this->render('create', [
+        return $this->render('multiple', [
             'model' => $model,
         ]);
         
@@ -273,8 +486,13 @@ class StockBatchController extends Controller
             $model->deleted_by = Yii::$app->user->identity->username;
             $model->deleted_at = new Expression('NOW()');
             $model->save();
+            
+            if(is_writable(getcwd() . '/' . $model->file_import)){
+                unlink(getcwd() . '/' . $model->file_import); 
+            }
         }
 
+        Yii::$app->session->setFlash('success', 'The list of selected file has successfully been deleted.');
         return $this->redirect(['index']);
 
     }
@@ -288,8 +506,13 @@ class StockBatchController extends Controller
         $model->status = 'Deleted';
         $model->deleted_by = Yii::$app->user->identity->username;
         $model->deleted_at = new Expression('NOW()');
-        $model->save();
+        $model->save(false);
         
+        if(is_writable(getcwd() . '/' . $model->file_import)){
+            unlink(getcwd() . '/' . $model->file_import); 
+        }
+        
+        Yii::$app->session->setFlash('success', 'The file has successfully been deleted.');
         return $this->redirect(['index']);
     }
 

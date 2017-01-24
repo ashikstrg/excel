@@ -20,7 +20,7 @@ class StockSearch extends Stock
     {
         return [
             [['id', 'batch', 'retail_id', 'product_id', 'status'], 'integer'],
-            [['retail_dms_code', 'retail_name', 'retail_type', 'retail_channel_type', 'retail_zone', 'retail_area', 'retail_territory', 'imei_no', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'submission_date', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['validity', 'retail_dms_code', 'retail_name', 'retail_type', 'retail_channel_type', 'retail_zone', 'retail_area', 'retail_territory', 'imei_no', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'submission_date', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
 
@@ -74,6 +74,7 @@ class StockSearch extends Stock
         // grid filtering conditions
         $query->andFilterWhere([
             'batch' => $this->batch,
+            'validity' => $this->validity,
             'status' => $this->status,
             'submission_date' => $this->submission_date,
             'created_at' => $this->created_at,

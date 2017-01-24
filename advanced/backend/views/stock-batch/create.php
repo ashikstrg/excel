@@ -27,13 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body">
               <table class="table table-bordered">
                 <tr>
-                  <th style="width: 30%">Product Model Code</th>
-                  <th style="width: 30%">Color</th>
-                  <th style="width: 40%">IMEI Number</th>
+                  <th style="width: 100%">IMEI Number</th>
                 </tr>
                 <tr>
-                  <td>XXXXXXXXXXX</td>
-                  <td>XXXXX</td>
                   <td>XXXXXXXXXXXXXXX</td>
                 </tr>
               </table>
@@ -42,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-footer clearfix">
                 <div class="content-header"><b>Conditions</b></div>
               <ul>
-                 <li>Product Model Code &amp; Color must be exist in the product list.</li>
                  <li><b>IMEI Number</b> must be 15 characters long.</li>
               </ul>
             </div>

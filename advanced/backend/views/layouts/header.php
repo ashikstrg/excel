@@ -214,7 +214,7 @@ if($notificationCount > 10) {
                 <div class="pull-left">
                     <?php
                     
-                    if(Yii::$app->session->get('userRole') == 'Sales' || Yii::$app->session->get('userRole') == 'admin'){
+                    if(Yii::$app->session->get('userRole') == 'Sales'){
                         echo Html::a(
                                 'Profile', ['/hr-sales/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
                         );
@@ -222,8 +222,11 @@ if($notificationCount > 10) {
                         echo Html::a(
                                 'Profile', ['/hr/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
                         );
+                    } else if(Yii::$app->session->get('userRole') == 'admin') {
+                        echo Html::a(
+                                'Profile', ['/hr-management/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
+                        );
                     }
-                    
                     ?>
                 </div>
                 <div class="pull-right">

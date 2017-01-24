@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
@@ -14,7 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php 
     
     $gridColumns = [
-        ['class' => 'yii\grid\SerialColumn'], // 0
+        [
+            'header' => 'Answers',
+            'format' => 'raw',
+            'hAlign' => 'center',
+            'vAlign' => 'middle',
+            'value'=>function ($data) {
+                return Html::a('<i class="fa fa-search"></i>', ['/training-assessment-answer/index', 'TrainingAssessmentAnswerSearch[category_id]' => $data->category_id, 'TrainingAssessmentAnswerSearch[hr_employee_id]' => $data->hr_employee_id, 'TrainingAssessmentAnswerSearch[hr_name]' => $data->hr_name, 'TrainingAssessmentAnswerSearch[hr_designation]' => $data->hr_designation]);
+            },
+        ], // 0
+        ['class' => 'yii\grid\SerialColumn'], // 1
         'hr_employee_id',
         'hr_name',
         'hr_designation',
@@ -37,8 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
-        //'hiddenColumns'=>[0, 1],
-        //'noExportColumns'=>[0, 1],
+        'hiddenColumns'=>[0],
+        'noExportColumns'=>[0],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,

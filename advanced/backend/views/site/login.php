@@ -7,7 +7,9 @@ $this->title = 'Login Page';
 ?>
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?= Yii::$app->homeUrl; ?>"><b>EXCEL</b>Telecom</a>
+    <a href="<?= Yii::$app->homeUrl; ?>">
+    <img src="<?= Yii::$app->homeUrl . '/../img/logo.png'; ?>" />
+    </a>
   </div><!– /.login-logo –>
   <div class="login-box-body">
     <p class="login-box-msg">Sign in</p>

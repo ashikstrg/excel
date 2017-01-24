@@ -232,6 +232,13 @@ class HrManagementController extends Controller
             ]);
         }
     }
+    
+    public function actionProfile($id)
+    {
+        return $this->render('profile', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
     public function actionDelete($id)
     {

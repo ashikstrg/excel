@@ -17,7 +17,7 @@ class StockBatch extends \yii\db\ActiveRecord
     {
         return [
             [['batch', 'file_import', 'stock_date'], 'required'],
-            [['batch'], 'integer'],
+            [['batch', 'total_row'], 'integer'],
             [['status'], 'string'],
             [['created_at', 'deleted_at', 'stock_date'], 'safe'],
             [['file_import', 'created_by', 'deleted_by'], 'string', 'max' => 255],
@@ -29,6 +29,7 @@ class StockBatch extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'batch' => 'Batch',
+            'total_row' => 'Total Row',
             'file_import' => 'File Import',
             'status' => 'Status',
             'created_by' => 'Created By',

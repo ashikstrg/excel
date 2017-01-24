@@ -15,9 +15,6 @@ use backend\models\UserRole;
 
 class UserController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -30,10 +27,6 @@ class UserController extends Controller
         ];
     }
 
-    /**
-     * Lists all User models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new UserSearch();
@@ -85,12 +78,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -106,8 +93,9 @@ class UserController extends Controller
 
         if($loadedPost && $user->validate()) {
             $user->password = $user->newPassword;
+            $user->password_actual = $user->newPassword;
             $user->save(false);
-            Yii::$app->session->setFlash('success', 'You have successfully changed your password');
+            Yii::$app->session->setFlash('success', 'You have successfully changed your password.');
             return $this->refresh();
         }
 
@@ -116,13 +104,6 @@ class UserController extends Controller
             ]);
     }
 
-    /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return User the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {

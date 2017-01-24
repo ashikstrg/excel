@@ -131,25 +131,52 @@ class TrainingAssessmentResultController extends Controller
             
         } 
         
+        $bulkInsertArray = array();
+        $hrEmployeeId = Yii::$app->session->get('employee_id');
+        $hrName = Yii::$app->session->get('name');
+        $hrDesignation = Yii::$app->session->get('designation');
+        $hrEmployeeType = Yii::$app->session->get('userRole');
+        $submittedAnswer = 'Unanswered';
+        $remark = 'Wrong';
+        
         $right_answer=0;
         $wrong_answer=0;
         $unanswered=0; 
         $keys=array_keys($_POST);
         $order=join(",",$keys);
         
-        $response = Yii::$app->db->createCommand("select id, answer from training_assessment_question where id IN($order) ORDER BY FIELD(id,$order)")->queryAll();
+        $response = Yii::$app->db->createCommand("select id, question_name, answer1, answer2, answer3, answer4, answer from training_assessment_question where id IN($order) ORDER BY FIELD(id,$order)")->queryAll();
         
         foreach($response as $result){
             
-            if($result['answer']==$_POST[$result['id']]){
-                    $right_answer++;
-                }else if($_POST[$result['id']]==5){
-                    $unanswered++;
-                }
-                else{
-                    $wrong_answer++;
-                }
-         }
+            if($_POST[$result['id']] != 5) {
+                $submittedAnswer = $result['answer' . $_POST[$result['id']]];
+            } else {
+                $submittedAnswer = 'Unanswered';
+            }
+                            
+            if($result['answer'] == $_POST[$result['id']]){
+                $right_answer++;
+                $remark = 'Right';
+            }else if($_POST[$result['id']]==5){
+                $unanswered++;
+                $remark = 'Wrong';
+            }else{
+                $wrong_answer++;
+                $remark = 'Wrong';
+            }
+            
+            $bulkInsertArray[]=[
+                'category_id' => $category_id,
+                'hr_employee_id' => $hrEmployeeId,
+                'hr_name' => $hrName,
+                'hr_designation' => $hrDesignation,
+                'hr_employee_type' => $hrEmployeeType,
+                'question_name' => $result['question_name'],
+                'answer' => $submittedAnswer,
+                'remark' => $remark
+            ];
+        }
 
         $score = $right_answer;
         $score_percent = number_format((($score/$modelTrainingAssessMentCategory->qlimit) * 100), 2);
@@ -159,10 +186,10 @@ class TrainingAssessmentResultController extends Controller
 
         $model = new TrainingAssessmentResult();
         $model->category_id = $category_id;
-        $model->hr_employee_id = Yii::$app->session->get('employee_id');
-        $model->hr_name = Yii::$app->session->get('name');
-        $model->hr_designation = Yii::$app->session->get('designation');
-        $model->hr_employee_type = Yii::$app->session->get('userRole');
+        $model->hr_employee_id = $hrEmployeeId;
+        $model->hr_name = $hrName;
+        $model->hr_designation = $hrDesignation;
+        $model->hr_employee_type = $hrEmployeeType;
         $model->score = $score;
         $model->right_answer = $right_answer;
         $model->wrong_answer = $wrong_answer;
@@ -174,6 +201,19 @@ class TrainingAssessmentResultController extends Controller
         $model->status = 'Active';
         
         if($model->save()) {
+            
+            $tableName = 'training_assessment_answer';
+            $columnNameArray=[
+                'category_id',
+                'hr_employee_id',
+                'hr_name',
+                'hr_designation',
+                'hr_employee_type',
+                'question_name',
+                'answer',
+                'remark'
+            ];
+            Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
             
             return $this->redirect(['view', 'id' => $model->id]);
             

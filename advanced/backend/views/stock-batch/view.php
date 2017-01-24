@@ -63,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'batch',
+            'total_row',
             'created_by',
             'created_at',
         ],
@@ -71,12 +72,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-footer">
         <div class="row">
             <div class="col-md-6">
-                <?= Html::a('Add New', ['create'], ['class' => 'btn btn-primary']) ?>
-                <?= Html::a('Configure', ['index'], ['class' => 'btn btn-primary']) ?>
+                <?php 
+                if( Yii::$app->session->get('userRole') == 'admin' ) {
+                    
+                    echo Html::a('Add New', ['/stock-batch/multiple'], ['class' => 'btn btn-primary']);
+                    echo ' ';
+                    echo Html::a('Configure', ['index'], ['class' => 'btn btn-primary']);
+                    
+                } else {
+                    echo Html::a('Add New', ['create'], ['class' => 'btn btn-primary']);
+                    echo ' ';
+                    echo Html::a('Configure', ['index'], ['class' => 'btn btn-primary']);
+                }
+                ?>
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
-                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
                 <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [

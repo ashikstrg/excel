@@ -21,7 +21,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'trainer'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,9 +44,28 @@ class SiteController extends Controller
             ],
         ];
     }
+    
+    public function actionTrainer()
+    {
+        $assessmentCategoryModel = \backend\models\TrainingAssessmentCategory::find()->orderBy(['id' => SORT_DESC])->one();
+        $assessmentResultModel = \backend\models\TrainingAssessmentResult::find()
+                ->where('category_id=:category_id', [':category_id' => $assessmentCategoryModel->id])
+                ->orderBy(['score_percent' => SORT_DESC])
+                ->limit(20)
+                ->all();
+        
+        return $this->render('trainer', [
+            'assessmentCategoryModel' => $assessmentCategoryModel,
+            'assessmentResultModel' => $assessmentResultModel
+        ]);
+    }
 
     public function actionIndex()
     {
+        if(Yii::$app->session->get('userRole') == 'Trainer') {
+            return $this->redirect(['trainer']);
+        }
+        
         $targetQuery = \backend\models\Target::find();
         $targetQuery->select([
             'SUM(`fsm_vol`) as fsm_vol', 

@@ -2,18 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\widgets\Alert;
-
-/* @var $this yii\web\View */
-/* @var $model common\models\User */
-/* @var $form yii\widgets\ActiveForm */
 
 $this->title = 'Reset Password';
+$this->miniTitle = 'Profile';
+$this->subTitle = 'Change Password';
+
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="user-form">
-
-	<?= Alert::widget(); ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -23,8 +21,17 @@ $this->title = 'Reset Password';
 
     <?= $form->field($model, 'newPasswordConfirm')->passwordInput() ?>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="box-footer">
+        <div class="row">
+            <div class="col-md-6">
+                <?= Html::submitButton('Change Password', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <div class="col-md-6">
+                <div class="pull-right">
+                <?= Html::resetButton('Reset Form', ['class' => 'btn btn-danger']) ?>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

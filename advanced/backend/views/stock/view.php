@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'product_model_name',
             'product_color',
             'product_type',
+            'validity',
             'status',
             'submission_date',
             'created_at',

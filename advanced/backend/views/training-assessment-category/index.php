@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'hAlign' => 'center',
             'vAlign' => 'middle',
             'value'=>function ($data) {
-                    return Html::a('<i class="fa fa-search"></i>', ['/training-assessment-question/index', 'TrainingAssessmentQuestionSearch[category_id]' => $data->id]);
+                return Html::a('<i class="fa fa-search"></i>', ['/training-assessment-question/index', 'TrainingAssessmentQuestionSearch[category_id]' => $data->id]);
             },
         ], // 1
         [
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'hAlign' => 'center',
             'vAlign' => 'middle',
             'value'=>function ($data) {
-                    return Html::a('<i class="fa fa-search"></i>', ['/training-assessment-result/index', 'TrainingAssessmentResultSearch[category_id]' => $data->id]);
+                return Html::a('<i class="fa fa-search"></i>', ['/training-assessment-result/index', 'TrainingAssessmentResultSearch[category_id]' => $data->id]);
             },
         ], // 2
         ['class' => 'yii\grid\SerialColumn'], // 3

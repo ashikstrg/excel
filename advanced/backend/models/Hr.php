@@ -6,6 +6,7 @@ use Yii;
 
 class Hr extends \yii\db\ActiveRecord
 {
+    public static $fsmEmployeeType = 'FSM';
 
     public static function tableName()
     {
@@ -30,6 +31,7 @@ class Hr extends \yii\db\ActiveRecord
             [['retail_area', 'retail_territory'], 'string', 'max' => 250],
             [['educational_qualification', 'educational_institute', 'educational_qualification_second_last', 'educational_institute_second_last', 'created_by', 'updated_by'], 'string', 'max' => 255],
             [['contact_no_official', 'contact_no_personal', 'contact_no_immergency', 'bkash_no'], 'string', 'max' => 11],
+            [['contact_no_official', 'contact_no_personal', 'contact_no_immergency', 'bkash_no'], 'match', 'pattern' => '/^(01)(1|5|6|7|8|9)\d{8}$/'],
             [['blood_group', 'status', 'graduation_status'], 'string', 'max' => 10],
             [['bank_ac_no'], 'string', 'max' => 20],
             [['permanent_address', 'present_address'], 'string', 'max' => 550],

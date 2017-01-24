@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-md-12">
                 <div class="pull-right">
-                <?= Html::a('Change Password', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Change Password', ['user/change_password'], ['class' => 'btn btn-primary']) ?>
                 </div>
             </div>
         </div>

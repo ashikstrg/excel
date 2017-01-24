@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Stock Raw Data';
+$this->title = 'Stock ' . ucwords($searchModel->validity);
 $this->miniTitle = 'Stock Module';
 $this->subTitle = 'Stock Data in Descending Order';
 $this->params['breadcrumbs'][] = $this->title;
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Sales Raw Data',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Stock Raw Data',
             ],
         ]); ?>
     <?php Pjax::end(); ?>

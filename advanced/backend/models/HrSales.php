@@ -24,7 +24,10 @@ class HrSales extends \yii\db\ActiveRecord
             [['manager_name', 'name', 'name_immergency_contact_person', 'email_address', 'email_address_official', 'bank_ac_name'], 'string', 'max' => 80],
             [['bank_name'], 'string', 'max' => 150],
             [['educational_qualification', 'educational_institute', 'educational_qualification_second_last', 'educational_institute_second_last', 'created_by', 'updated_by'], 'string', 'max' => 255],
+            
             [['contact_no_official', 'contact_no_personal', 'contact_no_immergency', 'bkash_no'], 'string', 'max' => 11],
+            [['contact_no_official', 'contact_no_personal', 'contact_no_immergency', 'bkash_no'], 'match', 'pattern' => '/^(01)(1|5|6|7|8|9)\d{8}$/'],
+            
             [['blood_group', 'status', 'graduation_status'], 'string', 'max' => 10],
             [['bank_ac_no'], 'string', 'max' => 20],
             [['permanent_address', 'present_address'], 'string', 'max' => 550],

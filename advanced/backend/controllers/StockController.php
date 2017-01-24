@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+// Custom Models
+use backend\models\Inventory;
+
 // Custom (Dropdown)
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -89,6 +92,9 @@ class StockController extends Controller
     public function actionCreate()
     {
         $model = new Stock();
+        
+        $productModel = ArrayHelper::map(\backend\models\Product::find()
+                    ->orderBy(['model_code' => SORT_ASC])->all(), 'model_code', 'model_code');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             
@@ -108,37 +114,65 @@ class StockController extends Controller
             $model->retail_area = $hrModelOne->retail_area;
             $model->retail_territory = $hrModelOne->retail_territory;
             
-            $productModelOne = \backend\models\Product::find()
-                    ->select(['id', 'name', 'model_name', 'type', 'lifting_price', 'rrp', 'status'])
-                    ->where('model_code=:model_code AND color=:color', [':model_code' => $model->product_model_code, ':color' => $model->product_color])
+            $inventoryModelOne = Inventory::find()
+                    ->where('imei_no=:imei_no AND validity=:validity', [':imei_no' => $model->imei_no, ':validity' => Inventory::$validityIn])
                     ->one();
-            $model->product_id = $productModelOne->id;
-            $model->product_name = $productModelOne->name;
-            $model->product_model_name = $productModelOne->model_name;
-            $model->product_type = $productModelOne->type;
-            $model->lifting_price = $productModelOne->lifting_price;
-            $model->rrp = $productModelOne->rrp;
-            $model->status = $productModelOne->status;
             
-            $model->submission_date = date('Y-m-d', time());
-            $model->created_at = new Expression('NOW()');
-            $model->created_by = Yii::$app->user->identity->username;
-            
-            if($model->save()){
-                Yii::$app->session->setFlash('success', 'The product has successfully been added in the stock.');
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+            if(!empty($inventoryModelOne)) {
+                
+                $model->product_id = $inventoryModelOne->product_id;
+                $model->product_name = $inventoryModelOne->product_name;
+                $model->product_model_name = $inventoryModelOne->product_model_name;
+                $model->product_model_code = $inventoryModelOne->product_model_code;
+                $model->product_color = $inventoryModelOne->product_color;
+                $model->product_type = $inventoryModelOne->product_type;
+                $model->lifting_price = $inventoryModelOne->lifting_price;
+                $model->rrp = $inventoryModelOne->rrp;
+                $model->validity = Stock::$validityIn;
+                $model->status = $inventoryModelOne->status;
 
-        } else {
+                $model->submission_date = date('Y-m-d', time());
+                $model->created_at = new Expression('NOW()');
+                $model->created_by = Yii::$app->user->identity->username;
+
+                $inventoryModelOne->validity = Inventory::$validityOut;
+                $inventoryModelOne->stage = Inventory::$stageStock;
+                $inventoryModelOne->updated_at = new Expression('NOW()');
+                $inventoryModelOne->updated_by = Yii::$app->user->identity->username;
+                
+                if($inventoryModelOne->update() !== false){
+                                        
+                    if($model->save()) {
+                        
+                        Yii::$app->session->setFlash('success', 'The product has successfully been added in the stock.');
+                        return $this->redirect(['view', 'id' => $model->id]);
+                        
+                    } else {
+                    
+                        \Yii::$app->session->setFlash('error', 'This IMEI Number could not be added due to the server error.');
+
+                    }
+                    
+                    
+                } else {
+                    
+                    \Yii::$app->session->setFlash('error', 'This IMEI Number could not be added due to the server error related to inventory.');
+                    
+                }
+                
+            } else {
+                
+                \Yii::$app->session->setFlash('error', 'This IMEI Number has not been added in the inventory yet.');
+                
+            }   
+
+        } 
             
-            $productModel = ArrayHelper::map(\backend\models\Product::find()
-                    ->orderBy(['model_code' => SORT_ASC])->all(), 'model_code', 'model_code');
-            
-            return $this->render('create', [
-                'model' => $model,
-                'productModel' => $productModel
-            ]);
-        }
+        return $this->render('create', [
+            'model' => $model,
+            'productModel' => $productModel
+        ]);
+        
     }
 
     public function actionUpdate($id)
