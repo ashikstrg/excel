@@ -154,6 +154,7 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+        
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId()); 
             foreach($userRole as $key => $value) {

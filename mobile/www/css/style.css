@@ -672,3 +672,22 @@ fieldset {
   margin-top: 10px;
   border-radius: 4px;
 }
+
+.col-header {
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    background: #f7f7f7;
+    text-align: center;
+}
+
+.col-body {
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    background: #f7f7f7;
+    text-align: center;
+    margin: 0px;
+}

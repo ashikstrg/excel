@@ -1,0 +1,30 @@
+{
+    "elements": {
+        "ion-side-menus": {},
+        "ion-header-bar": {},
+        "ion-popover-view": {},
+        "ion-refresher": {},
+        "ion-footer-bar": {},
+        "ion-content": {},
+        "ion-slide-box": {},
+        "ion-nav-bar": {},
+        "ion-side-menu": {},
+        "ion-list": {},
+        "ion-nav-view": {},
+        "ion-item": {},
+        "ion-modal-view": {},
+        "ion-slide": {},
+        "ion-view": {}
+    },
+    "attributes": {
+        "nav-clear": {
+            "context": "button"
+        },
+        "on-tap": {
+            "context": "button"
+        },
+        "ui-sref": {
+            "context": "button"
+        }
+    }
+}
