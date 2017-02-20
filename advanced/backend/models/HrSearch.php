@@ -12,9 +12,9 @@ class HrSearch extends Hr
     public function rules()
     {
         return [
-            [['id', 'designation_id', 'employee_type_id', 'retail_id', 'status', 'previous_experience', 'previous_experience_two'], 'integer'],
+            [['id', 'designation_id', 'employee_type_id', 'retail_id', 'status', 'previous_experience', 'previous_experience_two', 'batch'], 'integer'],
 
-            [['designation', 'employee_type', 'employee_id', 'tm_employee_id', 'tm_name', 'am_employee_id', 'am_name', 'csm_employee_id', 'csm_name', 'retail_dms_code', 'retail_channel_type', 'retail_type', 'retail_name', 'retail_zone', 'retail_area', 'retail_territory', 'name', 'joining_date', 'leaving_date', 'image', 'image_src_filename', 'image_web_filename', 'contact_no_official', 'contact_no_personal', 'name_immergency_contact_person', 'relation_immergency_contact_person', 'contact_no_immergency', 'email_address', 'email_address_official', 'bank_name', 'bank_ac_name', 'bank_ac_no', 'bkash_no', 'blood_group', 'graduation_status', 'educational_qualification', 'educational_institute', 'educational_qualification_second_last', 'educational_institute_second_last', 'permanent_address', 'present_address', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['batch', 'designation', 'employee_type', 'employee_id', 'tm_employee_id', 'tm_name', 'am_employee_id', 'am_name', 'csm_employee_id', 'csm_name', 'retail_dms_code', 'retail_channel_type', 'retail_type', 'retail_name', 'retail_zone', 'retail_area', 'retail_territory', 'name', 'joining_date', 'leaving_date', 'image', 'image_src_filename', 'image_web_filename', 'contact_no_official', 'contact_no_personal', 'name_immergency_contact_person', 'relation_immergency_contact_person', 'contact_no_immergency', 'email_address', 'email_address_official', 'bank_name', 'bank_ac_name', 'bank_ac_no', 'bkash_no', 'blood_group', 'graduation_status', 'educational_qualification', 'educational_institute', 'educational_qualification_second_last', 'educational_institute_second_last', 'permanent_address', 'present_address', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
         ];
     }
 
@@ -40,6 +40,7 @@ class HrSearch extends Hr
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'batch' => $this->batch,
             'designation_id' => $this->designation_id,
             'employee_type_id' => $this->employee_type_id,
             'retail_id' => $this->retail_id,

@@ -162,6 +162,9 @@ class RetailController extends Controller
             
             $model->created_at = date('Y-m-d H:i:s', time());
             $model->created_by = Yii::$app->user->identity->username;
+            
+            $model->number_sec += 1;
+            $model->number_rsa += 1;
 
             if($model->save()) {
                 
@@ -197,6 +200,9 @@ class RetailController extends Controller
 
             $model->updated_at = date('Y-m-d H:i:s', time());
             $model->updated_by = Yii::$app->user->identity->username;
+            
+            $model->number_sec += 1;
+            $model->number_rsa += 1;
 
             if($model->save()) {
 

@@ -2,8 +2,6 @@
 
 namespace backend\models;
 
-use Yii;
-
 class StockBatch extends \yii\db\ActiveRecord
 {
     public $file;

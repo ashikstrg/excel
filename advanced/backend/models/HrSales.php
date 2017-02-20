@@ -51,7 +51,7 @@ class HrSales extends \yii\db\ActiveRecord
             'employee_type' => 'Employee Type',
             'employee_id' => 'Employee ID',
             'parent' => 'Parent',
-            'manager_id' => 'Manager ID',
+            'manager_id' => 'Supervisor  ID',
             'manager_name' => 'Manager Name',
             'manager_designation' => 'Manager Designation',
             'name' => 'Name',

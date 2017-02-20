@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Retail Congiguration';
+$this->title = 'Retail Configuration';
 $this->miniTitle = 'Retail Control Panel';
 $this->subTitle = 'Retail Data';
 $this->params['breadcrumbs'][] = $this->title;

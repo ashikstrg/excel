@@ -57,7 +57,7 @@ use yii\helpers\Url;
                 'data'=>[$model->upazilaProperty => $model->upazila],
                 'pluginOptions'=>[
                     'depends'=>['retail-districtproperty'],
-                    'placeholder'=>'Select Upazila',
+                    'placeholder'=>'Select Upazila/Thana',
                     'url'=>Url::to(['/retail/upazila'])
                 ]
             ]); ?>
@@ -96,7 +96,7 @@ use yii\helpers\Url;
 
             <?= $form->field($model, 'number_rsa')->dropDownList(range(1, 10), ['prompt' => 'Select Number of RSA']) ?>
 
-            <?= $form->field($model, 'day_off')->dropDownList(['Saturday' => 'Saturday', 'Sunday' => 'Sunday', 'Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday'], ['prompt' => 'Select Day Off']) ?>
+            <?= $form->field($model, 'day_off')->dropDownList(['No Holiday' => 'No Holiday', 'Saturday' => 'Saturday', 'Sunday' => 'Sunday', 'Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday'], ['prompt' => 'Select Day Off']) ?>
 
             <?= $form->field($model, 'connectivity_wifi')->dropDownList([ 'Yes' => 'Yes', 'No' => 'No', ], ['prompt' => 'Select Connectivity (Wifi)']) ?>
 

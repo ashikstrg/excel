@@ -26,8 +26,9 @@ class Retail extends \yii\db\ActiveRecord
             [['Address'], 'string', 'max' => 550],
             
             [['day_off'], 'string', 'max' => 20],
-            [['contact_no', 'owner_contact_no', 'store_contact_no', 'manager_contact_no'], 'string', 'max' => 11],
-            [['contact_no', 'owner_contact_no', 'store_contact_no', 'manager_contact_no'], 'match', 'pattern' => '/^(01)(1|5|6|7|8|9)\d{8}$/'],
+            [['contact_no', 'owner_contact_no', 'manager_contact_no'], 'string', 'max' => 11],
+            [['store_contact_no'], 'string', 'min' => 9],
+            [['contact_no', 'owner_contact_no', 'manager_contact_no'], 'match', 'pattern' => '/^(01)(1|5|6|7|8|9)\d{8}$/'],
             
             [['owner_name', 'manager_name'], 'string', 'max' => 60],
             [['owner_email', 'store_email'], 'string', 'max' => 80],
@@ -62,8 +63,8 @@ class Retail extends \yii\db\ActiveRecord
             'divisionProperty' => 'Division',
             'district' => 'District',
             'districtProperty' => 'District',
-            'upazila' => 'Upazila',
-            'upazilaProperty' => 'Upazila',
+            'upazila' => 'Upazila/Thana',
+            'upazilaProperty' => 'Upazila/Thana',
             'market_name' => 'Market Name',
             'geotag' => 'Geotag',
             'Address' => 'Address',

@@ -9,14 +9,13 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * UpazilasController implements the CRUD actions for Upazilas model.
- */
+// Custom Helper
+use yii\helpers\ArrayHelper;
+
+
 class UpazilasController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+
     public function behaviors()
     {
         return [
@@ -29,10 +28,7 @@ class UpazilasController extends Controller
         ];
     }
 
-    /**
-     * Lists all Upazilas models.
-     * @return mixed
-     */
+
     public function actionIndex()
     {
         $searchModel = new UpazilasSearch();
@@ -68,8 +64,12 @@ class UpazilasController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            
+            $districtModel = ArrayHelper::map(\backend\models\Districts::find()->select(['id', 'name'])->all(), 'id', 'name');
+            
             return $this->render('create', [
                 'model' => $model,
+                'districtModel' => $districtModel
             ]);
         }
     }

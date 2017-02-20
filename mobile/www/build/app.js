@@ -78,6 +78,78 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
                                 }
                             }
                         })
+                        .state('app.stockreport', {
+                            url: "/stockreport/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/stockreport.html",
+                                    controller: 'StockreportController'
+                                }
+                            }
+                        })
+                        .state('app.salesview', {
+                            url: "/salesview/{title}",
+                            params: {
+                                imei_no: null,
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/salesview.html",
+                                    controller: 'SalesviewController'
+                                }
+                            }
+                        })
+                        .state('app.salesadd', {
+                            url: "/salesadd/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/salesadd.html",
+                                    controller: 'SalesaddController'
+                                }
+                            }
+                        })
+                        .state('app.stockadd', {
+                            url: "/stockadd/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/stockadd.html",
+                                    controller: 'StockaddController'
+                                }
+                            }
+                        })
+                        .state('app.stockview', {
+                            url: "/stockview/{title}",
+                            params: {
+                                imei_no: null,
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/stockview.html",
+                                    controller: 'StockviewController'
+                                }
+                            }
+                        })
                         .state('app.item', {
                             url: "/item/{title}",
                             params: {
@@ -380,6 +452,7 @@ window.queries = [
         $scope.employee_id = window.localStorage.getItem('employee_id');
         $scope.designation = window.localStorage.getItem('designation');
 
+        // Box Item
         $scope.box = [
             {
                 color: "#002F57",
@@ -387,48 +460,51 @@ window.queries = [
                 title: "Attendance"
             },
             {
-                color: "#00a65a",
+                color: "#002F57",
                 icon: "ion-calendar",
                 title: "MI"
             },
             {
-                color: "#E47500",
+                color: "#002F57",
                 icon: "ion-camera",
-                title: "Sales"
+                title: "Add Sales",
+                url: "app.salesadd"
             },
             {
-                color: "#A3216B",
+                color: "#002F57",
                 icon: "ion-ios-camera-outline",
-                title: "Stock"
+                title: "Add Stock",
+                url: "app.stockadd"
             },
             {
-                color: "#206AA7",
+                color: "#002F57",
                 icon: "ion-document-text",
                 title: "Sales Report",
                 url: "app.salesreport"
             },
             {
-                color: "#AD5CE9",
+                color: "#002F57",
                 icon: "ion-clipboard",
-                title: "Stock Report"
+                title: "Stock Report",
+                url: "app.stockreport"
             },
             {
-                color: "#F8E548",
+                color: "#002F57",
                 icon: "ion-cube",
                 title: "Leaderboard"
             },
             {
-                color: "#3DBEC9",
+                color: "#002F57",
                 icon: "ion-ios-grid-view",
                 title: "TGT vs ACHV"
             },
             {
-                color: "#D86B67",
+                color: "#002F57",
                 icon: "ion-ios-bookmarks",
                 title: "Taining"
             },
             {
-                color: "#5AD863",
+                color: "#002F57",
                 icon: "ion-arrow-expand",
                 title: "Complain Box"
             }
@@ -562,13 +638,30 @@ window.queries = [
             });
             $state.go('app.gallery');
         }
+        
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.viewSales = function (imei_no) {
+            
+            $scope.showLoading();
+            $state.go('app.salesview', {title: 'Sales Entry Detail View', icon: 'ion-eye', color: '#002F57', imei_no: imei_no});
+
+        };
 
         $scope.doRefresh = function () {
-            
-            $scope.hideLoading = function () {
-                $ionicLoading.hide();
-            };
-            
+
             var link = paramsUrl + '/appbasic/sales_report';
             $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
 
@@ -586,15 +679,524 @@ window.queries = [
 
                 $scope.hideLoading();
 
-            }).finally(function() {
+            }).finally(function () {
                 // Stop the ion-refresher from spinning
                 $scope.$broadcast('scroll.refreshComplete');
             });
         };
-        
+
         $scope.doRefresh();
     }
 })();
+
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('StockreportController', StockreportController);
+
+    StockreportController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function StockreportController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+        
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.viewStock = function (imei_no) {
+            
+            $scope.showLoading();
+            $state.go('app.stockview', {title: 'Stock Entry Detail View', icon: 'ion-eye', color: '#002F57', imei_no: imei_no});
+
+        };
+
+        $scope.doRefresh = function () {
+
+            var link = paramsUrl + '/appbasic/stock_report';
+            $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.stock_model = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('SalesviewController', SalesviewController);
+
+    SalesviewController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function SalesviewController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color,
+            imei_no: $stateParams.imei_no
+        };
+
+        if (!$scope.item.imei_no) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+        
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+            
+            var link = paramsUrl + '/appbasic/sales_view';
+            $http.post(link, {imei_no: $scope.item.imei_no}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.sales_model = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Add Sales Controller
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('SalesaddController', SalesaddController);
+
+    SalesaddController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading', '$cordovaBarcodeScanner'];
+    function SalesaddController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading, $cordovaBarcodeScanner) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+        
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+        
+        $scope.scanBarcode = function() {
+            $cordovaBarcodeScanner.scan().then(function(barcodeData) {
+                
+                var barcodeText = barcodeData.text;
+                
+                if(barcodeText.length === 15) {
+                    
+                    $scope.showLoading();
+                    
+                    $scope.error_message = false;
+                    $scope.imei_no = barcodeText;
+                    
+                    var linkStockFetch = paramsUrl + '/appbasic/stock_fetch';
+                    $http.post(linkStockFetch, {imei_no: $scope.imei_no, employee_id: window.localStorage.getItem("employee_id")}).then(function (res) {
+
+                        if (res.data.response == 'Error') {
+
+                            $scope.stock_item = false;
+                            
+                            $scope.message = res.data.message;
+                            $scope.error_message = true;
+                            
+                            $scope.scanned_imei = true;
+
+                        } else {
+
+                            $scope.error_message = false;
+                            
+                            $scope.scanned_imei = false;
+                            
+                            $scope.stock_item = true;
+                            $scope.stock_model = res.data;
+                            $scope.stock_imei_no = res.data.imei_no;
+
+                        }
+
+                        $scope.hideLoading();
+
+                    }).finally(function () {
+                        // Stop the ion-refresher from spinning
+                        $scope.$broadcast('scroll.refreshComplete');
+                    });
+                    
+                    
+                } else {
+                    
+                    $scope.stock_item = false;
+                    $scope.message = 'Please scan the correct barcode.';
+                    $scope.error_message = true;
+                    
+                }
+                    
+                //console.log("Barcode Format -> " + imageData.format);
+                //console.log("Cancelled -> " + imageData.cancelled);
+            }, function(error) {
+                
+                alert("An error occured -> " + error);
+                
+            });
+        };
+
+        $scope.doRefresh = function () {
+            
+            $scope.hideLoading();
+            
+        };
+
+        $scope.doRefresh();
+        
+        var linkAddSales = paramsUrl + '/appbasic/add_sales';
+        $scope.submit = function () {
+            
+            $scope.showLoading();
+            $http.post(linkAddSales, {imei_no: $scope.stock_imei_no, employee_id: window.localStorage.getItem("employee_id")}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.stock_item = false;
+                    
+                    $scope.success_message = false;
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                    $scope.scanned_imei = false;
+
+                } else if (res.data.response == 'Success') {
+
+                    $scope.stock_item = false;
+                    
+                    $scope.error_message = false;
+                    $scope.message = res.data.message;
+                    $scope.success_message = true;
+                    
+                    $scope.scanned_imei = false;
+
+                }
+                
+                 $scope.hideLoading();
+
+            });
+        };
+    }
+})();
+
+// Add Stock Controller
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('StockaddController', StockaddController);
+
+    StockaddController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading', '$cordovaBarcodeScanner'];
+    function StockaddController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading, $cordovaBarcodeScanner) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+        
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+        
+        $scope.scanBarcode = function() {
+            $cordovaBarcodeScanner.scan().then(function(barcodeData) {
+                
+                var barcodeText = barcodeData.text;
+                
+                if(barcodeText.length === 15) {
+                    
+                    $scope.showLoading();
+                    
+                    $scope.error_message = false;
+                    $scope.imei_no = barcodeText;
+                    
+                    var linkInventoryFetch = paramsUrl + '/appbasic/inventory_fetch';
+                    $http.post(linkInventoryFetch, {imei_no: $scope.imei_no, employee_id: window.localStorage.getItem("employee_id")}).then(function (res) {
+
+                        if (res.data.response == 'Error') {
+
+                            $scope.inventory_item = false;
+                            
+                            $scope.message = res.data.message;
+                            $scope.error_message = true;
+                            
+                            $scope.scanned_imei = true;
+
+                        } else {
+
+                            $scope.error_message = false;
+                            
+                            $scope.scanned_imei = false;
+                            
+                            $scope.inventory_item = true;
+                            $scope.inventory_model = res.data;
+                            $scope.inventory_imei_no = res.data.imei_no;
+
+                        }
+
+                        $scope.hideLoading();
+
+                    }).finally(function () {
+                        // Stop the ion-refresher from spinning
+                        $scope.$broadcast('scroll.refreshComplete');
+                    });
+                    
+                    
+                } else {
+                    
+                    $scope.inventory_item = false;
+                    $scope.message = 'Please scan the correct barcode.';
+                    $scope.error_message = true;
+                    
+                }
+                    
+                //console.log("Barcode Format -> " + imageData.format);
+                //console.log("Cancelled -> " + imageData.cancelled);
+                
+            }, function(error) {
+                
+                alert("An error occured -> " + error);
+                
+            });
+        };
+
+        $scope.doRefresh = function () {
+            
+            $scope.hideLoading();
+            
+        };
+
+        $scope.doRefresh();
+        $scope.inventory_item = true;
+        var linkAddStock = paramsUrl + '/appbasic/add_stock';
+        $scope.submit = function () {
+            
+            $scope.showLoading();
+            $http.post(linkAddStock, {imei_no: '442525525551514', employee_id: window.localStorage.getItem("employee_id")}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.stock_item = false;
+                    
+                    $scope.success_message = false;
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                    $scope.scanned_imei = false;
+
+                } else if (res.data.response == 'Success') {
+
+                    $scope.stock_item = false;
+                    
+                    $scope.error_message = false;
+                    $scope.message = res.data.message;
+                    $scope.success_message = true;
+                    
+                    $scope.scanned_imei = false;
+
+                }
+                
+                 $scope.hideLoading();
+
+            });
+        };
+    }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('StockviewController', StockviewController);
+
+    StockviewController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function StockviewController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color,
+            imei_no: $stateParams.imei_no
+        };
+
+        if (!$scope.item.imei_no) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+        
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+            
+            var link = paramsUrl + '/appbasic/stock_view';
+            $http.post(link, {imei_no: $scope.item.imei_no}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.stock_model = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Home Controller
 (function () {
     'use strict';
 
@@ -646,7 +1248,7 @@ window.queries = [
 
                     $scope.showLoading();
 
-                    window.localStorage.setItem('hrId', res.data.hrID);
+                    window.localStorage.setItem('hrId', res.data.hrId);
                     window.localStorage.setItem('name', res.data.name);
                     window.localStorage.setItem('employee_id', res.data.employee_id);
                     window.localStorage.setItem('designation', res.data.designation);

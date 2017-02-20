@@ -2,20 +2,18 @@
 
 use yii\helpers\Html;
 
+$this->title = 'Upazila/Thana Add';
+$this->miniTitle = 'Utility Module';
+$this->subTitle = 'Upazila/Thana Form';
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\Upazilas */
-
-$this->title = 'Create Upazilas';
-$this->params['breadcrumbs'][] = ['label' => 'Upazilas', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Upazila Config', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="upazilas-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="hr-create">
 
     <?= $this->render('_form', [
         'model' => $model,
+        'districtModel' => $districtModel
     ]) ?>
 
 </div>

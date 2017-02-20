@@ -65,7 +65,6 @@ class SalesController extends Controller
             
             if(!empty($hrModelOne)){
                 $stockModelOne = Stock::find()
-                        ->select(['id', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'lifting_price', 'rrp', 'status'])
                         ->where('retail_dms_code=:retail_dms_code AND imei_no=:imei_no AND validity=:validity', [':retail_dms_code' => $hrModelOne->retail_dms_code, ':imei_no' => $model->imei_no, ':validity' => Stock::$validityIn])
                         ->one();
                 
@@ -131,7 +130,6 @@ class SalesController extends Controller
                         $stockModelOne->save();
                         
                         $inventoryModelOne = Inventory::find()
-                            ->select(['id'])
                             ->where('imei_no=:imei_no', [':imei_no' => $model->imei_no])
                             ->one();
                         $inventoryModelOne->updated_at = $now;
