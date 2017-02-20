@@ -1,0 +1,59 @@
+<ion-view class="salesreportView" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-ios-list-outline"></i> Last 20 Sales Data</h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div class="card" ng-repeat="sales in sales_model">
+            <div class="item item-divider item-royal">
+                <i class="icon ion-ios-barcode"></i>
+                IMEI Number
+            </div>
+            <div class="item item-text-wrap">
+                {{sales.imei_no}}
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-planet"></i>
+                Product Model Name
+            </div>
+            <div class="item item-text-wrap">
+                {{sales.product_model_name}}
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-ipad"></i>
+                Product Model Code
+            </div>
+            <div class="item item-text-wrap">
+                {{sales.product_model_code}}
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-cash"></i>
+                Price
+            </div>
+            <div class="item item-text-wrap">
+                {{sales.price}}
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-ios-calendar-outline"></i>
+                Sales Date
+            </div>
+            <div class="item item-text-wrap">
+                {{sales.sales_date}}
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>
