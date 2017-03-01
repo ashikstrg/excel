@@ -122,13 +122,13 @@ class TrainingPdfController extends Controller
 
         if($model->file){
             
-            $random_date = Yii::$app->formatter->asDatetime(date("dmyyhis"), "php:dmYHis");
+            $random_date = time();
             $rand = rand(10,100);
             $random = $random_date . $rand . $userId;
             $now = new Expression('NOW()');
 
             $filePath = 'uploads/files/training/pdf/';  
-            $model->file_import = $filePath . $random .'-'.str_replace('','-',$model->file->name);
+            $model->file_import = $filePath . $random . str_replace($model->file->name, '', $model->file) . '.pdf';
 
             $uploadExists = 1;
         }

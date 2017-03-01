@@ -5,21 +5,21 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'User Configuration';
-$this->miniTitle = 'User Module';
-$this->subTitle = 'User Data';
+$this->title = 'Configure Attendence Question';
+$this->miniTitle = 'Attendence Module';
+$this->subTitle = 'Checklist';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
-<div class="retail-index">
+
+<div class="attendance-question-index">
 
     <?php 
     $gridColumns = [
+        ['class' => 'yii\grid\ActionColumn'], // 0
         ['class' => 'yii\grid\SerialColumn'],
         
-        'username',
-        'email',
-        'password_actual'
-
+        'question:ntext'    
     ];
 
     $fullExportMenu = ExportMenu::widget([
@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
-        'hiddenColumns'=>[0, 36],
-        'noExportColumns'=>[0, 36],
+        'hiddenColumns'=>[0],
+        'noExportColumns'=>[0],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,
@@ -60,13 +60,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success']) . ' '.
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of User',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of checklist questions.'
             ],
         ]); ?>
     <?php Pjax::end(); ?>
@@ -76,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-footer">
     <div class="row">
         <div class="col-md-12">
-            <i>* User can not be deleted/updated.</i>
+            <i>* List of questions in descending order.</i>
         </div>
     </div>
 </div>

@@ -106,7 +106,7 @@ class RetailBatchController extends Controller {
 
                         $rowNumber++;
                         $channelType = HtmlPurifier::process(trim($line[0]));
-                        $retailType = HtmlPurifier::process(trim($line[1]));
+                        $retailType = trim($line[1]);
                         $dmsCode = HtmlPurifier::process(trim($line[2]));
                         $retailName = HtmlPurifier::process(trim($line[3]));
                         $retailZone = HtmlPurifier::process(trim($line[4]));

@@ -258,6 +258,13 @@ class HrTrainerController extends Controller
 
         return $this->redirect(['index']);
     }
+    
+    public function actionProfile($id)
+    {
+        return $this->render('profile', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
     protected function findModel($id)
     {

@@ -178,25 +178,25 @@ class StockSearch extends Stock
         $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT retail_dms_code) FROM stock')
 			->queryScalar();
         
-        $sql= "SET @sql = NULL;
+        $sql= "SET @sql1 = NULL;
             SELECT
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
                         'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', 1, 0)) AS ',
-                        product_model_code
+                        CONCAT('`', product_model_name, '`')
                     )
-                ) INTO @sql
-            FROM stock;
-            SET @sql2 = NULL;
+                ) INTO @sql1
+            FROM stock WHERE validity='in';
+            SET @sql2 = NULL; 
             SELECT
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
                         'SUM(IF(product_type = ''',
                         product_type,
                         ''', 1, 0)) AS ',
-                        product_type
+                        CONCAT('`', product_type, '`')
                     )
                 )
             INTO @sql2
@@ -205,8 +205,8 @@ class StockSearch extends Stock
             SELECT 
                 COUNT(imei_no) AS `total`
             INTO @sql3
-            FROM stock;
-            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, retail_territory, ', @sql, ', ', @sql2, ', COUNT(imei_no) AS total FROM stock, (SELECT @i:= 0) AS i WHERE 
+            FROM stock WHERE validity='in';
+            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, retail_territory, ', @sql1, ', ', @sql2, ', COUNT(imei_no) AS total FROM stock, (SELECT @i:= 0) AS i WHERE 
             (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
             AND (retail_type like :retail_type or :retail_type is null)

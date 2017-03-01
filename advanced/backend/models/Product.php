@@ -15,13 +15,14 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'model_code', 'model_name', 'color', 'type', 'lifting_price', 'rrp', 'status'], 'required'],
+            [['name', 'sku_code', 'model_code', 'model_name', 'color', 'type', 'lifting_price', 'rrp', 'status'], 'required'],
             [['lifting_price', 'rrp'], 'number'],
             [['name'], 'string', 'max' => 80],
             [['model_code', 'model_name', 'color', 'type'], 'string', 'max' => 50],
             [['status'], 'string', 'max' => 10],
             [['created_by', 'updated_by'], 'string', 'max' => 255],
             [['created_at', 'updated_at'], 'safe'],
+            [['sku_code'], 'unique'],
             // Custom
             [['model_code'], 'unique', 'targetAttribute' => ['model_code', 'color']]
         ];
@@ -31,6 +32,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'sku_code' => 'SKU Code',
             'name' => 'Name',
             'model_code' => 'Model Code',
             'model_name' => 'Model Name',

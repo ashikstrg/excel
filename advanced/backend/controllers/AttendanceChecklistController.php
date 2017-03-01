@@ -3,18 +3,20 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Districts;
-use backend\models\DistrictsSearch;
+use backend\models\AttendanceChecklist;
+use backend\models\AttendanceChecklistSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
-// Custom Helper
-use yii\helpers\ArrayHelper;
-
-class DistrictsController extends Controller
+/**
+ * AttendanceChecklistController implements the CRUD actions for AttendanceChecklist model.
+ */
+class AttendanceChecklistController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
@@ -27,9 +29,13 @@ class DistrictsController extends Controller
         ];
     }
 
+    /**
+     * Lists all AttendanceChecklist models.
+     * @return mixed
+     */
     public function actionIndex()
     {
-        $searchModel = new DistrictsSearch();
+        $searchModel = new AttendanceChecklistSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -38,6 +44,11 @@ class DistrictsController extends Controller
         ]);
     }
 
+    /**
+     * Displays a single AttendanceChecklist model.
+     * @param string $id
+     * @return mixed
+     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -45,23 +56,30 @@ class DistrictsController extends Controller
         ]);
     }
 
+    /**
+     * Creates a new AttendanceChecklist model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
     public function actionCreate()
     {
-        $model = new Districts();
+        $model = new AttendanceChecklist();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            
-            $divisionModel = ArrayHelper::map(\backend\models\Divisions::find()->select(['id', 'name'])->all(), 'id', 'name');
-            
             return $this->render('create', [
                 'model' => $model,
-                'divisionModel' => $divisionModel
             ]);
         }
     }
 
+    /**
+     * Updates an existing AttendanceChecklist model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -69,15 +87,18 @@ class DistrictsController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            
-            $divisionModel = ArrayHelper::map(\backend\models\Divisions::find()->select(['id', 'name'])->all(), 'id', 'name');
-            
             return $this->render('update', [
                 'model' => $model,
             ]);
         }
     }
 
+    /**
+     * Deletes an existing AttendanceChecklist model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param string $id
+     * @return mixed
+     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -85,9 +106,16 @@ class DistrictsController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Finds the AttendanceChecklist model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return AttendanceChecklist the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     protected function findModel($id)
     {
-        if (($model = Districts::findOne($id)) !== null) {
+        if (($model = AttendanceChecklist::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

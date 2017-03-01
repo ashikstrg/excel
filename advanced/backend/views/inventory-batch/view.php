@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php 
                 if( Yii::$app->session->get('userRole') == 'admin' ) {
                     
-                    echo Html::a('Add New', ['/stock-batch/multiple'], ['class' => 'btn btn-primary']);
+                    echo Html::a('Add New', ['/inventory-batch/create'], ['class' => 'btn btn-primary']);
                     echo ' ';
                     echo Html::a('Configure', ['index'], ['class' => 'btn btn-primary']);
                     

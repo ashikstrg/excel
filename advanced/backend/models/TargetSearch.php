@@ -33,6 +33,7 @@ class TargetSearch extends Target
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -252,7 +253,7 @@ class TargetSearch extends Target
                         'MAX(IF(product_model_code = ''',
                         product_model_code,
                         ''', fsm_vol, 0)) AS ',
-                        product_model_name
+                        CONCAT('`', product_model_name, '`')
                     )
                 )
             INTO @sql

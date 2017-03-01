@@ -3,22 +3,21 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = 'District Detail';
-$this->miniTitle = 'View District';
-$this->subTitle = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'District Configuration', 'url' => ['index']];
+$this->title = 'Question Preview';
+$this->miniTitle = 'Attendance Module';
+$this->subTitle = $model->question;
+$this->params['breadcrumbs'][] = ['label' => 'Attendance Module', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-<div class="upazilas-view">
+<div class="attendance-question-view">
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'name',
+            'question:ntext',
         ],
     ]) ?>
-    
+
     <div class="box-footer">
         <div class="row">
             <div class="col-md-6">

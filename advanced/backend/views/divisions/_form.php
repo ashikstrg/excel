@@ -5,23 +5,16 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<div class="divisions-form">
+<div class="districts-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'division_id')->dropDownList($divisionModel, ['prompt' => 'Select Division']) ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <div class="box-footer">
-    	<div class="row">
-    		<div class="col-md-6">
-    			<?= Html::submitButton($model->isNewRecord ? 'Add Division' : 'Update Division', ['class' => 'btn btn-primary']) ?>
-    		</div>
-    		<div class="col-md-6">
-    			<div class="pull-right">
-    			<?= Html::resetButton('Reset Form', ['class' => 'btn btn-danger']); ?>
-    			</div>
-    		</div>
-    	</div>
+    <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

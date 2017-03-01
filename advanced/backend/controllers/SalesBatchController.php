@@ -17,6 +17,8 @@ use backend\models\Hr;
 use backend\models\Sales;
 use backend\models\Target;
 use backend\models\Stock;
+use backend\models\Inventory;
+
 // Custom Helpers
 use yii\helpers\HtmlPurifier;
 
@@ -122,7 +124,6 @@ class SalesBatchController extends Controller {
                                     if (empty($salesModelOne)) {
 
                                         $stockModelOne = Stock::find()
-                                                ->select(['id', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'lifting_price', 'rrp', 'imei_no', 'status'])
                                                 ->where('retail_dms_code=:retail_dms_code AND imei_no=:imei_no', [':retail_dms_code' => $hrModelOne->retail_dms_code, ':imei_no' => $imeiNumber])
                                                 ->orderBy(['id' => SORT_DESC])
                                                 ->one();
@@ -179,7 +180,19 @@ class SalesBatchController extends Controller {
                                                 $targetModel->updateCounters($targetUpdateCounter);
                                             }
 
-                                            $stockModelOne->delete();
+                                            $stockModelOne->updated_at = $now;
+                                            $stockModelOne->updated_by = $username;
+                                            $stockModelOne->validity = Stock::$validityOut;
+                                            $stockModelOne->save();
+
+                                            $inventoryModelOne = Inventory::find()
+                                                ->where('imei_no=:imei_no', [':imei_no' => $stockModelOne->imei_no])
+                                                ->one();
+                                            $inventoryModelOne->updated_at = $now;
+                                            $inventoryModelOne->updated_by = $username;
+                                            $inventoryModelOne->stage = Inventory::$stageSold;
+                                            $inventoryModelOne->save();
+                                            
                                             $successArray[] = 'Row Number ' . $rowNumber . ':Sales Data has successfully been uploaded.';
                                             
                                         } else {

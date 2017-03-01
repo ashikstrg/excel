@@ -1,0 +1,52 @@
+<ion-view class="leaderboardvalView" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-cash"></i> Value </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div ng-repeat="leader in leaderboard" class="card">
+            <div class="item item-divider item-royal">
+                <i class="icon ion-arrow-up-a"></i>
+                RANK
+            </div>
+            <div class="item item-text-wrap">
+                {{$index + 1}} 
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-card"></i>
+                Employee ID
+            </div>
+            <div class="item item-text-wrap">
+                {{leader.employee_id}}
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-person"></i>
+                Employee Name
+            </div>
+            <div class="item item-text-wrap">
+                {{leader.employee_name}}
+            </div>
+            <div class="item item-divider item-dark">
+                <i class="icon ion-android-happy"></i>
+                Achievement Percent
+            </div>
+            <div class="item item-text-wrap">
+                {{leader.achievement_percent}}
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

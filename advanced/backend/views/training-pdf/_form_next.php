@@ -40,7 +40,7 @@ use yii\helpers\Url;
             'uploadUrl' => Url::to(['/training-pdf/upload']),
             'allowedFileExtensions'=>['pdf'],
             'maxFileCount' => 1,
-            'maxFileSize'=> 5120,
+            'maxFileSize'=> 15360,
         ]
     ]);
     ?>

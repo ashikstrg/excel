@@ -12,6 +12,7 @@ use backend\models\Hr;
 use backend\models\Stock;
 use backend\models\Sales;
 use backend\models\Inventory;
+use backend\models\AttendanceChecklist;
 // Access Components
 use backend\components\Access;
 // Message Components
@@ -29,7 +30,7 @@ class AppbasicController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'sales_report', 'sales_view', 'stock_report', 'stock_view', 'stock_fetch', 'add_sales', 'inventory_fetch', 'add_stock'],
+                        'actions' => ['login', 'sales_report', 'sales_view', 'stock_report', 'stock_view', 'stock_fetch', 'add_sales', 'inventory_fetch', 'add_stock', 'attendance_fetch', 'add_attendance', 'add_attendance_out', 'leaderboard', 'leaderboard_val'],
                         'allow' => true,
                     ],
                 ],
@@ -86,6 +87,117 @@ class AppbasicController extends Controller {
             $request->message = 'Data not submitted.';
             echo json_encode($request);
         }
+    }
+
+    // Mobile Leaderboard Volume
+    public function actionLeaderboard() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+            $product = array();
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+
+                $targetDate = date('2017-01', time()) . '-01';
+                $targetProductModel = \backend\models\Target::find()->select('product_model_code')->where(['target_date' => $targetDate])->distinct()->all();
+                if (!empty($targetProductModel)) {
+                    foreach ($targetProductModel as $value) {
+                        $product[] = $value->product_model_code;
+                    }
+                }
+
+                $productString = '"' . implode('","', $product) . '"';
+                $sql = "SELECT employee_id, employee_name, designation, SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement, "
+                . "CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), '%') AS achievement_percent "
+                . "FROM target WHERE (product_model_code IN ($productString)) AND (target_date='$targetDate') "
+                        . "GROUP BY employee_id ORDER BY `achievement_percent` DESC LIMIT 20";
+                $leaderboardQuery = Yii::$app->db->createCommand($sql)->queryAll();
+
+                if (!empty($leaderboardQuery)) {
+
+                    $request = $leaderboardQuery;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = var_dump($leaderboardQuery);
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Leaderboard Value
+    public function actionLeaderboard_val() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+            $product = array();
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+
+                $targetDate = date('2017-01', time()) . '-01';
+                $targetProductModel = \backend\models\Target::find()->select('product_model_code')->where(['target_date' => $targetDate])->distinct()->all();
+                if (!empty($targetProductModel)) {
+                    foreach ($targetProductModel as $value) {
+                        $product[] = $value->product_model_code;
+                    }
+                }
+
+                $productString = '"' . implode('","', $product) . '"';
+                $sql = "SELECT employee_id, employee_name, designation, FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
+                    CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), '%') AS achievement_percent 
+                    FROM target "
+                . "WHERE (product_model_code IN ($productString)) AND (target_date='$targetDate') "
+                        . "GROUP BY employee_id ORDER BY `achievement_percent` DESC LIMIT 20";
+                $leaderboardQuery = Yii::$app->db->createCommand($sql)->queryAll();
+
+                if (!empty($leaderboardQuery)) {
+
+                    $request = $leaderboardQuery;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = var_dump($leaderboardQuery);
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
     }
 
     // Mobile Sales View
@@ -268,13 +380,11 @@ class AppbasicController extends Controller {
                     if (!empty($inventoryModel)) {
 
                         $request = $inventoryModel;
-
                     } else {
 
                         $request->response = 'Error';
                         $request->message = Message::$imeiNotFoundInventory;
                     }
-                    
                 } else {
 
                     $request->response = 'Error';
@@ -426,6 +536,206 @@ class AppbasicController extends Controller {
         echo json_encode($request);
     }
 
+    // Fetch Attendance
+    public function actionAttendance_fetch() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = Message::$serverError;
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+
+                $attendanceCount = AttendanceChecklist::find()
+                        ->where('hr_employee_id=:hr_employee_id AND checklist_date=:checklist_date', [':hr_employee_id' => $request->employee_id, ':checklist_date' => date('Y-m-d', time())])
+                        ->count();
+
+                if ($attendanceCount == 0) {
+
+                    $request->response = 'IN';
+                    $attendanceQuestionModel = \backend\models\AttendanceQuestion::find()->asArray()->all();
+                    $request = $attendanceQuestionModel;
+                } else {
+
+                    $attendanceOutCount = AttendanceChecklist::find()
+                            ->where('hr_employee_id=:hr_employee_id AND checklist_date=:checklist_date AND out_time IS NULL', [':hr_employee_id' => $request->employee_id, ':checklist_date' => date('Y-m-d', time())])
+                            ->count();
+
+                    if ($attendanceOutCount == 0) {
+
+                        $request->response = 'DONE';
+                        $request->message = 'You have already given your attendance.';
+                    } else {
+
+                        $request->response = 'OUT';
+                    }
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = Message::$employeeIdNotFound;
+            }
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+
+        echo json_encode($request);
+    }
+
+    // Add Attendance
+    public function actionAdd_attendance() {
+
+        Access::setPermission();
+
+        $model = new AttendanceChecklist();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = Message::$serverError;
+
+            if ((isset($request->employee_id) && !empty($request->employee_id)) && (isset($request->answer) && !empty($request->answer))) {
+
+                $employee_id = $request->employee_id;
+                $answer = json_decode($request->answer);
+
+                $hrModelOne = Hr::find()
+                        ->select(['retail_dms_code', 'retail_name', 'employee_id', 'name'])
+                        ->where('employee_id=:employee_id', [':employee_id' => $employee_id])
+                        ->orderBy(['id' => SORT_DESC])
+                        ->one();
+
+                if (!empty($hrModelOne)) {
+
+                    $questionArray[] = array();
+                    $questionModel = \backend\models\AttendanceQuestion::find()->all();
+
+                    if (count($questionModel) == count((array) $answer->option)) {
+
+                        foreach ($questionModel as $attendanceQuestion) {
+
+                            $qid = $attendanceQuestion->id;
+                            $questionArray[$qid] = $attendanceQuestion->question;
+                        }
+
+                        $checklist = '';
+                        $error = false;
+                        foreach ($answer->option as $key => $value) {
+
+                            if ($value == 'Yes') {
+
+                                $checklist .= '<div>' . '<b>Question: </b>' . $questionArray[$key] . ', <b> Answer: </b>' . $value . '</div>';
+                            } else if ($value == 'No') {
+
+                                if (isset($answer->remark->$key) && $answer->remark->$key != '') {
+
+                                    $checklist .= '<div>' . '<b>Question: </b>' . $questionArray[$key] . ', <b> Answer: </b>' . $value . ', <b>Review: </b>' . $answer->remark->$key . '</div>';
+                                } else {
+
+                                    $error = true;
+                                    $request->response = 'Error';
+                                    $request->message = 'Remark cannot be blank.';
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!$error) {
+
+                            $model->checklist = $checklist;
+                            $model->retail_dms_code = $hrModelOne->retail_dms_code;
+                            $model->retail_name = $hrModelOne->retail_name;
+                            $model->hr_employee_id = $hrModelOne->employee_id;
+                            $model->hr_name = $hrModelOne->name;
+                            $model->checklist_date = date('Y-m-d', time());
+                            $model->in_time = date('H:i:s', time());
+                            $model->status = AttendanceChecklist::$statusPending;
+
+                            if ($model->save()) {
+
+                                $request->response = 'Success';
+                                $request->message = Message::$successMessage;
+                            } else {
+
+                                $request->response = 'Error';
+                                $request->message = Message::$serverError;
+                            }
+                        }
+                    } else {
+
+                        $request->response = 'Error';
+                        $request->message = Message::$questionMandatory;
+                    }
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = Message::$employeeIdNotFound;
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = Message::$employeeIdNotFound;
+            }
+        } else {
+            $request->response = 'Error';
+            $request->message = Message::$unauthorizedAccess;
+        }
+
+        echo json_encode($request);
+    }
+
+    // Add Attendance Out
+    public function actionAdd_attendance_out() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = Message::$serverError;
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+
+                $attendanceChecklistModel = AttendanceChecklist::find()
+                        ->where('hr_employee_id=:hr_employee_id AND checklist_date=:checklist_date AND out_time IS NULL', [':hr_employee_id' => $request->employee_id, ':checklist_date' => date('Y-m-d', time())])
+                        ->one();
+
+                if (!empty($attendanceChecklistModel)) {
+
+                    $attendanceChecklistModel->out_time = date('H:i:s', time());
+                    $attendanceChecklistModel->save(false);
+
+                    $request->response = 'Success';
+                    $request->message = Message::$successMessage;
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'Your request cannot be processed.';
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = Message::$employeeIdNotFound;
+            }
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+
+        echo json_encode($request);
+    }
+
     // Add Stock
     public function actionAdd_stock() {
 
@@ -495,34 +805,28 @@ class AppbasicController extends Controller {
 
                             $request->response = 'Success';
                             $request->message = Message::$successMessage;
-                            
                         } else {
 
                             $request->response = 'Error';
                             $request->message = Message::$serverError;
                         }
-                        
                     } else {
 
                         $request->response = 'Error';
                         $request->message = Message::$serverError . ' ' . var_dump($inventoryModelOne->errors);
                     }
-                    
                 } else {
 
                     $request->response = 'Error';
                     $request->message = Message::$imeiNotFoundInventory;
                 }
-                
             } else {
-                
+
                 $request->response = 'Error';
                 $request->message = Message::$employeeIdNotFound;
-                
             }
-            
         } else {
-            
+
             $request->response = 'Error';
             $request->message = Message::$unauthorizedAccess;
         }

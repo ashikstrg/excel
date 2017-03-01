@@ -3,16 +3,13 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\Districts */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="districts-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'division_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'division_id')->dropDownList($divisionModel, ['prompt' => 'Select Division']) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

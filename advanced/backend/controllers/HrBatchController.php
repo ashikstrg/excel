@@ -123,8 +123,8 @@ class HrBatchController extends Controller
                         $nameEmergencyContactPerson = HtmlPurifier::process(trim($line[8]));
                         $relationEmergencyContactPerson = HtmlPurifier::process(trim($line[9]));
                         $contactNoEmergency = HtmlPurifier::process(trim($line[10]));
-                        $emailAddress = HtmlPurifier::process(trim($line[11]));
-                        $emailAddressOfficial = HtmlPurifier::process(trim($line[12]));
+                        $emailAddress = trim($line[11]);
+                        $emailAddressOfficial = trim($line[12]);
                         $bankName = HtmlPurifier::process(trim($line[13]));
                         $bankAcName = HtmlPurifier::process(trim($line[14]));
                         $bankAcNo = HtmlPurifier::process(trim($line[15]));
@@ -299,8 +299,9 @@ class HrBatchController extends Controller
                                                                             'user_id' => $user->getId()
                                                                         ];
 
-                                                                        $successArray[] = 'Row Number ' . $rowNumber . ': Retail Data has successfully been uploaded.';
+                                                                        $successArray[] = 'Row Number ' . $rowNumber . ': FSM Data has successfully been uploaded.';
                                                                         $successCount++;
+                                                                        
                                                                     } else {
 
                                                                         $errorsArray[] = 'Row Number ' . $rowNumber . ': This Employee ID has already been used.';
@@ -456,6 +457,14 @@ class HrBatchController extends Controller
     public function actionDelete($id) {
 
         $model = $this->findModel($id);
+        
+        $hrModel = Hr::findAll(['batch' => $model->batch]);
+        
+        foreach($hrModel as $hr) {
+            
+            User::deleteAll(['username' => $hr->employee_id]);
+            
+        }
 
         Hr::deleteAll(['batch' => $model->batch]);
 
@@ -479,6 +488,14 @@ class HrBatchController extends Controller
             $model = $this->findModel($value);
 
             Hr::deleteAll(['batch' => $model->batch]);
+            
+            $hrModel = Hr::findAll(['batch' => $model->batch]);
+        
+            foreach($hrModel as $hr) {
+
+                User::deleteAll(['username' => $hr->employee_id]);
+
+            }
 
             $model->status = 'Deleted';
             $model->deleted_by = Yii::$app->user->identity->username;

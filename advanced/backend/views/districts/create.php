@@ -2,20 +2,18 @@
 
 use yii\helpers\Html;
 
+$this->title = 'District Add';
+$this->miniTitle = 'Utility Module';
+$this->subTitle = 'District Form';
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\Districts */
-
-$this->title = 'Create Districts';
-$this->params['breadcrumbs'][] = ['label' => 'Districts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Dictrict Config', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="districts-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="hr-create">
 
     <?= $this->render('_form', [
         'model' => $model,
+        'divisionModel' => $divisionModel
     ]) ?>
 
 </div>

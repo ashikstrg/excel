@@ -1,0 +1,77 @@
+<ion-view class="attendanceAdd" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-calendar"></i> Daily Checklist </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+        
+        <div class="card" ng-show="success_message">
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-checkmark-circled"></i>
+                Success
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+        
+        <div ng-hide="form_in">
+            <form ng-submit="submit()">
+
+                <div class="list animated bounceInUp" ng-repeat="question in attendance_question">
+                    <div class="item item-text-wrap item-divider">
+                        {{question.question}}
+                    </div>
+                    <ion-list>
+                        <ion-radio ng-model="choice.option[question.id]" value="Yes" name="qname{{question.id}}" on-tap="hideRemark(question.id)">Yes</ion-radio>
+                        <ion-radio ng-model="choice.option[question.id]" value="No" name="qname{{question.id}}" on-tap="showRemark(question.id)">No</ion-radio>
+                    </ion-list>
+
+                    <label class="item item-input" ng-show="remark[question.id]">
+                        <i class="icon ion-ios-chatbubble placeholder-icon"></i>
+                        <input type="text" name="remark{{question.id}}" placeholder="Remark" ng-model="choice.remark[question.id]">
+                    </label>
+
+                </div>
+
+                <button class="button button-block button-royal">
+                    Confirm
+                </button>
+            </form>
+        </div>
+        
+        <div ng-show="form_out">
+            <form ng-submit="submit_out()">
+                
+                <div class="card">
+                    <div class="item item-divider item-royal">
+                        <i class="icon ion-clock"></i>
+                        Current Date And Time
+                    </div>
+                    <div class="item item-text-wrap">
+                        <h2>{{clock}}</h2>
+                    </div>
+                </div>
+                
+                <button class="button button-block button-royal">
+                    Confirm Out Time
+                </button>
+                
+            </form>
+        </div>
+
+    </ion-content>
+</ion-view>

@@ -2,20 +2,18 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\Districts */
+$this->title = 'District Update';
+$this->miniTitle = 'Utility Module';
+$this->subTitle = 'District Form: ' . $model->name;
 
-$this->title = 'Update Districts: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Districts', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => 'Dictrict Config', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="districts-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="hr-create">
 
     <?= $this->render('_form', [
         'model' => $model,
+        'divisionModel' => $divisionModel
     ]) ?>
 
 </div>

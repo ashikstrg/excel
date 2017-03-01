@@ -14,6 +14,8 @@ use yii\widgets\ActiveForm;
         <div class="col-md-6">
 
             <?= $form->field($model, 'type')->dropDownList($productTypeModel, ['prompt' => 'Select Handset Type']) ?>
+            
+            <?= $form->field($model, 'sku_code')->textInput(['placeholder' => 'Enter SKU Code', 'maxlength' => true]) ?>
 
             <?= $form->field($model, 'name')->textInput(['placeholder' => 'Enter Handset Name', 'maxlength' => true]) ?>
 

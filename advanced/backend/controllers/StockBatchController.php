@@ -136,16 +136,13 @@ class StockBatchController extends Controller
                             if (strlen($stockIMEI) == 15) {
 
                                 $stockSubmission = Stock::find()
-                                    ->select('id')
                                     ->where('imei_no=:imei_no', 
                                             [':imei_no' => $stockIMEI])
-                                    ->one();
+                                    ->count();
 
-                                if($stockSubmission === null) {
+                                if($stockSubmission == 0) {
 
                                     $inventoryModel = Inventory::find()
-                                        ->select(['imei_no', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 
-                                            'product_type', 'rrp', 'lifting_price', 'status'])
                                         ->where('imei_no=:imei_no AND validity=:validity', 
                                             [':imei_no' => $stockIMEI, ':validity' => Inventory::$validityIn])
                                         ->one();   
@@ -178,6 +175,10 @@ class StockBatchController extends Controller
                                             'created_at' => $now,
                                             'created_by' => $username
                                         ];
+                                        
+                                        $inventoryModel->validity = Inventory::$validityOut;
+                                        $inventoryModel->stage = Inventory::$stageStock;
+                                        $inventoryModel->save();
 
                                         $successArray[] = 'Row Number ' . $rowNumber . ':Stock Data has successfully been uploaded.';
                                         $successCount++;
@@ -328,8 +329,6 @@ class StockBatchController extends Controller
                                 if($stockSubmission === null) {
 
                                     $inventoryModel = Inventory::find()
-                                        ->select(['imei_no', 'product_id', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 
-                                            'product_type', 'rrp', 'lifting_price', 'status'])
                                         ->where('imei_no=:imei_no AND validity=:validity', 
                                             [':imei_no' => $stockIMEI, ':validity' => Inventory::$validityIn])
                                         ->one();   
@@ -370,13 +369,13 @@ class StockBatchController extends Controller
                                                 'created_at' => $now,
                                                 'created_by' => $username
                                             ];
-
-                                            $successArray[] = 'Row Number ' . $rowNumber . ': Stock Data has successfully been uploaded.';
-                                            $successCount++;
                                             
                                             $inventoryModel->validity = Inventory::$validityOut;
                                             $inventoryModel->stage = Inventory::$stageStock;
                                             $inventoryModel->save();
+
+                                            $successArray[] = 'Row Number ' . $rowNumber . ': Stock Data has successfully been uploaded.';
+                                            $successCount++;
                                             
                                         } else {
                                             

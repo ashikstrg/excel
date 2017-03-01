@@ -7,39 +7,22 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Product;
 
-/**
- * ProductSearch represents the model behind the search form about `backend\models\Product`.
- */
 class ProductSearch extends Product
 {
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
             [['id'], 'integer'],
-            [['name', 'model_code', 'model_name', 'color', 'type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['sku_code', 'name', 'model_code', 'model_name', 'color', 'type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
             [['lifting_price', 'rrp'], 'number'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $query = Product::find();
@@ -61,6 +44,7 @@ class ProductSearch extends Product
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'sku_code' => $this->sku_code,
             'lifting_price' => $this->lifting_price,
             'rrp' => $this->rrp,
             'status' => $this->status,

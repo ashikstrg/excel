@@ -24,5 +24,6 @@ class Message {
     public static $imeiSold = 'This IMEI Number has already been sold.';
     public static $imeiAdded = 'This IMEI Number has already been added.';
     public static $inventoryError = 'Inventory could not be updated.';
+    public static $questionMandatory = 'All checklist are mandatory.';
     
 }
