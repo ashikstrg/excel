@@ -328,7 +328,7 @@ class HrBatchController extends Controller
                                                 }
                                             } else {
 
-                                                $errorsArray[] = 'Row Number ' . $rowNumber . ': This Retail Location has not been added yet.';
+                                                $errorsArray[] = 'Row Number ' . $rowNumber . ': This CSM has not been added yet.';
                                             }
                                         } else {
 

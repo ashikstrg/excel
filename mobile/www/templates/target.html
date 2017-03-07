@@ -1,0 +1,83 @@
+<ion-view class="target" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-asterisk"></i> Volume </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="item item-divider item-energized">
+                <i class="icon ion-bag"></i>
+                Total Target
+            </div>
+            <div class="item item-text-wrap">
+                {{summary.total_target}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-planet"></i>
+                Total Achievement
+            </div>
+            <div class="item item-text-wrap">
+                {{summary.total_achievement}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-ipad"></i>
+                Achievement Percentage
+            </div>
+            <div class="item item-text-wrap">
+                {{summary.achievement_percent}}
+            </div>
+        </div>
+
+        <div ng-repeat="target in tgtvsachv" class="card">
+            <div class="item item-divider item-royal">
+                <i class="icon ion-arrow-up-a"></i>
+                SL
+            </div>
+            <div class="item item-text-wrap">
+                {{$index + 1}} 
+            </div>
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-card"></i>
+                Handset Model Name
+            </div>
+            <div class="item item-text-wrap">
+                {{target.product_model_name}}
+            </div>
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-person"></i>
+                Target
+            </div>
+            <div class="item item-text-wrap">
+                {{target.fsm_vol}}
+            </div>
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-android-happy"></i>
+                Achievement
+            </div>
+            <div class="item item-text-wrap">
+                {{target.fsm_vol_sales}}
+            </div>
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-android-happy"></i>
+                Achievement Percentage
+            </div>
+            <div class="item item-text-wrap">
+                {{target.achievement_percent}}
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

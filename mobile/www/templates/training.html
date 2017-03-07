@@ -1,0 +1,40 @@
+<ion-view class="training" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-clock"></i> Schedule </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div class="card" ng-hide="error_message">
+            <div class="item item-divider item-royal">
+                <i class="icon ion-bag"></i>
+                Title
+            </div>
+            <div class="item item-text-wrap">
+                {{training_pdf_model.name}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-android-alarm-clock"></i>
+                Training Time
+            </div>
+            <div class="item item-text-wrap">
+                {{training_pdf_model.training_datetime}}
+            </div>
+        </div>
+        
+        <ng-pdf template-url="/templates/partials/viewer.html" scale="page-fit"></ng-pdf>
+
+    </ion-content>
+</ion-view>

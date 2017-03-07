@@ -18,7 +18,7 @@
         </ion-header-bar>
         <ion-content class="has-header">
             <ion-list>
-                <ion-item ng-repeat="item in items" menu-close nav-direction="enter" ui-sref="app.item({ icon: item.icon, color: item.color })" class="item item-icon-right" ui-sref-active="active">{{item.title}} <i class="icon ion-chevron-right"></i></ion-item>
+                <ion-item ng-repeat="item in box" menu-close nav-direction="enter" ng-click="openItem(item)" class="item item-icon-right" ui-sref-active="active" style="color: #fff;">{{item.title}} <i class="icon ion-chevron-right"></i></ion-item>
             </ion-list>
         </ion-content>
         <ion-footer-bar class="bar-light">

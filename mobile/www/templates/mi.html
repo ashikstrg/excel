@@ -1,0 +1,67 @@
+<ion-view class="mi" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-calendar"></i> MI </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div class="card" ng-show="success_message">
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-checkmark-circled"></i>
+                Success
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div ng-hide="button_hide">
+            <div class="square">
+                <div class="icon_square">
+                    <i class="icon ion-ipad"></i>
+                </div>
+                <div class="content_square">
+                    PRODUCT
+                </div>
+            </div>
+            <div class="square">
+                <div class="icon_square">
+                    <i class="icon ion-ios-box-outline"></i>
+                </div>
+                <div class="content_square">
+                    INFRA
+                </div>
+            </div>
+            <div class="square">
+                <div class="icon_square">
+                    <i class="icon ion-ios-browsers"></i>
+                </div>
+                <div class="content_square">              
+                    TP&CP
+                </div>
+            </div>
+            <div class="square">
+                <div class="icon_square">
+                    <i class="icon ion-eye"></i>
+                </div>
+                <div class="content_square">              
+                    VISIBILITY
+                </div>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

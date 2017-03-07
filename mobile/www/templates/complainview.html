@@ -1,0 +1,52 @@
+<ion-view class="complainView" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-eye"></i> {{complainbox_model.token_no}} </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="item item-divider item-royal">
+                <i class="icon ion-chatbubble"></i>
+                Complain
+            </div>
+            <div class="item item-text-wrap">
+                {{complainbox_model.complain}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-chatbubble-working"></i>
+                Feedback
+            </div>
+            <div class="item item-text-wrap">
+                {{complainbox_model.feedback}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-android-open"></i>
+                Status
+            </div>
+            <div class="item item-text-wrap">
+                {{complainbox_model.status}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-ios-calendar"></i>
+                Complain Date
+            </div>
+            <div class="item item-text-wrap">
+                {{complainbox_model.complain_date}}
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

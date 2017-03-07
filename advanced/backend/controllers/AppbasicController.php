@@ -19,18 +19,25 @@ use backend\components\Access;
 use backend\components\Message;
 // Custom DB Helper
 use yii\db\Expression;
+// Helper
+use yii\helpers\Url;
 
 class AppbasicController extends Controller {
 
     public $enableCsrfValidation = false;
+    public static $paramsUrl = 'http://localhost/stsv3/excel/vc/v7/advanced/backend/web';
 
     public function behaviors() {
+        
+        // Rules
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'sales_report', 'sales_view', 'stock_report', 'stock_view', 'stock_fetch', 'add_sales', 'inventory_fetch', 'add_stock', 'attendance_fetch', 'add_attendance', 'add_attendance_out', 'leaderboard', 'leaderboard_val'],
+                        'actions' => ['login', 'sales_report', 'sales_view', 'stock_report', 'stock_view', 'stock_fetch', 'add_sales', 'inventory_fetch', 
+                            'add_stock', 'attendance_fetch', 'add_attendance', 'add_attendance_out', 'leaderboard', 'leaderboard_val', 'target', 
+                            'target_val', 'target_total', 'target_total_val', 'training', 'complain_fetch', 'complain_add', 'complain_view'],
                         'allow' => true,
                     ],
                 ],
@@ -88,6 +95,181 @@ class AppbasicController extends Controller {
             echo json_encode($request);
         }
     }
+    
+    // Mobile Complain Box Method
+    public function actionComplain_fetch() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+
+                $complainboxModel = \backend\models\Complainbox::find()
+                        ->select(['id', 'token_no'])
+                        ->where('hr_employee_id=:hr_employee_id', [':hr_employee_id' => $request->employee_id])
+                        ->orderBy(['id' => SORT_DESC])
+                        ->limit(20)
+                        ->asArray()
+                        ->all();
+
+                if (!empty($complainboxModel)) {
+
+                    $request = $complainboxModel;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'You have not submitted any complain yet.';
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+
+            echo json_encode($request);
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+            echo json_encode($request);
+        }
+    }
+    
+    // Mobile Complain Box Method
+    public function actionComplain_add() {
+
+        Access::setPermission();
+        
+        $model = new \backend\models\Complainbox();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                if(isset($request->complain) && !empty($request->complain)) {
+                    
+                    $employeeId = $request->employee_id;
+                    
+                    $hrModel = Hr::find()
+                            ->select(['id', 'retail_dms_code', 'retail_name', 'name', 'image_web_filename'])
+                            ->where('employee_id=:employee_id', [':employee_id' => $employeeId])
+                            ->one();
+                    
+                    if(!empty($hrModel)) {
+                        
+                        $current_date = time();
+                        $random = $current_date . rand(10, 99) . $hrModel->id;
+                        $now = new Expression('NOW()');
+
+                        $model->token_no = $random;
+                        $model->complain = $request->complain;
+                        $model->hr_employee_id = $employeeId;
+                        $model->hr_name = $hrModel->name;
+                        $model->retail_dms_code = $hrModel->retail_dms_code;
+                        $model->retail_name = $hrModel->retail_name;
+                        $model->status = 'Pending';
+                        $model->complain_date = $now;
+
+                        if ($model->save()) {
+                            
+                            $hrManagementModel = \backend\models\HrManagement::find()
+                                    ->select(['id', 'name', 'employee_id', 'employee_type'])
+                                    ->where('designation=:designation', [':designation' => 'Admin'])
+                                    ->all();
+                            
+                            if (!empty($hrManagementModel)) {
+
+                                foreach ($hrManagementModel as $hrManagement) {
+
+                                    $bulkInsertArray[] = [
+                                        
+                                        'batch' => $model->token_no,
+                                        'name' => 'Complain Box',
+                                        'module_name' => 'Complain',
+                                        'url' => '/complainbox/notification_view?id=' . $model->id,
+                                        'hr_id' => $hrManagement->id,
+                                        'hr_employee_id' => $hrManagement->employee_id,
+                                        'hr_designation' => 'Admin',
+                                        'hr_employee_type' => 'Admin',
+                                        'hr_name' => $hrManagement->name,
+                                        'message' => $model->complain,
+                                        'read_status' => 'Unread',
+                                        'created_at' => $now,
+                                        'created_by' => $model->hr_employee_id,
+                                        'image_web_filename' => $hrModel->image_web_filename,
+                                        'created_by_name' => $hrModel->name
+                                    ];
+                                }
+                                
+                                $tableName = 'notification';
+                                $columnNameArray = [
+                                    'batch',
+                                    'name',
+                                    'module_name',
+                                    'url',
+                                    'hr_id',
+                                    'hr_employee_id',
+                                    'hr_designation',
+                                    'hr_employee_type',
+                                    'hr_name',
+                                    'message',
+                                    'read_status',
+                                    'created_at',
+                                    'created_by',
+                                    'image_web_filename',
+                                    'created_by_name'
+                                ];
+                                Yii::$app->db->createCommand()->batchInsert($tableName, $columnNameArray, $bulkInsertArray)->execute();
+                            }
+
+                            $request->response = 'Success';
+                            $request->message = 'Your complain has successfully been submitted. Your token number is: ' . $model->token_no;
+                            
+                        } else {
+
+                            $request->response = 'Error';
+                            $request->message = 'You have not submitted any complain yet.';
+                        }
+                        
+                    } else {
+
+                        $request->response = 'Error';
+                        $request->message = 'Please exit app and try again.';
+                    }
+                    
+                } else {
+                    
+                    $request->response = 'Error';
+                    $request->message = 'Complain Box cannot be empty.';
+                    
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+
+            echo json_encode($request);
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+            echo json_encode($request);
+        }
+    }
 
     // Mobile Leaderboard Volume
     public function actionLeaderboard() {
@@ -104,7 +286,7 @@ class AppbasicController extends Controller {
 
             if (isset($request->employee_id) && !empty($request->employee_id)) {
 
-                $targetDate = date('2017-01', time()) . '-01';
+                $targetDate = date('Y-m', time()) . '-01';
                 $targetProductModel = \backend\models\Target::find()->select('product_model_code')->where(['target_date' => $targetDate])->distinct()->all();
                 if (!empty($targetProductModel)) {
                     foreach ($targetProductModel as $value) {
@@ -126,7 +308,7 @@ class AppbasicController extends Controller {
                 } else {
 
                     $request->response = 'Error';
-                    $request->message = var_dump($leaderboardQuery);
+                    $request->message = 'Monthly leaderboard is not available at this moment.';
                 }
                 
             } else {
@@ -159,7 +341,7 @@ class AppbasicController extends Controller {
 
             if (isset($request->employee_id) && !empty($request->employee_id)) {
 
-                $targetDate = date('2017-01', time()) . '-01';
+                $targetDate = date('Y-m', time()) . '-01';
                 $targetProductModel = \backend\models\Target::find()->select('product_model_code')->where(['target_date' => $targetDate])->distinct()->all();
                 if (!empty($targetProductModel)) {
                     foreach ($targetProductModel as $value) {
@@ -182,7 +364,245 @@ class AppbasicController extends Controller {
                 } else {
 
                     $request->response = 'Error';
-                    $request->message = var_dump($leaderboardQuery);
+                    $request->message = 'Monthly leaderboard is not available at this moment.';
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Total Target Value
+    public function actionTarget_total_val() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+            $product = array();
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                $employeeId = $request->employee_id;
+
+                $targetDate = date('Y-m', time()) . '-01';
+                $sql = "SELECT SUM(fsm_val) AS total_target, SUM(fsm_val_sales) AS total_achievement, "
+                . "CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), '%') AS achievement_percent "
+                . "FROM target WHERE (employee_id='$employeeId') AND (target_date='$targetDate')";
+                $targetTotalModel = Yii::$app->db->createCommand($sql)->queryOne();
+
+                if (!empty($targetTotalModel)) {
+
+                    $request = $targetTotalModel;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'Monthly total Target Vs Achievement is not available at this moment.';
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Total Target Volume
+    public function actionTarget_total() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+            $product = array();
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                $employeeId = $request->employee_id;
+
+                $targetDate = date('Y-m', time()) . '-01';
+                $sql = "SELECT SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement, "
+                . "CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), '%') AS achievement_percent "
+                . "FROM target WHERE (employee_id='$employeeId') AND (target_date='$targetDate')";
+                $targetTotalModel = Yii::$app->db->createCommand($sql)->queryOne();
+
+                if (!empty($targetTotalModel)) {
+
+                    $request = $targetTotalModel;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'Monthly total Target Vs Achievement is not available at this moment.';
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Target VS Achievement Value
+    public function actionTarget_val() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+            $product = array();
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                $employeeId = $request->employee_id;
+                $targetDate = date('Y-m', time()) . '-01';
+                $sql = "SELECT product_model_name, fsm_val, fsm_val_sales, CONCAT(FORMAT(case when fsm_val=0 then 0 else ( fsm_val_sales/fsm_val)*100 end ,2), '%') AS achievement_percent FROM `target` WHERE employee_id='$employeeId' AND target_date='$targetDate' group by product_model_code";
+                $targetQuery = Yii::$app->db->createCommand($sql)->queryAll();
+                
+                if (!empty($targetQuery)) {
+
+                    $request = $targetQuery;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'Monthly Target Vs Achievement is not available at this moment.';
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Training Method
+    public function actionTraining() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+
+            if ((isset($request->employee_id) && !empty($request->employee_id)) && (isset($request->designation) && !empty($request->designation))) {
+                
+                $employeeId = $request->employee_id;
+                $designation = $request->designation;
+                $trainingPdfModel = \backend\models\TrainingPdf::find()
+                        ->andFilterWhere(['status' => 'Active'])
+                        ->andFilterWhere(['like', 'designations', $designation])
+                        ->orderBy(['id' => SORT_DESC])
+                        ->asArray()
+                        ->one();
+                
+                if (!empty($trainingPdfModel)) {
+                    
+                    $fileParams = explode('/', $trainingPdfModel['file_import']);
+                    
+                    $trainingPdfModel['file_import'] =  self::$paramsUrl . '/uploads/files/training/pdf/index.php?file_name=' . $fileParams[4];
+
+                    $request = $trainingPdfModel;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'Training content is not available at this moment.';
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Target VS Achievement Volume
+    public function actionTarget() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+            $product = array();
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                $employeeId = $request->employee_id;
+                $targetDate = date('Y-m', time()) . '-01';
+                $sql = "SELECT product_model_name, fsm_vol, fsm_vol_sales, CONCAT(FORMAT(case when fsm_vol=0 then 0 else ( fsm_vol_sales/fsm_vol)*100 end ,2), '%') AS achievement_percent FROM `target` WHERE employee_id='$employeeId' AND target_date='$targetDate' group by product_model_code";
+                $targetQuery = Yii::$app->db->createCommand($sql)->queryAll();
+                
+                if (!empty($targetQuery)) {
+
+                    $request = $targetQuery;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'Monthly Target Vs Achievement is not available at this moment.';
                 }
                 
             } else {
@@ -241,6 +661,51 @@ class AppbasicController extends Controller {
             $request->message = 'Data not submitted.';
             echo json_encode($request);
         }
+    }
+    
+    // Mobile Complain View
+    public function actionComplain_view() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+
+            if (isset($request->token_no) && !empty($request->token_no)) {
+
+                $complainboxModel = \backend\models\Complainbox::find()
+                        ->select(['id', 'token_no', 'complain', 'feedback', 'status', 'complain_date'])
+                        ->where('token_no=:token_no', [':token_no' => $request->token_no])
+                        ->asArray()
+                        ->one();
+
+                if (!empty($complainboxModel)) {
+
+                    $complainboxModel['complain_date'] = date('d-m-Y g:i a', strtotime($complainboxModel['complain_date']));
+                    $request = $complainboxModel;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'The token number has been marked as invalid.';
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+            
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
     }
 
     // Mobile Stock View

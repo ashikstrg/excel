@@ -1,0 +1,65 @@
+<ion-view class="complain" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-ios-list-outline"></i> {{subTitle}} </h2>
+    </div>
+    <ion-content class="animated slideInUp has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+        
+        <div class="card" ng-show="success_message">
+            <div class="item item-divider item-balanced">
+                <i class="icon ion-checkmark-circled"></i>
+                Success
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <ion-list option-buttons="itemButtons" can-swipe="true" ng-hide="complain_form">
+            <label class="item item-divider" ng-if="showTokenNo == true">
+                <i class="icon ion-ios-list-outline"></i> Last 20 Token Number
+            </label>
+            
+            <ion-item ng-repeat="complain in complain_box" item="item" item-type="item item-icon-left">
+                <i class="icon ion-sad"></i>
+                {{complain.token_no}}
+                <ion-option-button class="button button-positive" ng-click="viewComplain(complain.token_no)"> <i class="icon ion-eye"></i> </ion-option-button>
+            </ion-item>
+        </ion-list>
+        
+        <form ng-submit="submit()" ng-show="complain_form">
+            <div class="list animated bounceInUp">
+                <label class="item">
+                    <textarea name="complain" rows="10" placeholder="Type your complain" ng-model="inputBox.complain" style="border: 4px solid #3c8dbc; padding: 5px; margin: 0px; width:100%"></textarea>
+                </label>
+            </div>
+            
+            <button class="button button-block button-royal animated bounceInUp">
+                Submit
+            </button>
+        </form>
+
+    </ion-content>
+    
+    <div class="float-button" ng-click="addComplain()">
+        <span class="height-fix">
+            <a class="content">
+                <i class="icon ion-compose"> </i>
+            </a>
+        </span>
+    </div>
+    
+</ion-view>

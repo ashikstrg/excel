@@ -7,7 +7,7 @@
 // Global Variable
 var paramsUrl = "http://localhost/stsv3/excel/vc/v7/advanced/backend/web/index.php";
 
-angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
+angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
 
         .run(['$ionicPlatform',
             function ($ionicPlatform) {
@@ -38,7 +38,8 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
                 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|ghttps?|ms-appx|x-wmapp0):/);
 
                 $ionicConfigProvider.scrolling.jsScrolling(ionic.Platform.isIOS());
-
+                
+                // State Provider
                 $stateProvider
                         .state('home', {
                             url: "/home",
@@ -75,6 +76,20 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
                                 }
                             }
                         })
+                        .state('app.complain', {
+                            url: "/complain/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/complain.html",
+                                    controller: 'ComplainController'
+                                }
+                            }
+                        })
                         .state('app.stockreport', {
                             url: "/stockreport/{title}",
                             params: {
@@ -104,6 +119,21 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
                                 }
                             }
                         })
+                        .state('app.complainview', {
+                            url: "/complainview/{title}",
+                            params: {
+                                token_no: null,
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/complainview.html",
+                                    controller: 'ComplainviewController'
+                                }
+                            }
+                        })
                         .state('app.salesadd', {
                             url: "/salesadd/{title}",
                             params: {
@@ -129,6 +159,34 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
                                 viewContent: {
                                     templateUrl: "templates/attendanceadd.html",
                                     controller: 'AttendanceaddController'
+                                }
+                            }
+                        })
+                        .state('app.training', {
+                            url: "/training/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/training.html",
+                                    controller: 'TrainingController'
+                                }
+                            }
+                        })
+                        .state('app.mi', {
+                            url: "/mi/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/mi.html",
+                                    controller: 'MiController'
                                 }
                             }
                         })
@@ -189,11 +247,40 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
                                 }
                             }
                         })
+                        .state('app.target', {
+                            url: "/target/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/target.html",
+                                    controller: 'TargetController'
+                                }
+                            }
+                        })
+                        .state('app.targetval', {
+                            url: "/targetval/{title}",
+                            params: {
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/targetval.html",
+                                    controller: 'TargetvalController'
+                                }
+                            }
+                        })
                         .state('app.item', {
                             url: "/item/{title}",
                             params: {
                                 color: null,
-                                icon: null
+                                icon: null,
+                                url: null
                             },
                             cache: false,
                             views: {
@@ -461,6 +548,8 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
         };
     }
 })();
+
+// App Controller
 (function () {
     'use strict';
 
@@ -485,9 +574,16 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
             },
             {
                 color: "#002F57",
-                icon: "ion-calendar",
-                title: "MI"
+                icon: "ion-ios-bookmarks",
+                title: "Taining",
+                url: "app.training"
             },
+//            {
+//                color: "#002F57",
+//                icon: "ion-calendar",
+//                title: "MI",
+//                url: "app.mi"
+//            },
             {
                 color: "#002F57",
                 icon: "ion-camera",
@@ -520,24 +616,27 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
             },
             {
                 color: "#002F57",
+                icon: "ion-ios-grid-view",
+                title: "TGT vs ACHV (VOL)",
+                url: "app.target"
+            },
+            {
+                color: "#002F57",
+                icon: "ion-ios-grid-view",
+                title: "TGT vs ACHV (Val)",
+                url: "app.targetval"
+            },
+            {
+                color: "#002F57",
                 icon: "ion-clipboard",
                 title: "Stock Report",
                 url: "app.stockreport"
             },
             {
                 color: "#002F57",
-                icon: "ion-ios-grid-view",
-                title: "TGT vs ACHV"
-            },
-            {
-                color: "#002F57",
-                icon: "ion-ios-bookmarks",
-                title: "Taining"
-            },
-            {
-                color: "#002F57",
                 icon: "ion-arrow-expand",
-                title: "Complain Box"
+                title: "Complain Box",
+                url: "app.complain"
             }
         ];
 
@@ -613,6 +712,13 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
         $scope.$on('$destroy', function () {
             $scope.popover.remove();
         });
+        
+        $scope.openItem = function (box) {
+
+            $state.go(box.url, {title: box.title, icon: box.icon, color: box.color});
+
+        };
+        
     }
 })();
 (function () {
@@ -878,6 +984,58 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
     }
 })();
 
+// MI
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('MiController', MiController);
+
+    MiController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function MiController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+
+            $scope.hideLoading();
+            
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+//Sales Report Controller
 (function () {
     'use strict';
 
@@ -951,6 +1109,131 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
         };
 
         $scope.doRefresh();
+    }
+})();
+
+//Complainbox Controller
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('ComplainController', ComplainController);
+
+    ComplainController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function ComplainController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+        
+        $scope.subTitle = 'Complain List';
+        $scope.inputBox = {};
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+        
+
+        $scope.viewComplain = function (token_no) {
+
+            $scope.showLoading();
+            $state.go('app.complainview', {title: 'Complain Status', icon: 'ion-arrow-expand', color: '#002F57', token_no: token_no});
+
+        };
+
+        $scope.doRefresh = function () {
+            
+            $scope.subTitle = 'Complain List';
+            
+            var link = paramsUrl + '/appbasic/complain_fetch';
+            $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.showTokenNo = true;
+                    $scope.complain_form = false;
+                    
+                    $scope.error_message = false;
+                    $scope.complain_box = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+        
+        $scope.addComplain = function () {
+            
+            $scope.subTitle = 'Type Complain';
+            $scope.complain_form = true;
+            $scope.success_message = false;
+            $scope.error_message = false;
+            $scope.showTokenNo = false;
+            
+        };
+        
+        var linkComplainAdd = paramsUrl + '/appbasic/complain_add';
+        $scope.submit = function () {
+
+            $scope.showLoading();
+            $http.post(linkComplainAdd, {employee_id: window.localStorage.getItem("employee_id"), complain: $scope.inputBox.complain}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.complain_form = false;
+
+                    $scope.success_message = false;
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else if (res.data.response == 'Success') {
+
+                    $scope.complain_form = false;
+
+                    $scope.error_message = false;
+                    $scope.message = res.data.message;
+                    $scope.success_message = true;
+
+                }
+
+                $scope.hideLoading();
+
+            });
+        };
     }
 })();
 
@@ -1098,6 +1381,205 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
     }
 })();
 
+// Target VS Achievement Volume
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('TargetController', TargetController);
+
+    TargetController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function TargetController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+            
+            var linkTotal = paramsUrl + '/appbasic/target_total';
+            $http.post(linkTotal, {employee_id: window.localStorage.getItem('employee_id')}).then(function (total) {
+
+                if (total.data.response == 'Error') {
+
+                    $scope.message = total.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.summary = total.data;
+
+                }
+
+                $scope.fetchTargetVsAchievement();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+            
+        };
+        
+        $scope.fetchTargetVsAchievement = function () {
+            
+            var link = paramsUrl + '/appbasic/target';
+            $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.tgtvsachv = res.data;
+                    
+                    console.log(res.data);
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+            
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Target VS Achievement Value
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('TargetvalController', TargetvalController);
+
+    TargetvalController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function TargetvalController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+            
+            var linkTotal = paramsUrl + '/appbasic/target_total_val';
+            $http.post(linkTotal, {employee_id: window.localStorage.getItem('employee_id')}).then(function (total) {
+
+                if (total.data.response == 'Error') {
+
+                    $scope.message = total.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.summary = total.data;
+
+                }
+
+                $scope.fetchTargetVsAchievement();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+            
+        };
+        
+        $scope.fetchTargetVsAchievement = function () {
+            
+            var link = paramsUrl + '/appbasic/target_val';
+            $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+                    
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.tgtvsachv = res.data;
+                    
+                    console.log(res.data);
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+            
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Stock Report Controller
 (function () {
     'use strict';
 
@@ -1174,6 +1656,7 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
     }
 })();
 
+// Sales View Controller
 (function () {
     'use strict';
 
@@ -1229,6 +1712,148 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
 
                     $scope.error_message = false;
                     $scope.sales_model = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Complain View Controller
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('ComplainviewController', ComplainviewController);
+
+    ComplainviewController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function ComplainviewController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color,
+            token_no: $stateParams.token_no
+        };
+
+        if (!$scope.item.token_no) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+
+            var link = paramsUrl + '/appbasic/complain_view';
+            $http.post(link, {token_no: $scope.item.token_no}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.complainbox_model = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Training Controller
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('TrainingController', TrainingController);
+
+    TrainingController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading'];
+    function TrainingController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading) {
+
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color
+        };
+
+        if (!$scope.item.title) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+
+            var link = paramsUrl + '/appbasic/training';
+            $http.post(link, {employee_id: window.localStorage.getItem("employee_id"), designation: window.localStorage.getItem('designation')}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+
+                    $scope.error_message = false;
+                    $scope.training_pdf_model = res.data;
+                    $scope.pdfUrl = $scope.training_pdf_model.file_import;
 
                 }
 
@@ -1680,24 +2305,26 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate'])
             .module('App')
             .controller('ItemController', ItemController);
 
-    ItemController.$inject = ['$scope', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory'];
-    function ItemController($scope, $stateParams, $ionicViewSwitcher, $state, $ionicHistory) {
+    ItemController.$inject = ['$scope', '$stateParams', '$state', '$ionicLoading'];
+    function ItemController($scope, $stateParams, $state, $ionicLoading) {
 
         $scope.item = {
             title: $stateParams.title,
             icon: $stateParams.icon,
-            color: $stateParams.color
+            color: $stateParams.color,
+            url: $stateParams.url
         };
+        
+        $scope.showLoading = function () {
 
-        if (!$scope.item.color) {
-            $ionicViewSwitcher.nextDirection('back');
-            $ionicHistory.nextViewOptions({
-                disableBack: true,
-                disableAnimate: true,
-                historyRoot: true
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
             });
-            $state.go('app.gallery');
-        }
+
+        };
+        
     }
 })();
 (function () {

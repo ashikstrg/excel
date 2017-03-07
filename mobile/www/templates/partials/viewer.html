@@ -1,0 +1,8 @@
+<button ng-click="goPrevious()"><</button>
+<button ng-click="goNext()">></button>
+<button ng-click="zoomIn()">+</button>
+<button ng-click="fit()">100%</button>
+<button ng-click="zoomOut()">-</button>
+<span>Page: </span> <input type="text" min=1 ng-model="pageNum" style="display: inline; width: 22px; padding: 0px; vertical-align: baseline; border: 1px solid #000; height: 25px; text-align: center;"><span> / {{pageCount}}</span>
+
+<canvas id="pdf-canvas"></canvas>
