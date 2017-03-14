@@ -117,6 +117,21 @@ class TravelController extends Controller
                 $lineManagerName = $hrModel->tm_name;
                 $lineManagerDesignation = 'TM';
                 $lineManagerEmployeeType = 'Sales';
+                
+            } else if($model->hr_employee_type == 'Trainer') { 
+                
+                $hrModel = \backend\models\HrTrainer::find()
+                        ->select(['parent', 'manager_id', 'manager_name'])
+                        ->where(['employee_id' => $model->hr_employee_id])
+                        ->orderBy(['id' => SORT_DESC])
+                        ->one();
+                
+                $lineManagerID = $hrModel->parent;
+                $lineManagerEmployeeID = $hrModel->manager_id;
+                $lineManagerName = $hrModel->manager_name;
+                $lineManagerDesignation = 'Admin';
+                $lineManagerEmployeeType = 'Admin';
+                
             }
             
             $model->line_manager_hr_id = $lineManagerID;

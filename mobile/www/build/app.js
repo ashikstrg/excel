@@ -5,7 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 
 // Global Variable
-var paramsUrl = "http://localhost/stsv3/excel/vc/v7/advanced/backend/web/index.php";
+var paramsUrl = "http://45.64.135.139/~excelsts/advanced/backend/web/index.php";
+//var paramsUrl = "http://localhost/stsv3/excel/vc/v7/advanced/backend/web/index.php";
 
 angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
 
@@ -201,6 +202,21 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
                                 viewContent: {
                                     templateUrl: "templates/stockadd.html",
                                     controller: 'StockaddController'
+                                }
+                            }
+                        })
+                        .state('app.notificationview', {
+                            url: "/notificationview/{title}",
+                            params: {
+                                ntid: null,
+                                color: null,
+                                icon: null
+                            },
+                            cache: false,
+                            views: {
+                                viewContent: {
+                                    templateUrl: "templates/notificationview.html",
+                                    controller: 'NotificationviewController'
                                 }
                             }
                         })
@@ -557,12 +573,13 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
             .module('App')
             .controller('AppController', AppController);
 
-    AppController.$inject = ['$scope', '$ionicPopover', '$state'];
-    function AppController($scope, $ionicPopover, $state) {
+    AppController.$inject = ['$scope', '$ionicPopover', '$state', '$http', '$rootScope'];
+    function AppController($scope, $ionicPopover, $state, $http, $rootScope) {
 
         $scope.name = window.localStorage.getItem('name');
         $scope.employee_id = window.localStorage.getItem('employee_id');
         $scope.designation = window.localStorage.getItem('designation');
+        $scope.imageSrc = paramsUrl + '/../uploads/hr/' + window.localStorage.getItem('image_web_filename');
 
         // Box Item
         $scope.box = [
@@ -640,59 +657,6 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
             }
         ];
 
-        $scope.items = [
-            {
-                color: "#002F57",
-                icon: "ion-android-checkbox-outline",
-                title: "Attendance"
-            },
-            {
-                color: "#00a65a",
-                icon: "ion-calendar",
-                title: "MI"
-            },
-            {
-                color: "#E47500",
-                icon: "ion-camera",
-                title: "Sales"
-            },
-            {
-                color: "#A3216B",
-                icon: "ion-ios-camera-outline",
-                title: "Stock"
-            },
-            {
-                color: "#206AA7",
-                icon: "ion-document-text",
-                title: "Sales Report"
-            },
-            {
-                color: "#AD5CE9",
-                icon: "ion-clipboard",
-                title: "Stock Report"
-            },
-            {
-                color: "#F8E548",
-                icon: "ion-cube",
-                title: "Leaderboard"
-            },
-            {
-                color: "#3DBEC9",
-                icon: "ion-ios-grid-view",
-                title: "TGT vs ACHV"
-            },
-            {
-                color: "#D86B67",
-                icon: "ion-ios-bookmarks",
-                title: "Taining"
-            },
-            {
-                color: "#5AD863",
-                icon: "ion-arrow-expand",
-                title: "Complain Box"
-            }
-        ];
-
         $scope.exitApp = function () {
             window.localStorage.clear();
             ionic.Platform.exitApp();
@@ -702,11 +666,41 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
         $ionicPopover.fromTemplateUrl('templates/modals/popover.html', {
             scope: $scope
         }).then(function (popover) {
+            
+            var link = paramsUrl + '/appbasic/notification_fetch';
+            $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $rootScope.notification_message = res.data.message;
+                    $rootScope.notification_error_message = true;
+
+                } else {
+
+                    $rootScope.notification_error_message = false;   
+                    $rootScope.notifications = res.data;
+
+                }
+
+            });
+            
             $scope.popover = popover;
+        });
+        
+        $rootScope.notificationTotal = '0';
+        var link = paramsUrl + '/appbasic/notification_count';
+        $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+            $rootScope.notificationTotal = res.data.total;
+
         });
 
         $scope.openPopover = function ($event) {
             $scope.popover.show($event);
+        };
+        
+        $scope.closePopover = function () {
+            $scope.popover.hide();
         };
 
         $scope.$on('$destroy', function () {
@@ -721,6 +715,7 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
         
     }
 })();
+
 (function () {
     'use strict';
 
@@ -1712,6 +1707,112 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
 
                     $scope.error_message = false;
                     $scope.sales_model = res.data;
+
+                }
+
+                $scope.hideLoading();
+
+            }).finally(function () {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
+
+        $scope.doRefresh();
+    }
+})();
+
+// Notification View Controller
+(function () {
+    'use strict';
+
+    angular
+            .module('App')
+            .controller('NotificationviewController', NotificationviewController);
+
+    NotificationviewController.$inject = ['$scope', '$http', '$stateParams', '$ionicViewSwitcher', '$state', '$ionicHistory', '$ionicLoading', '$ionicPopover', '$rootScope'];
+    function NotificationviewController($scope, $http, $stateParams, $ionicViewSwitcher, $state, $ionicHistory, $ionicLoading, $ionicPopover, $rootScope) {
+
+        $scope.popover.hide();
+        
+        $scope.item = {
+            title: $stateParams.title,
+            icon: $stateParams.icon,
+            color: $stateParams.color,
+            ntid: $stateParams.ntid
+        };
+
+        if (!$scope.item.ntid) {
+            $ionicViewSwitcher.nextDirection('back');
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                disableAnimate: true,
+                historyRoot: true
+            });
+            $state.go('app.gallery');
+        }
+
+        $scope.showLoading = function () {
+
+            $ionicLoading.show({
+                template: '<ion-spinner icon="android"></ion-spinner>',
+                showBackdrop: true,
+                maxWidth: 500,
+            });
+
+        };
+
+        $scope.hideLoading = function () {
+            $ionicLoading.hide();
+        };
+
+        $scope.doRefresh = function () {
+
+            var link = paramsUrl + '/appbasic/notification_view';
+            $http.post(link, {ntid: $scope.item.ntid}).then(function (res) {
+
+                if (res.data.response == 'Error') {
+
+                    $scope.message = res.data.message;
+                    $scope.error_message = true;
+
+                } else {
+                    
+                    $rootScope.notificationTotal = '0';
+                    var link = paramsUrl + '/appbasic/notification_count';
+                    $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                        $rootScope.notificationTotal = res.data.total;
+                        
+                        $ionicPopover.fromTemplateUrl('templates/modals/popover.html', {
+                            scope: $scope
+                        }).then(function (popover) {
+
+                            var link = paramsUrl + '/appbasic/notification_fetch';
+                            $http.post(link, {employee_id: window.localStorage.getItem('employee_id')}).then(function (res) {
+
+                                if (res.data.response == 'Error') {
+
+                                    $rootScope.notification_message = res.data.message;
+                                    $rootScope.notification_error_message = true;
+
+                                } else {
+
+                                    $rootScope.notification_error_message = false;
+
+                                    $rootScope.notifications = res.data;
+
+                                }
+
+                            });
+
+                            $scope.popover = popover;
+                        });
+
+                    });
+
+                    $scope.error_message = false;
+                    $scope.notification_model = res.data;
 
                 }
 

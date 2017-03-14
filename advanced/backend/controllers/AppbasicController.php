@@ -25,7 +25,7 @@ use yii\helpers\Url;
 class AppbasicController extends Controller {
 
     public $enableCsrfValidation = false;
-    public static $paramsUrl = 'http://localhost/stsv3/excel/vc/v7/advanced/backend/web';
+    public static $paramsUrl = 'http://45.64.135.139/~excelsts/advanced/backend/web';
 
     public function behaviors() {
         
@@ -37,7 +37,8 @@ class AppbasicController extends Controller {
                     [
                         'actions' => ['login', 'sales_report', 'sales_view', 'stock_report', 'stock_view', 'stock_fetch', 'add_sales', 'inventory_fetch', 
                             'add_stock', 'attendance_fetch', 'add_attendance', 'add_attendance_out', 'leaderboard', 'leaderboard_val', 'target', 
-                            'target_val', 'target_total', 'target_total_val', 'training', 'complain_fetch', 'complain_add', 'complain_view'],
+                            'target_val', 'target_total', 'target_total_val', 'training', 'complain_fetch', 'complain_add', 'complain_view', 
+                            'notification_fetch', 'notification_count', 'notification_view'],
                         'allow' => true,
                     ],
                 ],
@@ -49,6 +50,155 @@ class AppbasicController extends Controller {
                 ],
             ],
         ];
+    }
+    
+    // Mobile Notification Count
+    public function actionNotification_count() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->total = 0;
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                $employeeId = $request->employee_id;
+
+                $notificationCount = \backend\models\Notification::find()->where(
+                                'hr_employee_id=:hr_employee_id AND read_status=:read_status', 
+                        [':hr_employee_id' => $employeeId, ':read_status' => 'Unread'])
+                        ->count();
+
+                if ($notificationCount > 0) {
+
+                    if($notificationCount > 5) {
+                        
+                        $request->total = '5+';
+                        
+                    } else {
+                        $request->total = $notificationCount;
+                    }
+                    
+                } else {
+
+                    $request->total = 0;
+                }
+            } else {
+
+                $request->total = 0;
+            }
+
+        } else {
+
+            $request->total = 0;
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Notification Fetch
+    public function actionNotification_fetch() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+                
+                $employeeId = $request->employee_id;
+
+                $notificationModel = \backend\models\Notification::find()->where(
+                                'hr_employee_id=:hr_employee_id AND read_status=:read_status', 
+                        [':hr_employee_id' => $employeeId, ':read_status' => 'Unread'])
+                        ->limit(5)
+                        ->orderBy(['id' => SORT_DESC])
+                        ->asArray()
+                        ->all();
+
+                if (!empty($notificationModel)) {
+
+                    $request = $notificationModel;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'You have no notification.';
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
+    }
+    
+    // Mobile Notification Fetch
+    public function actionNotification_view() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = 'Server error !!! Please Try again';
+
+            if (isset($request->ntid) && !empty($request->ntid)) {
+                
+                $ntId = $request->ntid;
+
+                $notificationModel = \backend\models\Notification::find()->where(
+                                'id=:id AND read_status=:read_status', 
+                        [':id' => $ntId, ':read_status' => 'Unread'])
+                        ->one();
+
+                if (!empty($notificationModel)) {
+                    
+                    $notificationModel->read_status = 'Read';
+                    $notificationModel->seen = new Expression('NOW()');
+                    $notificationModel->save(false);
+                    
+                    $request->response = 'Success';
+                    $request->name = $notificationModel->name;
+                    $request->message = $notificationModel->message;
+                    $request->module_name = $notificationModel->module_name;
+                    $request->created_at = date('d-m-Y g:i a', strtotime($notificationModel->created_at));
+                    $request->created_by_name = $notificationModel->created_by_name;
+                    
+                } else {
+
+                    $request->response = 'Error';
+                    $request->message = 'This notification is no more valid.';
+                }
+            } else {
+
+                $request->response = 'Error';
+                $request->message = 'Please exit app and login again.';
+            }
+
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+        
+        echo json_encode($request);
     }
 
     // Mobile Sales Report

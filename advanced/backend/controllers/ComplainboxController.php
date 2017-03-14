@@ -77,9 +77,18 @@ class ComplainboxController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            
+            $model->feedback_by_employee_id = Yii::$app->user->identity->username;
+            $model->feedback_by_name = Yii::$app->session->get('name');
+            $model->feedback_date = new Expression('NOW()');
+            
+            if($model->save()) {
+                Yii::$app->session->setFlash('success', 'You feedback has successfully been submitted.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            
         } else {
             return $this->render('update', [
                 'model' => $model,

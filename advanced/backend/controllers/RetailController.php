@@ -195,6 +195,9 @@ class RetailController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
+        $model->number_sec -= 1;
+        $model->number_rsa -= 1;
 
         if ($model->load(Yii::$app->request->post())) {
 

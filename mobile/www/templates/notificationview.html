@@ -1,0 +1,52 @@
+<ion-view class="notificationView" view-title="<i class='icon {{item.icon}}'></i> {{item.title}}">
+    <div class="bar bar-subheader bar-calm">
+        <h2 class="title"><i class="icon ion-hammer"></i> {{notification_model.module_name}} </h2>
+    </div>
+    <ion-content class="animated slideInUp padding has-subheader">
+        <ion-refresher
+            pulling-text="Pull to refresh..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-show="error_message">
+            <div class="item item-divider item-assertive">
+                <i class="icon ion-bug"></i>
+                Error
+            </div>
+            <div class="item item-text-wrap">
+                <b ng-bind="message"></b>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="item item-divider item-royal">
+                <i class="icon ion-bag"></i>
+                Title
+            </div>
+            <div class="item item-text-wrap">
+                {{notification_model.name}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-bag"></i>
+                Message
+            </div>
+            <div class="item item-text-wrap">
+                {{notification_model.message}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-planet"></i>
+                Sent At
+            </div>
+            <div class="item item-text-wrap">
+                {{notification_model.created_at}}
+            </div>
+            <div class="item item-divider">
+                <i class="icon ion-ipad"></i>
+                Sent By
+            </div>
+            <div class="item item-text-wrap">
+                {{notification_model.created_by_name}}
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

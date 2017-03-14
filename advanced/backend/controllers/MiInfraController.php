@@ -65,6 +65,13 @@ class MiInfraController extends Controller
                 $model->am_name = $model->hr_name;
                 $model->csm_employee_id = $hrModel->csm_employee_id;
                 $model->csm_name = $hrModel->csm_name;
+            } else {
+                
+                $model->am_employee_id = 'N/A';
+                $model->am_name = 'N/A';
+                $model->csm_employee_id = 'N/A';
+                $model->csm_name = 'N/A';
+                
             }
             
             $model->created_at = date('Y-m-d H:i:s', time());

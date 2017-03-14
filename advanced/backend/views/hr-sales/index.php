@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'HR Congiguration (Sales)';
+$this->title = 'HR Configuration (Sales)';
 $this->miniTitle = 'HR Module';
 $this->subTitle = 'HR Data (Sales)';
 $this->params['breadcrumbs'][] = $this->title;

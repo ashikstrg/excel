@@ -286,6 +286,7 @@ class HrController extends Controller
     {
         $this->findModel($id)->delete();
 
+        Yii::$app->session->setFlash('success', 'HR has successfully been deleted.');
         return $this->redirect(['index']);
     }
 
@@ -298,7 +299,8 @@ class HrController extends Controller
             $sql = "DELETE FROM hr WHERE id = $value";
             $query = Yii::$app->db->createCommand($sql)->execute();
         }
-
+        
+        Yii::$app->session->setFlash('success', 'HR has successfully been deleted.');
         return $this->redirect(['index']);
 
     }

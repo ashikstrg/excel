@@ -9,8 +9,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     
-    <?= $form->field($model, 'status')->dropDownList([ 'Pending' => 'Pending', 'Resolved' => 'Resolved', 'Declined' => 'Declined', ], ['prompt' => '']) ?>
-
+    <?= $form->field($model, 'status')->dropDownList(['Pending' => 'Pending', 'Resolved' => 'Resolved', 'Declined' => 'Declined'], ['prompt' => 'Select Status']) ?>
+    
+    <?= $form->field($model, 'complain')->textarea(['rows' => 6, 'readOnly' => 'readOnly']) ?>
+    
     <?= $form->field($model, 'feedback')->textarea(['rows' => 6]) ?>
 
     <div class="box-footer">

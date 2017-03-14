@@ -3,14 +3,14 @@
         <ion-nav-bar class="bar-positive" align-title="center">
             <ion-nav-back-button></ion-nav-back-button>
             <ion-nav-buttons side="left"><button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button></ion-nav-buttons>
-            <ion-nav-buttons side="right"><button class="button button-icon button-clear ion-more" ng-click="openPopover($event)"></button></ion-nav-buttons>
+            <ion-nav-buttons side="right"><button class="button icon-left ion-android-notifications button-assertive" ng-click="openPopover($event)" ng-bind="notificationTotal"></button></ion-nav-buttons>
         </ion-nav-bar>
         <ion-nav-view name="viewContent" animation="slide-left-right"></ion-nav-view>
     </ion-side-menu-content>
     <ion-side-menu side="left" class="menu">
         <ion-header-bar ui-sref="app.gallery" menu-close nav-direction="enter" nav-clear>
             <ion-item class="item item-thumbnail-left">
-                <img style="border-radius: 50%;" src="img/user.jpg" alt="Fry" class="animated">
+                <img style="border-radius: 50%;" src="{{imageSrc}}" alt="Fry" class="animated">
                 <h2 ng-bind="name"></h2>
                 <p ng-bind="employee_id"></p>
                 <p ng-bind="designation"></p>

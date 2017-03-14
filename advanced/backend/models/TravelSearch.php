@@ -107,6 +107,12 @@ class TravelSearch extends Travel
                 'action_by' => Yii::$app->session->get('employee_id'),
             ]);
             
+        } if(\Yii::$app->session->get('userRole') == 'admin') {
+            
+            $query->andFilterWhere([
+                'action_by' => Yii::$app->session->get('employee_id'),
+            ]);
+            
         }
 
         return $dataProvider;

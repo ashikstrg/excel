@@ -84,6 +84,12 @@ class MiProductSearch extends MiProduct
                 'am_employee_id' => Yii::$app->session->get('employee_id')
             ]);
             
+        } else if(Yii::$app->session->get('userRole') == 'Trainer') {
+            
+            $query->andFilterWhere([
+                'hr_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+            
         }
 
         return $dataProvider;

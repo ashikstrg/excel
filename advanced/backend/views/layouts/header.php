@@ -31,6 +31,19 @@ if($notificationCount > 10) {
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
+      
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Dropdown <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                  </ul>
+              </li>
+          </ul>
+      </div>
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">

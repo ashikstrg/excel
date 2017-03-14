@@ -4,42 +4,32 @@
     </ion-header-bar>
     <ion-content>
         <ion-slide-box>
-            <ion-slide>
+            <ion-slide ng-if="notification_error_message === true">
                 <div class="card">
                     <div class="item item-divider">
-                        New Notification 1
+                        Sorry
                     </div>
                     <div class="item item-text-wrap">
-                        Project has been assigned
+                        {{notification_message}}
                     </div>
-                    <div class="item item-divider">
-                        View
+                    <div class="item item-divider" ng-click="closePopover()">
+                        Close
                     </div>
                 </div>
             </ion-slide>
-            <ion-slide>
+            <ion-slide ng-repeat="noti in notifications" ng-if="notification_error_message === false">
                 <div class="card">
                     <div class="item item-divider">
-                        New Notification 2
+                        {{noti.module_name}}
                     </div>
                     <div class="item item-text-wrap">
-                        Project has been assigned
+                        {{noti.message}}
                     </div>
-                    <div class="item item-divider">
-                        View
+                    <div class="item item-divider" ui-sref="app.notificationview({ title: 'Notification Detail', icon: 'ion-android-notifications', color: '#ffffff', ntid: noti.id })">
+                        View 
                     </div>
-                </div>
-            </ion-slide>
-            <ion-slide>
-                <div class="card">
-                    <div class="item item-divider">
-                        New Notification 3
-                    </div>
-                    <div class="item item-text-wrap">
-                        Project has been assigned
-                    </div>
-                    <div class="item item-divider">
-                        View
+                    <div class="item item-divider" ng-click="closePopover()">
+                        Close
                     </div>
                 </div>
             </ion-slide>
