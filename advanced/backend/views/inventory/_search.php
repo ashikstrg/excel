@@ -3,52 +3,40 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\InventorySearch */
-/* @var $form yii\widgets\ActiveForm */
+// Custom
+use kartik\widgets\DatePicker;
+
 ?>
 
 <div class="inventory-search">
-
+    
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'batch') ?>
-
-    <?= $form->field($model, 'imei_no') ?>
-
-    <?= $form->field($model, 'product_name') ?>
-
-    <?= $form->field($model, 'product_model_code') ?>
-
-    <?php // echo $form->field($model, 'product_model_name') ?>
-
-    <?php // echo $form->field($model, 'product_color') ?>
-
-    <?php // echo $form->field($model, 'product_type') ?>
-
-    <?php // echo $form->field($model, 'lifting_price') ?>
-
-    <?php // echo $form->field($model, 'rrp') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    <div class="row">
+        <div class="col-md-7">
+            &nbsp; 
+        </div>
+        <div class="col-md-2">
+            <div class="pull-right">
+                <?= $form->field($model, 'from_row')->textInput(['placeholder' => 'From number of row'])->label(false) ?>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="pull-right">
+                <?= $form->field($model, 'total_row')->textInput(['placeholder' => 'Total Row'])->label(false) ?>
+                <?= $form->field($model, 'validity')->hiddenInput()->label(false) ?>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="pull-right">
+                <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+            </div>
+        </div>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 

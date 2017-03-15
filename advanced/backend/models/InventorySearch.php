@@ -14,7 +14,7 @@ class InventorySearch extends Inventory
         return [
             [['id', 'batch'], 'integer'],
             [['imei_no', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'status', 'validity', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
-            [['lifting_price', 'rrp'], 'number'],
+            [['lifting_price', 'rrp', 'from_row', 'total_row'], 'number'],
         ];
     }
 
@@ -26,14 +26,22 @@ class InventorySearch extends Inventory
 
     public function search($params)
     {
-        $query = Inventory::find();
-
+        $this->load($params);
+        
+        if((!empty($this->from_row) || $this->from_row == 0) && !empty($this->total_row)) {
+            
+            $query = Inventory::find()->offset($this->from_row)->limit($this->total_row);
+            
+        } else {
+            
+            $query = Inventory::find();
+            
+        }
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            //'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
-
-        $this->load($params);
 
         if (!$this->validate()) {
             return $dataProvider;
@@ -59,7 +67,7 @@ class InventorySearch extends Inventory
             ->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'created_by', $this->created_by])
             ->andFilterWhere(['like', 'updated_by', $this->updated_by]);
-
+        
         return $dataProvider;
     }
 }

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
+use kartik\widgets\Alert;
 
 $this->title = 'Inventory Raw Data';
 $this->miniTitle = 'Inventory Module';
@@ -11,6 +12,34 @@ $this->subTitle = 'Inventory Data in Descending Order';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="inventory-index">
+    
+    <?php
+    
+    if(!empty($searchModel->from_row)) {
+        
+        echo Alert::widget([
+            'type' => Alert::TYPE_SUCCESS,
+            'title' => 'From Number of Row: ',
+            'icon' => 'glyphicon glyphicon-ok-sign',
+            'body' => $searchModel->from_row,
+            'showSeparator' => false,
+        ]);
+    }
+    
+    if (!empty($searchModel->total_row)) {
+
+        echo Alert::widget([
+            'type' => Alert::TYPE_SUCCESS,
+            'title' => 'Total Row: ',
+            'icon' => 'glyphicon glyphicon-ok-sign',
+            'body' => $searchModel->total_row,
+            'showSeparator' => false,
+        ]);
+    }
+    
+    ?>
+    
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php 
     $gridColumns = [
@@ -36,11 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => $gridColumns,
         // Large File Streaming
-        //'stream' => false, // this will automatically save the file to a folder on web server
-        //'streamAfterSave' => true, // this will stream the file to browser after its saved on the web folder 
-        //'deleteAfterSave' => true,
+        'stream' => false, // this will automatically save the file to a folder on web server
+        'streamAfterSave' => true, // this will stream the file to browser after its saved on the web folder 
+        'deleteAfterSave' => true,
         // Large File Streaming
-        'batchSize' => 100,
+        //'batchSize' => 100,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
         'hiddenColumns'=>[0],

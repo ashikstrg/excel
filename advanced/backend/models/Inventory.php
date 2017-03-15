@@ -13,6 +13,9 @@ class Inventory extends \yii\db\ActiveRecord
     public static $stageStock = 'stock';
     public static $stageSold = 'sold';
     
+    public $from_row;
+    public $total_row;
+    
     public static function tableName()
     {
         return 'inventory';
