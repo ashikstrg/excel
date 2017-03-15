@@ -127,7 +127,7 @@ class SalesController extends Controller
                         $stockModelOne->updated_at = $now;
                         $stockModelOne->updated_by = $username;
                         $stockModelOne->validity = Stock::$validityOut;
-                        $stockModelOne->save();
+                        $stockModelOne->save(false);
                         
                         $inventoryModelOne = Inventory::find()
                             ->where('imei_no=:imei_no', [':imei_no' => $model->imei_no])
@@ -135,7 +135,7 @@ class SalesController extends Controller
                         $inventoryModelOne->updated_at = $now;
                         $inventoryModelOne->updated_by = $username;
                         $inventoryModelOne->stage = Inventory::$stageSold;
-                        $inventoryModelOne->save();
+                        $inventoryModelOne->save(false);
                         
                         Yii::$app->session->setFlash('success', '<b>IMEI Number: ' . $model->imei_no . ' </b>has successfully been added.');
                         return $this->redirect(['view', 'id' => $model->id]);

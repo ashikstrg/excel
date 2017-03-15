@@ -183,7 +183,7 @@ class SalesBatchController extends Controller {
                                             $stockModelOne->updated_at = $now;
                                             $stockModelOne->updated_by = $username;
                                             $stockModelOne->validity = Stock::$validityOut;
-                                            $stockModelOne->save();
+                                            $stockModelOne->save(false);
 
                                             $inventoryModelOne = Inventory::find()
                                                 ->where('imei_no=:imei_no', [':imei_no' => $stockModelOne->imei_no])
@@ -191,7 +191,7 @@ class SalesBatchController extends Controller {
                                             $inventoryModelOne->updated_at = $now;
                                             $inventoryModelOne->updated_by = $username;
                                             $inventoryModelOne->stage = Inventory::$stageSold;
-                                            $inventoryModelOne->save();
+                                            $inventoryModelOne->save(false);
                                             
                                             $successArray[] = 'Row Number ' . $rowNumber . ':Sales Data has successfully been uploaded.';
                                             

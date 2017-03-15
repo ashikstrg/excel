@@ -35,6 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
     $fullExportMenu = ExportMenu::widget([
         'dataProvider' => $dataProvider,
         'columns' => $gridColumns,
+        // Large File Streaming
+        //'stream' => false, // this will automatically save the file to a folder on web server
+        //'streamAfterSave' => true, // this will stream the file to browser after its saved on the web folder 
+        //'deleteAfterSave' => true,
+        // Large File Streaming
+        'batchSize' => 100,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
         'hiddenColumns'=>[0],

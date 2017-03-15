@@ -7,54 +7,35 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Inventory;
 
-/**
- * InventorySearch represents the model behind the search form about `backend\models\Inventory`.
- */
 class InventorySearch extends Inventory
 {
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
             [['id', 'batch'], 'integer'],
-            [['imei_no', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
+            [['imei_no', 'product_name', 'product_model_code', 'product_model_name', 'product_color', 'product_type', 'status', 'validity', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'safe'],
             [['lifting_price', 'rrp'], 'number'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $query = Inventory::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            //'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
@@ -62,6 +43,7 @@ class InventorySearch extends Inventory
         $query->andFilterWhere([
             'id' => $this->id,
             'batch' => $this->batch,
+            'validity' => $this->validity,
             'lifting_price' => $this->lifting_price,
             'rrp' => $this->rrp,
             'created_at' => $this->created_at,

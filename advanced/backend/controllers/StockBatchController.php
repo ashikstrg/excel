@@ -178,7 +178,7 @@ class StockBatchController extends Controller
                                         
                                         $inventoryModel->validity = Inventory::$validityOut;
                                         $inventoryModel->stage = Inventory::$stageStock;
-                                        $inventoryModel->save();
+                                        $inventoryModel->save(false);
 
                                         $successArray[] = 'Row Number ' . $rowNumber . ':Stock Data has successfully been uploaded.';
                                         $successCount++;
@@ -372,7 +372,7 @@ class StockBatchController extends Controller
                                             
                                             $inventoryModel->validity = Inventory::$validityOut;
                                             $inventoryModel->stage = Inventory::$stageStock;
-                                            $inventoryModel->save();
+                                            $inventoryModel->save(false);
 
                                             $successArray[] = 'Row Number ' . $rowNumber . ': Stock Data has successfully been uploaded.';
                                             $successCount++;
@@ -553,7 +553,7 @@ class StockBatchController extends Controller
 
                                         $inventoryModel->validity = Inventory::$validityOut;
                                         $inventoryModel->stage = Inventory::$stageStock;
-                                        $inventoryModel->save();
+                                        $inventoryModel->save(false);
                                         
                                         $stockSubmission->delete();
 

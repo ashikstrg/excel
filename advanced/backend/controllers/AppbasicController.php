@@ -1111,7 +1111,7 @@ class AppbasicController extends Controller {
                             $stockModelOne->updated_at = $now;
                             $stockModelOne->updated_by = $username;
                             $stockModelOne->validity = Stock::$validityOut;
-                            $stockModelOne->save();
+                            $stockModelOne->save(false);
 
                             $inventoryModelOne = Inventory::find()
                                     ->where('imei_no=:imei_no', [':imei_no' => $model->imei_no])
@@ -1119,7 +1119,7 @@ class AppbasicController extends Controller {
                             $inventoryModelOne->updated_at = $now;
                             $inventoryModelOne->updated_by = $username;
                             $inventoryModelOne->stage = Inventory::$stageSold;
-                            $inventoryModelOne->save();
+                            $inventoryModelOne->save(false);
 
                             $request->response = 'Success';
                             $request->message = Message::$successMessage;
