@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $currentMonth = date('m', time());
     $currentYear = date('Y', time());
     if($currentMonth ==  $month && $currentYear == $year) {
-        $timePass = number_format(((date('d', time()) - 1) / date('t', time())) * 100, 2);
+        $timePass = round(((date('d', time()) - 1) / date('t', time())) * 100);
     } elseif(($currentMonth >  $month && $currentYear >= $year) || ($currentMonth <=  $month && $currentYear > $year)) {
         $timePass = 100;
     } else {

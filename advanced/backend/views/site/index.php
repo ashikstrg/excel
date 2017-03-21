@@ -13,7 +13,7 @@ foreach($salesProductType as $sales) {
     array_push($productTypeData, ['name' => $sales->product_type, 'y' => (int) $sales->total]);
 }
 
-$timePass = number_format(((date('d', time()) - 1) / date('t', time())) * 100, 2);
+$timePass = round(((date('d', time()) - 1) / date('t', time())) * 100);
  
 ?>
 <div class="row">
@@ -98,7 +98,7 @@ $timePass = number_format(((date('d', time()) - 1) / date('t', time())) * 100, 2
                 
                 <div class="clearfix">
                   <span class="pull-left">Time Pass</span>
-                  <small class="pull-right"><?= number_format($timePass, 2); ?>%</small>
+                  <small class="pull-right"><?= $timePass; ?>%</small>
                 </div>
                 <div class="progress xs">
                   <div class="progress-bar progress-bar-yellow" style="width: <?= round($timePass); ?>%;"></div>
