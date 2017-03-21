@@ -100,6 +100,65 @@ class StockSearch extends Stock
         return $dataProvider;
     }
     
+    public function hand($params)
+    {
+        $hrModel = null;
+        
+        if(Yii::$app->session->get('isFSM')) {
+            
+            $hrModel = Hr::find()->select('retail_id')->where(['employee_id' => Yii::$app->session->get('employee_id')])->all();
+            
+        } else if(Yii::$app->session->get('isTM')) {
+            
+            $hrModel = Hr::find()->select('retail_id')->where(['tm_employee_id' => Yii::$app->session->get('employee_id')])->all();
+            
+        } else if(Yii::$app->session->get('isAM')) {
+            
+            $hrModel = Hr::find()->select('retail_id')->where(['am_employee_id' => Yii::$app->session->get('employee_id')])->all();
+            
+        } else if(Yii::$app->session->get('isCSM')) {
+            
+            $hrModel = Hr::find()->select('retail_id')->where(['csm_employee_id' => Yii::$app->session->get('employee_id')])->all();
+            
+        }
+        
+        $query = Stock::find()->select(['product_model_code', 'product_model_name', 'product_type', 'COUNT(id) AS totalInHand'])
+                ->groupBy(['product_model_code'])
+                ->orderBy('product_model_name ASC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        
+        $query->andFilterWhere([
+            'retail_id' => $hrModel,
+        ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'product_model_code' => $this->product_model_code,
+            'product_model_name' => $this->product_model_name,
+            'product_type' => $this->product_type
+        ]);
+        
+        $dataProvider->setSort([
+            'attributes' => [
+                'product_type',
+                'product_model_name',
+                'product_model_code',
+                'totalInHand',
+            ]
+        ]);
+
+        return $dataProvider;
+    }
+    
     public function searchDaily($params)
     {
         $hrModel = null;
@@ -175,10 +234,11 @@ class StockSearch extends Stock
         $retailTerritory = $this->retail_territory;
         //$submissionDate = $this->submission_date;
         
-        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT retail_dms_code) FROM stock')
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT retail_dms_code) FROM stock WHERE retail_id IN ($hrString) AND validity='in'")
 			->queryScalar();
         
         $sql= "SET @sql1 = NULL;
+            SET @@group_concat_max_len = 6000000;
             SELECT
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
@@ -190,6 +250,7 @@ class StockSearch extends Stock
                 ) INTO @sql1
             FROM stock WHERE validity='in';
             SET @sql2 = NULL; 
+            SET @@group_concat_max_len = 6000000;
             SELECT
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
@@ -202,6 +263,7 @@ class StockSearch extends Stock
             INTO @sql2
             FROM stock;
             SET @sql3 = NULL;
+            SET @@group_concat_max_len = 6000000;
             SELECT 
                 COUNT(imei_no) AS `total`
             INTO @sql3
@@ -214,8 +276,8 @@ class StockSearch extends Stock
             AND (retail_zone like :retail_zone or :retail_zone is null)
             AND (retail_area like :retail_area or :retail_area is null)
             AND (retail_territory like :retail_territory or :retail_territory is null)
-            AND (retail_id IN (:retail_id))
-            GROUP BY retail_dms_code'); ";
+            AND (retail_id IN ($hrString))
+            GROUP BY retail_dms_code ORDER BY `#`');  ";
 
         $cmd  = Yii::$app->db->createCommand($sql); 
         $cmd->execute();
@@ -233,43 +295,42 @@ class StockSearch extends Stock
                 ':retail_channel_type' => '%' . $retailChannelType . '%',
                 ':retail_zone' => '%' . $retailZone . '%',
                 ':retail_area' => '%' . $retailArea . '%',
-                ':retail_territory' => '%' . $retailTerritory . '%',
-                ':retail_id' => $hrString
+                ':retail_territory' => '%' . $retailTerritory . '%'
             ],
             'totalCount' => $totalCount,
-            //'sort' =>false, to remove the table header sorting
-            'sort' => [
-                'attributes' => [
-                    'retail_dms_code' => [
-                        'asc' => ['retail_dms_code' => SORT_ASC],
-                        'desc' => ['retail_dms_code' => SORT_DESC],
-                    ],
-                    'retail_name' => [
-                        'asc' => ['retail_name' => SORT_ASC],
-                        'desc' => ['retail_name' => SORT_DESC],
-                    ],
-                    'retail_type' => [
-                        'asc' => ['retail_type' => SORT_ASC],
-                        'desc' => ['retail_type' => SORT_DESC],
-                    ],
-                    'retail_channel_type' => [
-                        'asc' => ['retail_channel_type' => SORT_ASC],
-                        'desc' => ['retail_channel_type' => SORT_DESC],
-                    ],
-                    'retail_zone' => [
-                        'asc' => ['retail_zone' => SORT_ASC],
-                        'desc' => ['retail_zone' => SORT_DESC],
-                    ],
-                    'retail_area' => [
-                        'asc' => ['retail_area' => SORT_ASC],
-                        'desc' => ['retail_area' => SORT_DESC],
-                    ],
-                    'retail_territory' => [
-                        'asc' => ['retail_territory' => SORT_ASC],
-                        'desc' => ['retail_territory' => SORT_DESC],
-                    ],
-                ],
-            ],
+            'sort' =>false, 
+//            'sort' => [
+//                'attributes' => [
+//                    'retail_dms_code' => [
+//                        'asc' => ['retail_dms_code' => SORT_ASC],
+//                        'desc' => ['retail_dms_code' => SORT_DESC],
+//                    ],
+//                    'retail_name' => [
+//                        'asc' => ['retail_name' => SORT_ASC],
+//                        'desc' => ['retail_name' => SORT_DESC],
+//                    ],
+//                    'retail_type' => [
+//                        'asc' => ['retail_type' => SORT_ASC],
+//                        'desc' => ['retail_type' => SORT_DESC],
+//                    ],
+//                    'retail_channel_type' => [
+//                        'asc' => ['retail_channel_type' => SORT_ASC],
+//                        'desc' => ['retail_channel_type' => SORT_DESC],
+//                    ],
+//                    'retail_zone' => [
+//                        'asc' => ['retail_zone' => SORT_ASC],
+//                        'desc' => ['retail_zone' => SORT_DESC],
+//                    ],
+//                    'retail_area' => [
+//                        'asc' => ['retail_area' => SORT_ASC],
+//                        'desc' => ['retail_area' => SORT_DESC],
+//                    ],
+//                    'retail_territory' => [
+//                        'asc' => ['retail_territory' => SORT_ASC],
+//                        'desc' => ['retail_territory' => SORT_DESC],
+//                    ],
+//                ],
+//            ],
             'pagination' => [
                 'pageSize' => 20,
             ],

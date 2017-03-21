@@ -5,9 +5,9 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Leaderboard by Volume';
+$this->title = 'Target VS Achievement';
 $this->miniTitle = 'Leaderboard Module';
-$this->subTitle = 'Leaderboard Ranking';
+$this->subTitle = 'Volume';
 $this->params['breadcrumbs'][] = $this->title;
 
 $year = date('Y', time());
@@ -31,9 +31,9 @@ if($currentMonth ==  $month && $currentYear == $year) {
 }
 
 ?>
-<div class="target-leaderboard">
+<div class="target-achv">
     
-    <?php echo $this->render('_search_leaderboard', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search_achv', ['model' => $searchModel]); ?>
 
     <?php 
     
@@ -80,13 +80,13 @@ if($currentMonth ==  $month && $currentYear == $year) {
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['leaderboard'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['achv'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> <b>Leaderboard Report (Month): </b>' . $monthFullName . ' | <b>Total Time Pass: </b>' . $timePass .'%',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> <b>Ranking (Month): </b>' . $monthFullName . ' | <b>Total Time Pass: </b>' . $timePass .'%',
             ],
         ]); ?>
     <?php Pjax::end(); ?>

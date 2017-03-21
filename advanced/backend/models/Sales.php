@@ -106,6 +106,7 @@ class Sales extends \yii\db\ActiveRecord
             'sales_date' => 'Sales Date',
             'created_at' => 'Upload Date',
             'created_by' => 'Created By',
+            'total_national' => 'Total',
             'D01' => '01',
             'D02' => '02',
             'D03' => '03',

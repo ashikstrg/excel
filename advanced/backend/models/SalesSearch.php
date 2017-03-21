@@ -850,10 +850,16 @@ class SalesSearch extends Sales
         $employeeName = $this->employee_name;
         $designation = $this->designation;    
         
-        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM sales')
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT employee_id) FROM sales WHERE (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)")
+                ->bindValue(':tm_employee_id', $this->tm_employee_id)
+                ->bindValue(':am_employee_id', $this->am_employee_id)
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
 			->queryScalar();
         
         $sql= "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
@@ -883,7 +889,7 @@ class SalesSearch extends Sales
             AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
             AND (am_employee_id=:am_employee_id or :am_employee_id is null)
             AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
-            GROUP BY employee_id'); ";
+            GROUP BY employee_id ORDER BY `#`');";
 
         $cmd  = Yii::$app->db->createCommand($sql); 
         $cmd->execute();
@@ -914,55 +920,56 @@ class SalesSearch extends Sales
                 ':end_date' => $dateRange[1]
             ],
             'totalCount' => $totalCount,
-            //'sort' =>false, to remove the table header sorting
-            'sort' => [
-                'attributes' => [
-                    'retail_dms_code' => [
-                        'asc' => ['retail_dms_code' => SORT_ASC],
-                        'desc' => ['retail_dms_code' => SORT_DESC],
-                    ],
-                    'retail_name' => [
-                        'asc' => ['retail_name' => SORT_ASC],
-                        'desc' => ['retail_name' => SORT_DESC],
-                    ],
-                    'retail_type' => [
-                        'asc' => ['retail_type' => SORT_ASC],
-                        'desc' => ['retail_type' => SORT_DESC],
-                    ],
-                    'retail_channel_type' => [
-                        'asc' => ['retail_channel_type' => SORT_ASC],
-                        'desc' => ['retail_channel_type' => SORT_DESC],
-                    ],
-                    'retail_zone' => [
-                        'asc' => ['retail_zone' => SORT_ASC],
-                        'desc' => ['retail_zone' => SORT_DESC],
-                    ],
-                    'retail_area' => [
-                        'asc' => ['retail_area' => SORT_ASC],
-                        'desc' => ['retail_area' => SORT_DESC],
-                    ],
-                    'retail_territory' => [
-                        'asc' => ['retail_territory' => SORT_ASC],
-                        'desc' => ['retail_territory' => SORT_DESC],
-                    ],
-                    'employee_id' => [
-                        'asc' => ['employee_id' => SORT_ASC],
-                        'desc' => ['employee_id' => SORT_DESC],
-                    ],
-                    'employee_name' => [
-                        'asc' => ['employee_name' => SORT_ASC],
-                        'desc' => ['employee_name' => SORT_DESC],
-                    ],
-                    'designation' => [
-                        'asc' => ['designation' => SORT_ASC],
-                        'desc' => ['designation' => SORT_DESC],
-                    ],
-                    'total' => [
-                        'asc' => ['total' => SORT_ASC],
-                        'desc' => ['total' => SORT_DESC],
-                    ],
-                ],
-            ],
+            'sort' =>false,
+//            'sort' => [
+//                'defaultOrder' => ['id'=>SORT_ASC],
+//                'attributes' => [
+//                    'retail_dms_code' => [
+//                        'asc' => ['retail_dms_code' => SORT_ASC],
+//                        'desc' => ['retail_dms_code' => SORT_DESC],
+//                    ],
+//                    'retail_name' => [
+//                        'asc' => ['retail_name' => SORT_ASC],
+//                        'desc' => ['retail_name' => SORT_DESC],
+//                    ],
+//                    'retail_type' => [
+//                        'asc' => ['retail_type' => SORT_ASC],
+//                        'desc' => ['retail_type' => SORT_DESC],
+//                    ],
+//                    'retail_channel_type' => [
+//                        'asc' => ['retail_channel_type' => SORT_ASC],
+//                        'desc' => ['retail_channel_type' => SORT_DESC],
+//                    ],
+//                    'retail_zone' => [
+//                        'asc' => ['retail_zone' => SORT_ASC],
+//                        'desc' => ['retail_zone' => SORT_DESC],
+//                    ],
+//                    'retail_area' => [
+//                        'asc' => ['retail_area' => SORT_ASC],
+//                        'desc' => ['retail_area' => SORT_DESC],
+//                    ],
+//                    'retail_territory' => [
+//                        'asc' => ['retail_territory' => SORT_ASC],
+//                        'desc' => ['retail_territory' => SORT_DESC],
+//                    ],
+//                    'employee_id' => [
+//                        'asc' => ['employee_id' => SORT_ASC],
+//                        'desc' => ['employee_id' => SORT_DESC],
+//                    ],
+//                    'employee_name' => [
+//                        'asc' => ['employee_name' => SORT_ASC],
+//                        'desc' => ['employee_name' => SORT_DESC],
+//                    ],
+//                    'designation' => [
+//                        'asc' => ['designation' => SORT_ASC],
+//                        'desc' => ['designation' => SORT_DESC],
+//                    ],
+//                    'total' => [
+//                        'asc' => ['total' => SORT_ASC],
+//                        'desc' => ['total' => SORT_DESC],
+//                    ],
+//                ],
+//            ],
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -1072,10 +1079,16 @@ class SalesSearch extends Sales
         $employeeName = $this->employee_name;
         $designation = $this->designation;    
         
-        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM sales')
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT employee_id) FROM sales WHERE (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)")
+                ->bindValue(':tm_employee_id', $this->tm_employee_id)
+                ->bindValue(':am_employee_id', $this->am_employee_id)
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
 			->queryScalar();
         
         $sql= "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
@@ -1087,7 +1100,7 @@ class SalesSearch extends Sales
                 )
             INTO @sql
             FROM sales;
-            SET @sql = CONCAT('SELECT @i:=@i+1 `sl`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
+            SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
             retail_territory, employee_id, employee_name, designation, ', @sql, ', SUM(price) AS total
             FROM sales, (SELECT @i:= 0) AS i
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
@@ -1105,7 +1118,7 @@ class SalesSearch extends Sales
             AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
             AND (am_employee_id=:am_employee_id or :am_employee_id is null)
             AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
-            GROUP BY employee_id'); ";
+            GROUP BY employee_id ORDER BY `#`'); ";
 
         $cmd  = Yii::$app->db->createCommand($sql); 
         $cmd->execute();
@@ -1136,60 +1149,60 @@ class SalesSearch extends Sales
                 ':end_date' => $dateRange[1]
             ],
             'totalCount' => $totalCount,
-            //'sort' =>false, to remove the table header sorting
-            'sort' => [
-                'defaultOrder' => ['sl'=>SORT_ASC],
-                'attributes' => [
-                    'retail_dms_code' => [
-                        'asc' => ['retail_dms_code' => SORT_ASC],
-                        'desc' => ['retail_dms_code' => SORT_DESC],
-                    ],
-                    'retail_name' => [
-                        'asc' => ['retail_name' => SORT_ASC],
-                        'desc' => ['retail_name' => SORT_DESC],
-                    ],
-                    'retail_type' => [
-                        'asc' => ['retail_type' => SORT_ASC],
-                        'desc' => ['retail_type' => SORT_DESC],
-                    ],
-                    'retail_channel_type' => [
-                        'asc' => ['retail_channel_type' => SORT_ASC],
-                        'desc' => ['retail_channel_type' => SORT_DESC],
-                    ],
-                    'retail_zone' => [
-                        'asc' => ['retail_zone' => SORT_ASC],
-                        'desc' => ['retail_zone' => SORT_DESC],
-                    ],
-                    'retail_area' => [
-                        'asc' => ['retail_area' => SORT_ASC],
-                        'desc' => ['retail_area' => SORT_DESC],
-                    ],
-                    'retail_territory' => [
-                        'asc' => ['retail_territory' => SORT_ASC],
-                        'desc' => ['retail_territory' => SORT_DESC],
-                    ],
-                    'employee_id' => [
-                        'asc' => ['employee_id' => SORT_ASC],
-                        'desc' => ['employee_id' => SORT_DESC],
-                    ],
-                    'employee_name' => [
-                        'asc' => ['employee_name' => SORT_ASC],
-                        'desc' => ['employee_name' => SORT_DESC],
-                    ],
-                    'designation' => [
-                        'asc' => ['designation' => SORT_ASC],
-                        'desc' => ['designation' => SORT_DESC],
-                    ],
-                    'total' => [
-                        'asc' => ['total' => SORT_ASC],
-                        'desc' => ['total' => SORT_DESC],
-                    ],
-                    'sl' => [
-                        'asc' => ['sl' => SORT_ASC],
-                        'desc' => ['sl' => SORT_DESC],
-                    ],
-                ],
-            ],
+            'sort' =>false,
+//            'sort' => [
+//                'defaultOrder' => ['sl'=>SORT_ASC],
+//                'attributes' => [
+//                    'retail_dms_code' => [
+//                        'asc' => ['retail_dms_code' => SORT_ASC],
+//                        'desc' => ['retail_dms_code' => SORT_DESC],
+//                    ],
+//                    'retail_name' => [
+//                        'asc' => ['retail_name' => SORT_ASC],
+//                        'desc' => ['retail_name' => SORT_DESC],
+//                    ],
+//                    'retail_type' => [
+//                        'asc' => ['retail_type' => SORT_ASC],
+//                        'desc' => ['retail_type' => SORT_DESC],
+//                    ],
+//                    'retail_channel_type' => [
+//                        'asc' => ['retail_channel_type' => SORT_ASC],
+//                        'desc' => ['retail_channel_type' => SORT_DESC],
+//                    ],
+//                    'retail_zone' => [
+//                        'asc' => ['retail_zone' => SORT_ASC],
+//                        'desc' => ['retail_zone' => SORT_DESC],
+//                    ],
+//                    'retail_area' => [
+//                        'asc' => ['retail_area' => SORT_ASC],
+//                        'desc' => ['retail_area' => SORT_DESC],
+//                    ],
+//                    'retail_territory' => [
+//                        'asc' => ['retail_territory' => SORT_ASC],
+//                        'desc' => ['retail_territory' => SORT_DESC],
+//                    ],
+//                    'employee_id' => [
+//                        'asc' => ['employee_id' => SORT_ASC],
+//                        'desc' => ['employee_id' => SORT_DESC],
+//                    ],
+//                    'employee_name' => [
+//                        'asc' => ['employee_name' => SORT_ASC],
+//                        'desc' => ['employee_name' => SORT_DESC],
+//                    ],
+//                    'designation' => [
+//                        'asc' => ['designation' => SORT_ASC],
+//                        'desc' => ['designation' => SORT_DESC],
+//                    ],
+//                    'total' => [
+//                        'asc' => ['total' => SORT_ASC],
+//                        'desc' => ['total' => SORT_DESC],
+//                    ],
+//                    'sl' => [
+//                        'asc' => ['sl' => SORT_ASC],
+//                        'desc' => ['sl' => SORT_DESC],
+//                    ],
+//                ],
+//            ],
             'pagination' => [
                 'pageSize' => 20,
             ],

@@ -3,6 +3,14 @@ use yii\helpers\Html;
 
 use backend\models\Notification;
 use backend\components\Common;
+// Top Menu Start
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use backend\components\MenuHelperTop;
+
+$admintopMenu = MenuHelperTop::getMenu();
+ksort($admintopMenu);
+// Top Menu End
 
 $employeeID = Yii::$app->session->get('employee_id');
 
@@ -33,17 +41,13 @@ if($notificationCount > 10) {
       </a>
       
       <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-          <ul class="nav navbar-nav">
-              <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                  </ul>
-              </li>
-          </ul>
-      </div>
+      <?php
+      echo Nav::widget([
+          'options' => ['class' => 'navbar-nav navbar-left'],
+          'items' => $admintopMenu,
+          'encodeLabels' => false,
+      ]);
+      ?>
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">

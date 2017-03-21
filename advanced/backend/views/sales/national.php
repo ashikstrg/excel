@@ -32,10 +32,11 @@ if(date('t', strtotime($year . '-' . $month . '-' . '01')) == 31) {
     $visibleDay29 = 1;
 }
 
-$this->title = 'M/D Sales Data (Volume)';
+$this->title = 'Model Wise Monthly Sales Data';
 $this->miniTitle = 'Sales Module';
-$this->subTitle = 'Model/Day wise sales data (Volume)';
+$this->subTitle = 'By Volume';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="sales-national">
     

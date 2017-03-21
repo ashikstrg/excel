@@ -6,9 +6,11 @@ use Yii;
 
 class Stock extends \yii\db\ActiveRecord
 {
+    public $totalInHand;
+    
     public static $validityIn = 'in';
     public static $validityOut = 'out';
-    
+
     public static function tableName()
     {
         return 'stock';
@@ -66,6 +68,7 @@ class Stock extends \yii\db\ActiveRecord
             'created_at' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
+            'totalInHand' => 'Total'
         ];
     }
 }

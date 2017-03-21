@@ -55,6 +55,17 @@ class StockController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionHand()
+    {
+        $searchModel = new StockSearch();
+        $dataProvider = $searchModel->hand(Yii::$app->request->queryParams);
+
+        return $this->render('hand', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionView($id)
     {

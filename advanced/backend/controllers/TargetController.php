@@ -67,6 +67,28 @@ class TargetController extends Controller
         ]);
     }
     
+    public function actionAchv()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->achv(Yii::$app->request->queryParams);
+
+        return $this->render('achv', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionAchv_val()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->achv_val(Yii::$app->request->queryParams);
+
+        return $this->render('achv_val', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     public function actionLeaderboard_value()
     {
         $searchModel = new TargetSearch();

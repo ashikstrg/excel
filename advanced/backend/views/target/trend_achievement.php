@@ -35,11 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
     $employee_id = array();
     $targetVol = array();
     $achievementVol = array();
+    $achievementPercent = array();
     foreach($dataProvider as $target) {
         $employee_id[] = $target->employee_id;
         $targetVol[] = (int) $target->fsm_vol;
         $achievementVol[] = (int) $target->fsm_vol_sales;
+        $achievementPercent[] = (int) round($target->achievement_percent);
     }
+    
+    $height = count($dataProvider) * 100;
  
     echo Highcharts::widget([
        'scripts'=> ['highcharts-more', 'modules/exporting', 'modules/drilldown'],
@@ -52,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'yAxis' => [
                'title' => ['text' => 'VOLUME']
             ],
-            'colors' => array('#6AC36A', '#FFD148'),
+            'colors' => array('#6AC36A', '#FFD148', '#3C8DBC'),
             'gradient' => array('enabled' => true),
             'credits' => array('enabled' => false),
             'exporting' => array('enabled' => true),
@@ -61,7 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'plotBackgroundColor' => '#ffffff',
                 'plotBorderWidth' => null,
                 'plotShadow' => true,
-                'type' => 'bar'
+                'type' => 'bar',
+                'height' => $height,
+                'zoomType' => 'x'
             ),
            'plotOptions' => array (
                 'series' => array (
@@ -73,7 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ), 
             'series' => [
                ['name' => 'Target', 'data' => $targetVol],
-               ['name' => 'Achievement', 'data' => $achievementVol]
+               ['name' => 'Achievement', 'data' => $achievementVol],
+               ['name' => 'Achievement Percentage', 'data' => $achievementPercent]
             ]
        ]
     ]);

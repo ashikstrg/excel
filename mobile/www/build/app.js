@@ -5,8 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 
 // Global Variable
-var paramsUrl = "http://45.64.135.139/~excelsts/advanced/backend/web/index.php";
-//var paramsUrl = "http://localhost/stsv3/excel/vc/v7/advanced/backend/web/index.php";
+//var paramsUrl = "http://45.64.135.139/~excelsts/advanced/backend/web/index.php";
+var paramsUrl = "http://localhost/stsv3/excel/vc/v7/advanced/backend/web/index.php";
 
 angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
 

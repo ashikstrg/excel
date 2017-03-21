@@ -109,7 +109,9 @@ class TargetSearch extends Target
         }
         
         $dataProvider = Target::find()
-                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_vol) AS fsm_vol', 'SUM(fsm_vol_sales) AS fsm_vol_sales'])
+                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 
+                    'SUM(fsm_vol) AS fsm_vol', 'SUM(fsm_vol_sales) AS fsm_vol_sales',
+                    'case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end AS achievement_percent'])
                 ->andFilterWhere(['like', 'target_date', $this->target_date])
                 ->andFilterWhere([
                     'tm_employee_id' => $this->tm_employee_id,
@@ -139,7 +141,8 @@ class TargetSearch extends Target
         }
         
         $dataProvider = Target::find()
-                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_val) AS fsm_val', 'SUM(fsm_val_sales) AS fsm_val_sales'])
+                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_val) AS fsm_val', 'SUM(fsm_val_sales) AS fsm_val_sales',
+                    'case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end AS achievement_percent'])
                 ->andFilterWhere(['like', 'target_date', $this->target_date])
                 ->andFilterWhere([
                     'tm_employee_id' => $this->tm_employee_id,
@@ -247,12 +250,13 @@ class TargetSearch extends Target
 			->queryScalar();
         
         $sql= "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
                         'MAX(IF(product_model_code = ''',
                         product_model_code,
-                        ''', fsm_vol, 0)) AS ',
+                        ''', fsm_vol_sales, 0)) AS ',
                         CONCAT('`', product_model_name, '`')
                     )
                 )
@@ -371,6 +375,225 @@ class TargetSearch extends Target
         return $dataProvider;
     }
     
+    public function achv($params) {
+        $product = array();
+
+        $this->load($params);
+
+        if (empty($this->retail_dms_code)) {
+            $this->retail_dms_code = null;
+        }
+
+        if (empty($this->retail_name)) {
+            $this->retail_name = null;
+        }
+
+        if (empty($this->retail_type)) {
+            $this->retail_type = null;
+        }
+
+        if (empty($this->retail_channel_type)) {
+            $this->retail_channel_type = null;
+        }
+
+        if (empty($this->retail_area)) {
+            $this->retail_area = null;
+        }
+
+        if (empty($this->retail_zone)) {
+            $this->retail_zone = null;
+        }
+
+        if (empty($this->retail_territory)) {
+            $this->retail_territory = null;
+        }
+
+        if (empty($this->employee_id)) {
+            $this->employee_id = null;
+        }
+
+        if (empty($this->employee_name)) {
+            $this->employee_name = null;
+        }
+
+        if (empty($this->designation)) {
+            $this->designation = null;
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        if (Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        } else if (Yii::$app->session->get('isAM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+            $this->csm_employee_id = null;
+        } else if (Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+
+        $retailDmsCode = $this->retail_dms_code;
+        $retailName = $this->retail_name;
+        $retailType = $this->retail_type;
+        $retailChannelType = $this->retail_channel_type;
+        $retailZone = $this->retail_zone;
+        $retailArea = $this->retail_area;
+        $retailTerritory = $this->retail_territory;
+        $employeeId = $this->employee_id;
+        $employeeName = $this->employee_name;
+        $designation = $this->designation;
+        $targetDate = $this->target_date;
+
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate . '-01'])->distinct()->all();
+
+
+        if (!empty($targetProductModel)) {
+            foreach ($targetProductModel as $value) {
+                $product[] = $value->product_model_code;
+            }
+        }
+
+        $productString = '"' . implode('","', $product) . '"';
+
+        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM target')
+                ->queryScalar();
+
+        $sql = "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'MAX(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', fsm_vol, 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
+                    )
+                )
+            INTO @sql
+            FROM target;
+            SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
+            retail_territory, employee_id, employee_name, designation, ', @sql, ', SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent 
+            FROM target 
+            WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
+            AND (retail_name like :retail_name or :retail_name is null)
+            AND (retail_type like :retail_type or :retail_type is null)
+            AND (retail_channel_type like :retail_channel_type or :retail_channel_type is null)
+            AND (retail_zone like :retail_zone or :retail_zone is null)
+            AND (retail_area like :retail_area or :retail_area is null)
+            AND (retail_territory like :retail_territory or :retail_territory is null)
+            AND (employee_id like :employee_id or :employee_id is null)
+            AND (employee_name like :employee_name or :employee_name is null)
+            AND (designation like :designation or :designation is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
+            GROUP BY employee_id'); ";
+
+        $cmd = Yii::$app->db->createCommand($sql);
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':retail_dms_code' => $retailDmsCode,
+                ':retail_name' => '%' . $retailName . '%',
+                ':retail_type' => '%' . $retailType . '%',
+                ':retail_channel_type' => '%' . $retailChannelType . '%',
+                ':retail_zone' => '%' . $retailZone . '%',
+                ':retail_area' => '%' . $retailArea . '%',
+                ':retail_territory' => '%' . $retailTerritory . '%',
+                ':employee_id' => '%' . $employeeId . '%',
+                ':employee_name' => '%' . $employeeName . '%',
+                ':designation' => '%' . $designation . '%',
+                ':target_date' => $targetDate . '-01',
+                ':tm_employee_id' => $this->tm_employee_id,
+                ':am_employee_id' => $this->am_employee_id,
+                ':csm_employee_id' => $this->csm_employee_id
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'defaultOrder' => ['achievement_percent' => SORT_DESC],
+                'attributes' => [
+                    'retail_dms_code' => [
+                        'asc' => ['retail_dms_code' => SORT_ASC],
+                        'desc' => ['retail_dms_code' => SORT_DESC],
+                    ],
+                    'retail_name' => [
+                        'asc' => ['retail_name' => SORT_ASC],
+                        'desc' => ['retail_name' => SORT_DESC],
+                    ],
+                    'retail_type' => [
+                        'asc' => ['retail_type' => SORT_ASC],
+                        'desc' => ['retail_type' => SORT_DESC],
+                    ],
+                    'retail_channel_type' => [
+                        'asc' => ['retail_channel_type' => SORT_ASC],
+                        'desc' => ['retail_channel_type' => SORT_DESC],
+                    ],
+                    'retail_zone' => [
+                        'asc' => ['retail_zone' => SORT_ASC],
+                        'desc' => ['retail_zone' => SORT_DESC],
+                    ],
+                    'retail_area' => [
+                        'asc' => ['retail_area' => SORT_ASC],
+                        'desc' => ['retail_area' => SORT_DESC],
+                    ],
+                    'retail_territory' => [
+                        'asc' => ['retail_territory' => SORT_ASC],
+                        'desc' => ['retail_territory' => SORT_DESC],
+                    ],
+                    'employee_id' => [
+                        'asc' => ['employee_id' => SORT_ASC],
+                        'desc' => ['employee_id' => SORT_DESC],
+                    ],
+                    'employee_name' => [
+                        'asc' => ['employee_name' => SORT_ASC],
+                        'desc' => ['employee_name' => SORT_DESC],
+                    ],
+                    'designation' => [
+                        'asc' => ['designation' => SORT_ASC],
+                        'desc' => ['designation' => SORT_DESC],
+                    ],
+                    'total_target' => [
+                        'asc' => ['total_target' => SORT_ASC],
+                        'desc' => ['total_target' => SORT_DESC],
+                    ],
+                    'total_achievement' => [
+                        'asc' => ['total_achievement' => SORT_ASC],
+                        'desc' => ['total_achievement' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+
     public function leaderboard_value($params)
     {
         $product = array();
@@ -466,13 +689,14 @@ class TargetSearch extends Target
 			->queryScalar();
         
         $sql= "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
                         'MAX(IF(product_model_code = ''',
                         product_model_code,
-                        ''', FORMAT(fsm_val, 2), 0)) AS ',
-                        product_model_name
+                        ''', FORMAT(fsm_val_sales, 2), 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
                     )
                 )
             INTO @sql
@@ -589,4 +813,224 @@ class TargetSearch extends Target
         
         return $dataProvider;
     }
+    
+    public function achv_val($params) {
+        $product = array();
+
+        $this->load($params);
+
+        if (empty($this->retail_dms_code)) {
+            $this->retail_dms_code = null;
+        }
+
+        if (empty($this->retail_name)) {
+            $this->retail_name = null;
+        }
+
+        if (empty($this->retail_type)) {
+            $this->retail_type = null;
+        }
+
+        if (empty($this->retail_channel_type)) {
+            $this->retail_channel_type = null;
+        }
+
+        if (empty($this->retail_area)) {
+            $this->retail_area = null;
+        }
+
+        if (empty($this->retail_zone)) {
+            $this->retail_zone = null;
+        }
+
+        if (empty($this->retail_territory)) {
+            $this->retail_territory = null;
+        }
+
+        if (empty($this->employee_id)) {
+            $this->employee_id = null;
+        }
+
+        if (empty($this->employee_name)) {
+            $this->employee_name = null;
+        }
+
+        if (empty($this->designation)) {
+            $this->designation = null;
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        if (Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        } else if (Yii::$app->session->get('isAM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+            $this->csm_employee_id = null;
+        } else if (Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+
+        $retailDmsCode = $this->retail_dms_code;
+        $retailName = $this->retail_name;
+        $retailType = $this->retail_type;
+        $retailChannelType = $this->retail_channel_type;
+        $retailZone = $this->retail_zone;
+        $retailArea = $this->retail_area;
+        $retailTerritory = $this->retail_territory;
+        $employeeId = $this->employee_id;
+        $employeeName = $this->employee_name;
+        $designation = $this->designation;
+        $targetDate = $this->target_date;
+
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate . '-01'])->distinct()->all();
+
+
+        if (!empty($targetProductModel)) {
+            foreach ($targetProductModel as $value) {
+                $product[] = $value->product_model_code;
+            }
+        }
+
+        $productString = '"' . implode('","', $product) . '"';
+
+        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM target')
+                ->queryScalar();
+
+        $sql = "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'MAX(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', FORMAT(fsm_val, 2), 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
+                    )
+                )
+            INTO @sql
+            FROM target;
+            SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
+            retail_territory, employee_id, employee_name, designation, ', @sql, ', FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), \"%\") AS achievement_percent 
+            FROM target 
+            WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
+            AND (retail_name like :retail_name or :retail_name is null)
+            AND (retail_type like :retail_type or :retail_type is null)
+            AND (retail_channel_type like :retail_channel_type or :retail_channel_type is null)
+            AND (retail_zone like :retail_zone or :retail_zone is null)
+            AND (retail_area like :retail_area or :retail_area is null)
+            AND (retail_territory like :retail_territory or :retail_territory is null)
+            AND (employee_id like :employee_id or :employee_id is null)
+            AND (employee_name like :employee_name or :employee_name is null)
+            AND (designation like :designation or :designation is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
+            GROUP BY employee_id'); ";
+
+        $cmd = Yii::$app->db->createCommand($sql);
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':retail_dms_code' => $retailDmsCode,
+                ':retail_name' => '%' . $retailName . '%',
+                ':retail_type' => '%' . $retailType . '%',
+                ':retail_channel_type' => '%' . $retailChannelType . '%',
+                ':retail_zone' => '%' . $retailZone . '%',
+                ':retail_area' => '%' . $retailArea . '%',
+                ':retail_territory' => '%' . $retailTerritory . '%',
+                ':employee_id' => '%' . $employeeId . '%',
+                ':employee_name' => '%' . $employeeName . '%',
+                ':designation' => '%' . $designation . '%',
+                ':target_date' => $targetDate . '-01',
+                ':tm_employee_id' => $this->tm_employee_id,
+                ':am_employee_id' => $this->am_employee_id,
+                ':csm_employee_id' => $this->csm_employee_id
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'defaultOrder' => ['achievement_percent' => SORT_DESC],
+                'attributes' => [
+                    'retail_dms_code' => [
+                        'asc' => ['retail_dms_code' => SORT_ASC],
+                        'desc' => ['retail_dms_code' => SORT_DESC],
+                    ],
+                    'retail_name' => [
+                        'asc' => ['retail_name' => SORT_ASC],
+                        'desc' => ['retail_name' => SORT_DESC],
+                    ],
+                    'retail_type' => [
+                        'asc' => ['retail_type' => SORT_ASC],
+                        'desc' => ['retail_type' => SORT_DESC],
+                    ],
+                    'retail_channel_type' => [
+                        'asc' => ['retail_channel_type' => SORT_ASC],
+                        'desc' => ['retail_channel_type' => SORT_DESC],
+                    ],
+                    'retail_zone' => [
+                        'asc' => ['retail_zone' => SORT_ASC],
+                        'desc' => ['retail_zone' => SORT_DESC],
+                    ],
+                    'retail_area' => [
+                        'asc' => ['retail_area' => SORT_ASC],
+                        'desc' => ['retail_area' => SORT_DESC],
+                    ],
+                    'retail_territory' => [
+                        'asc' => ['retail_territory' => SORT_ASC],
+                        'desc' => ['retail_territory' => SORT_DESC],
+                    ],
+                    'employee_id' => [
+                        'asc' => ['employee_id' => SORT_ASC],
+                        'desc' => ['employee_id' => SORT_DESC],
+                    ],
+                    'employee_name' => [
+                        'asc' => ['employee_name' => SORT_ASC],
+                        'desc' => ['employee_name' => SORT_DESC],
+                    ],
+                    'designation' => [
+                        'asc' => ['designation' => SORT_ASC],
+                        'desc' => ['designation' => SORT_DESC],
+                    ],
+                    'total_target' => [
+                        'asc' => ['total_target' => SORT_ASC],
+                        'desc' => ['total_target' => SORT_DESC],
+                    ],
+                    'total_achievement' => [
+                        'asc' => ['total_achievement' => SORT_ASC],
+                        'desc' => ['total_achievement' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+
 }

@@ -4,56 +4,12 @@ namespace backend\models;
 
 use Yii;
 
-/**
- * This is the model class for table "target".
- *
- * @property string $id
- * @property string $batch
- * @property string $retail_id
- * @property string $retail_dms_code
- * @property string $retail_name
- * @property string $retail_channel_type
- * @property string $retail_type
- * @property string $retail_zone
- * @property string $retail_area
- * @property string $retail_territory
- * @property string $hr_id
- * @property string $employee_id
- * @property string $employee_name
- * @property string $designation
- * @property string $fsm_vol
- * @property string $fsm_val
- * @property string $tm_parent
- * @property string $tm_employee_id
- * @property string $tm_name
- * @property string $tm_vol
- * @property string $tm_val
- * @property string $am_parent
- * @property string $am_employee_id
- * @property string $am_name
- * @property string $am_vol
- * @property string $am_val
- * @property string $csm_parent
- * @property string $csm_employee_id
- * @property string $csm_name
- * @property string $csm_vol
- * @property string $csm_val
- * @property string $product_name
- * @property string $product_model_code
- * @property string $product_model_name
- * @property string $product_type
- * @property string $target_date
- * @property string $created_at
- * @property string $created_by
- * @property string $updated_at
- * @property string $updated_by
- */
-
 class Target extends \yii\db\ActiveRecord
 {
     public $total_achv_percent;
     public $total_achv_percent_value;
     public $total;
+    public $achievement_percent;
 
     public static function tableName()
     {

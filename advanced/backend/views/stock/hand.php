@@ -5,50 +5,37 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'Leaderboard by Volume';
-$this->miniTitle = 'Leaderboard Module';
-$this->subTitle = 'Leaderboard Ranking';
+$this->title = 'Stock In Hand';
+$this->miniTitle = 'Stock Module';
+$this->subTitle = 'Model wise';
 $this->params['breadcrumbs'][] = $this->title;
-
-$year = date('Y', time());
-$month = date('m', time());
-$monthFullName = date('F', time());
-if(!empty($searchModel->target_date)) {
-    $monthYear = explode('-', $searchModel->target_date);
-    $year = $monthYear[0];
-    $month = $monthYear[1];
-    $monthFullName = date('F', mktime(0, 0, 0, $monthYear[1], 10));
-}
-
-$currentMonth = date('m', time());
-$currentYear = date('Y', time());
-if($currentMonth ==  $month && $currentYear == $year) {
-    $timePass = number_format(((date('d', time()) - 1) / date('t', time())) * 100, 2);
-} elseif(($currentMonth >  $month && $currentYear >= $year) || ($currentMonth <=  $month && $currentYear > $year)) {
-    $timePass = 100;
-} else {
-    $timePass = 0;
-}
-
 ?>
-<div class="target-leaderboard">
-    
-    <?php echo $this->render('_search_leaderboard', ['model' => $searchModel]); ?>
+<div class="stock-batch-index">
 
     <?php 
-    
     $gridColumns = [
-        
-        ['class' => 'yii\grid\SerialColumn'],
+        ['class' => 'kartik\grid\SerialColumn'],
+
+        'product_type', 
+        'product_model_name', 
+        [
+            'attribute' => 'product_model_code',
+            'pageSummary'=>'Total',
+            'pageSummaryOptions'=>['class'=>'text-right text-warning'],
+        ],
+        [
+            'attribute' => 'totalInHand',
+            'pageSummary' => true
+        ],
     ];
 
     $fullExportMenu = ExportMenu::widget([
         'dataProvider' => $dataProvider,
-        //'columns' => $gridColumns,
+        'columns' => $gridColumns,
         'target' => ExportMenu::TARGET_BLANK,
         'fontAwesome' => true,
         //'hiddenColumns'=>[0],
-        //'noExportColumns'=>[0],
+        // 'noExportColumns'=>[0],
         'pjaxContainerId' => 'kv-pjax-container',
         'exportConfig' => [
             'HTML' => false,
@@ -69,9 +56,11 @@ if($currentMonth ==  $month && $currentYear == $year) {
     <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            //'columns' => $gridColumns,
+            'columns' => $gridColumns,
             'pjax' => true,
             'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+            'showFooter'=>true,
+            'showPageSummary'=> true,
             'export' => [
                 'label' => 'Page',
                 'fontAwesome' => true,
@@ -80,13 +69,13 @@ if($currentMonth ==  $month && $currentYear == $year) {
                 '{export}',
                 $fullExportMenu,
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['leaderboard'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['hand'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
                 ],
             ],
 
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading'=> '<i class="glyphicon glyphicon-book"></i> <b>Leaderboard Report (Month): </b>' . $monthFullName . ' | <b>Total Time Pass: </b>' . $timePass .'%',
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of Stock Raw Data',
             ],
         ]); ?>
     <?php Pjax::end(); ?>
@@ -96,7 +85,7 @@ if($currentMonth ==  $month && $currentYear == $year) {
 <div class="box-footer">
     <div class="row">
         <div class="col-md-12">
-            <i>* Ranking by <b>achievement percentage</b> in ascending order by default.</i>
+            <i>* If you find any missing stock data, please contact with system administration.</i>
         </div>
     </div>
 </div>
