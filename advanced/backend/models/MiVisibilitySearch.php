@@ -13,8 +13,8 @@ class MiVisibilitySearch extends MiVisibility
     public function rules()
     {
         return [
-            [['id', 'hr_id'], 'integer'],
-            [['brand', 'model', 'posm', 'image', 'image_src_filename', 'image_web_filename', 'hr_employee_id', 'hr_name', 'hr_designation', 'hr_employee_type', 'am_employee_id', 'am_name', 'csm_employee_id', 'csm_name', 'created_at', 'updated_at'], 'safe'],
+            [['id'], 'integer'],
+            [['brand', 'model', 'posm', 'retail_type', 'store_size', 'owner', 'distributor_type', 'sales_team', 'rsa', 'fsm_type', 'region', 'district', 'town', 'hr_employee_id', 'hr_name', 'hr_designation', 'hr_employee_type', 'am_employee_id', 'am_name', 'csm_employee_id', 'csm_name', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -48,9 +48,16 @@ class MiVisibilitySearch extends MiVisibility
         $query->andFilterWhere(['like', 'brand', $this->brand])
             ->andFilterWhere(['like', 'model', $this->model])
             ->andFilterWhere(['like', 'posm', $this->posm])
-            ->andFilterWhere(['like', 'image', $this->image])
-            ->andFilterWhere(['like', 'image_src_filename', $this->image_src_filename])
-            ->andFilterWhere(['like', 'image_web_filename', $this->image_web_filename])
+            ->andFilterWhere(['like', 'retail_type', $this->retail_type])
+            ->andFilterWhere(['like', 'store_size', $this->store_size])
+            ->andFilterWhere(['like', 'owner', $this->owner])
+            ->andFilterWhere(['like', 'distributor_type', $this->distributor_type])
+            ->andFilterWhere(['like', 'sales_team', $this->sales_team])
+            ->andFilterWhere(['like', 'rsa', $this->rsa])
+            ->andFilterWhere(['like', 'fsm_type', $this->fsm_type])
+            ->andFilterWhere(['like', 'region', $this->region])
+            ->andFilterWhere(['like', 'district', $this->district])
+            ->andFilterWhere(['like', 'town', $this->town])
             ->andFilterWhere(['like', 'hr_employee_id', $this->hr_employee_id])
             ->andFilterWhere(['like', 'hr_name', $this->hr_name])
             ->andFilterWhere(['like', 'hr_designation', $this->hr_designation])

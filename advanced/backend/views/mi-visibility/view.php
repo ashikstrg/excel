@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = 'MI Visibility Preview';
+$this->title = 'MI Infra and Visibility Preview';
 $this->miniTitle = 'MI Module';
 $this->subTitle = $model->brand;
-$this->params['breadcrumbs'][] = ['label' => 'MI Visibility Configuration', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'MI Infra and Visibility Configuration', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mi-visibility-view">
@@ -16,6 +16,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'brand',
             'model',
+            'retail_type',
+            'store_size',
+            'owner',
+            'distributor_type',
+            'sales_team',
+            'rsa',
+            'fsm_type',
+            'region',
+            'district',
+            'town',
             'posm',
         ],
     ]) ?>

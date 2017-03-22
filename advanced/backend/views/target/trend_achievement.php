@@ -1,10 +1,11 @@
 <?php
+
 use miloschuman\highcharts\Highcharts;
 
 $year = date('Y', time());
 $month = date('m', time());
 $monthFullName = date('F', time());
-if(!empty($searchModel->target_date)) {
+if (!empty($searchModel->target_date)) {
     $monthYear = explode('-', $searchModel->target_date);
     $year = $monthYear[0];
     $month = $monthYear[1];
@@ -17,44 +18,43 @@ $this->subTitle = '<b>Target Month: </b>' . $monthFullName . ', ' . $year;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="target-trend_achievement">
-    
+
     <?php echo $this->render('_search_trend_achievement', ['model' => $searchModel]); ?>
 
-    <?php  
-    
+    <?php
     $currentMonth = date('m', time());
     $currentYear = date('Y', time());
-    if($currentMonth ==  $month && $currentYear == $year) {
+    if ($currentMonth == $month && $currentYear == $year) {
         $timePass = round(((date('d', time()) - 1) / date('t', time())) * 100);
-    } elseif(($currentMonth >  $month && $currentYear >= $year) || ($currentMonth <=  $month && $currentYear > $year)) {
+    } elseif (($currentMonth > $month && $currentYear >= $year) || ($currentMonth <= $month && $currentYear > $year)) {
         $timePass = 100;
     } else {
         $timePass = 0;
     }
-    
+
     $employee_id = array();
     $targetVol = array();
     $achievementVol = array();
     $achievementPercent = array();
-    foreach($dataProvider as $target) {
+    foreach ($dataProvider as $target) {
         $employee_id[] = $target->employee_id;
         $targetVol[] = (int) $target->fsm_vol;
         $achievementVol[] = (int) $target->fsm_vol_sales;
         $achievementPercent[] = (int) round($target->achievement_percent);
     }
-    
-    $height = count($dataProvider) * 100;
- 
+
+    $height = count($dataProvider) * 80;
+
     echo Highcharts::widget([
-       'scripts'=> ['highcharts-more', 'modules/exporting', 'modules/drilldown'],
-       'options' => [
+        'scripts' => ['highcharts-more', 'modules/exporting', 'modules/drilldown'],
+        'options' => [
             'title' => ['text' => 'Time Pass: ' . $timePass . '%'],
             'xAxis' => [
-               'categories' => $employee_id,
-               'type' => 'category'
+                'categories' => $employee_id,
+                'type' => 'category'
             ],
             'yAxis' => [
-               'title' => ['text' => 'VOLUME']
+                'title' => ['text' => 'VOLUME']
             ],
             'colors' => array('#6AC36A', '#FFD148', '#3C8DBC'),
             'gradient' => array('enabled' => true),
@@ -69,24 +69,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 'height' => $height,
                 'zoomType' => 'x'
             ),
-           'plotOptions' => array (
-                'series' => array (
+            'plotOptions' => array(
+                'series' => array(
                     'borderWidth' => 0,
                     'dataLabels' => array(
                         'enabled' => true,
                     ),
                 ),
-            ), 
+            ),
             'series' => [
-               ['name' => 'Target', 'data' => $targetVol],
-               ['name' => 'Achievement', 'data' => $achievementVol],
-               ['name' => 'Achievement Percentage', 'data' => $achievementPercent]
+                ['name' => 'Target', 'data' => $targetVol],
+                ['name' => 'Achievement', 'data' => $achievementVol],
+                [
+                    'type' => 'line',
+                    'name' => 'Achievement Percentage',
+                    'tooltip' => [
+                        'pointFormat' => '<span style="color:{series.color}">{series.name}: </span>{point.y}%<br/>',
+                    ],
+                    'dataLabels' => [
+                        'formatter' => new yii\web\JsExpression('function(){ return this.y + "%"; }')
+                    ],
+                    'data' => $achievementPercent,
+                ]
             ]
-       ]
+        ]
     ]);
-    
     ?>
-    
+
 </div>
 
 <div class="box-footer">

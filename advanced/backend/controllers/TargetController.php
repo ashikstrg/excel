@@ -23,6 +23,28 @@ class TargetController extends Controller
         ];
     }
     
+    public function actionTrend_achv_model()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->trend_achv_model(Yii::$app->request->queryParams);
+
+        return $this->render('trend_achv_model', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionTrend_achv_model_val()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->trend_achv_model_val(Yii::$app->request->queryParams);
+
+        return $this->render('trend_achv_model_val', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     public function actionTrend_achievement()
     {
         $searchModel = new TargetSearch();

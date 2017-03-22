@@ -1,10 +1,10 @@
 <?php
 
-$this->title = 'Visibility Add';
+$this->title = 'Add Infra and Visibility';
 $this->miniTitle = 'MI Module';
-$this->subTitle = 'MI Visibility Form';
+$this->subTitle = 'MI Infra and Visibility Form';
 
-$this->params['breadcrumbs'][] = ['label' => 'MI Visibility Configuration', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'MI Infra and Visibility Configuration', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mi-visibility-create">

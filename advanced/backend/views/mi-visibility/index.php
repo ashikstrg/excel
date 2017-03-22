@@ -20,6 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
         
         'brand',
         'model',
+        'retail_type',
+        'store_size',
+        'owner',
+        'distributor_type',
+        'sales_team',
+        'rsa',
+        'fsm_type',
+        'region',
+        'district',
+        'town',
         'posm',
         [
             'attribute' => 'Image',
@@ -29,6 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
               return '<img src="'.Yii::$app->homeUrl. '/../uploads/mi/image/'.$model->image_web_filename.'" width="50px" height="auto">'; else return 'no image';
             },
         ],
+        'hr_employee_id',
+        'hr_name',
+        'hr_designation',
         'created_at',
         'updated_at',
     

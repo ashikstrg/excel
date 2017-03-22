@@ -92,6 +92,76 @@ class TargetSearch extends Target
         return $dataProvider;
     }
     
+    public function trend_achv_model($params) {
+        
+        $this->load($params);
+
+        if (Yii::$app->session->get('isFSM')) {
+            $this->employee_id = Yii::$app->session->get('employee_id');
+        } else if (Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+        } else if (Yii::$app->session->get('isAM')) {
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+        } else if (Yii::$app->session->get('isCSM')) {
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        $dataProvider = Target::find()
+                ->select(["CONCAT(product_model_name, ' (', product_model_code, ')') AS product_model_name",
+                    'SUM(fsm_vol) AS fsm_vol', 'SUM(fsm_vol_sales) AS fsm_vol_sales',
+                    'case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end AS achievement_percent'])
+                ->andFilterWhere(['like', 'target_date', $this->target_date])
+                ->andFilterWhere([
+                    'employee_id' => $this->employee_id,
+                    'tm_employee_id' => $this->tm_employee_id,
+                    'am_employee_id' => $this->am_employee_id,
+                    'csm_employee_id' => $this->csm_employee_id
+                ])
+                ->groupBy(['product_model_code'])
+                ->all();
+
+        return $dataProvider;
+    }
+    
+    public function trend_achv_model_val($params) {
+        
+        $this->load($params);
+
+        if (Yii::$app->session->get('isFSM')) {
+            $this->employee_id = Yii::$app->session->get('employee_id');
+        } else if (Yii::$app->session->get('isTM')) {
+            $this->tm_employee_id = Yii::$app->session->get('employee_id');
+        } else if (Yii::$app->session->get('isAM')) {
+            $this->am_employee_id = Yii::$app->session->get('employee_id');
+        } else if (Yii::$app->session->get('isCSM')) {
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        $dataProvider = Target::find()
+                ->select(["CONCAT(product_model_name, ' (', product_model_code, ')') AS product_model_name",
+                    'SUM(fsm_val) AS fsm_val', 'SUM(fsm_val_sales) AS fsm_val_sales',
+                    'case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end AS achievement_percent'])
+                ->andFilterWhere(['like', 'target_date', $this->target_date])
+                ->andFilterWhere([
+                    'employee_id' => $this->employee_id,
+                    'tm_employee_id' => $this->tm_employee_id,
+                    'am_employee_id' => $this->am_employee_id,
+                    'csm_employee_id' => $this->csm_employee_id
+                ])
+                ->groupBy(['product_model_code'])
+                ->all();
+
+        return $dataProvider;
+    }
+
     public function trend_achievement($params)
     {
         $this->load($params);

@@ -101,7 +101,7 @@ class MiVisibilityController extends Controller
             }
             
             if($model->save()) {
-                Yii::$app->session->setFlash('success', 'MI Visibility has successfully been added.');            
+                Yii::$app->session->setFlash('success', 'MI Infra & Visibility has successfully been added.');            
                 return $this->redirect(['view', 'id' => $model->id]);
             }  else {
                 
@@ -145,7 +145,7 @@ class MiVisibilityController extends Controller
             }
             
             if($model->save()) {
-                Yii::$app->session->setFlash('success', 'MI Visibility has successfully been updated.');   
+                Yii::$app->session->setFlash('success', 'MI Infra and Visibility has successfully been updated.');   
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
