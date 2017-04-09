@@ -2,20 +2,17 @@
 
 use yii\helpers\Html;
 
+$this->title = 'HR Add (Management)';
+$this->miniTitle = 'HR Module';
+$this->subTitle = 'HR Form (Management)';
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\HrManagement */
-
-$this->title = 'Create Hr Management';
-$this->params['breadcrumbs'][] = ['label' => 'Hr Managements', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'HR Config (Management)', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hr-management-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model
     ]) ?>
 
 </div>

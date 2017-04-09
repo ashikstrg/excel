@@ -17,7 +17,15 @@ use kartik\widgets\DatePicker;
 
     <div class="row">
         <div class="col-md-8">
-            &nbsp; 
+            <?php
+            
+            if(!Yii::$app->session->get('isTM')) {
+                echo Html::a('<i class="glyphicon glyphicon-group"></i> TM wise Leaderboard', ['leaderboard_value_tm'], ['class' => 'btn btn-primary', 'title'=> 'Refresh']); 
+            } else {
+                echo '&nbsp;';
+            }
+
+            ?> 
         </div>
         <div class="col-md-3">
             <div class="pull-right">

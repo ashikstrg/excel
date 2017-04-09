@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
         ['class' => 'yii\grid\SerialColumn'],
         
+        'batch',
         'hr_employee_id',
         'hr_name',
         'hr_designation',

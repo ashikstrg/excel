@@ -2,86 +2,93 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\widgets\DepDrop;
+use yii\helpers\Url; 
+use kartik\widgets\DatePicker;
+use kartik\widgets\FileInput;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\HrManagement */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="hr-management-form">
+<div class="hr-trainer-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'designation_id')->textInput(['maxlength' => true]) ?>
+    <div class="row">
 
-    <?= $form->field($model, 'designation')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-6">
 
-    <?= $form->field($model, 'employee_type_id')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'employee_id')->textInput(['placeholder' => 'Enter Employee ID', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'employee_type')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['placeholder' => 'Enter Name', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'employee_id')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'status')->dropDownList(['' => 'Select Status', 'Active' => 'Active', 'Inactive' => 'Inactive', 'Resigned' => 'Resigned']) ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'joining_date')->widget(DatePicker::classname(), [
+                'options' => ['placeholder' => 'Enter Joining Date'],
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ]); ?>
 
-    <?= $form->field($model, 'status')->dropDownList([ 'Active' => 'Active', 'Inactive' => 'Inactive', 'Resigned' => 'Resigned', ], ['prompt' => '']) ?>
+            <?= $form->field($model, 'leaving_date')->widget(DatePicker::classname(), [
+                'options' => ['placeholder' => 'Enter Leaving Date'],
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ]); ?>
 
-    <?= $form->field($model, 'joining_date')->textInput() ?>
+            <?= $form->field($model, 'image')->widget(FileInput::classname(), [
+                  'options' => ['accept' => 'image/*'],
+                   'pluginOptions' => [
+                        'allowedFileExtensions'=>['jpg','gif','png'],
+                        'showUpload' => false,
+                        'initialPreview' => [
+                            $model->image_web_filename ? Html::img(Yii::$app->homeUrl . '/../uploads/hr/' . $model->image_web_filename) : null, // checks the models to display the preview
+                        ],
+                        'overwriteInitial' => false,
+                    ],
+              ]);   ?>
 
-    <?= $form->field($model, 'leaving_date')->textInput() ?>
+            <?= $form->field($model, 'contact_no_official')->textInput(['placeholder' => 'Enter Contact No (Official)', 'maxlength' => true]) ?>
+            
+            <?= $form->field($model, 'contact_no_personal')->textInput(['placeholder' => 'Enter Contact No (Personal)', 'maxlength' => true]) ?>
+            
+        </div>
 
-    <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-6">
+            
+            <?= $form->field($model, 'name_immergency_contact_person')->textInput(['placeholder' => 'Enter Name (Emergency Contact Person)', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'image_src_filename')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'relation_immergency_contact_person')->textInput(['placeholder' => 'Enter Relation (Emergency Contact Person)', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'image_web_filename')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'contact_no_immergency')->textInput(['placeholder' => 'Enter Contact No (Emergency Contact Person)', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contact_no_official')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'email_address_official')->textInput(['placeholder' => 'Enter Official Email Address', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contact_no_personal')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'email_address')->textInput(['placeholder' => 'Enter Personal Email Address', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'name_immergency_contact_person')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'blood_group')->dropDownList(['' => 'Select Blood Group', 'A+' => 'A+', 'A-' => 'A-', 'B+' => 'B+', 'B-' => 'B-', 'O+' => 'O+', 'O-' => 'O-', 'AB+' => 'AB+', 'AB-' => 'AB-']) ?>
 
-    <?= $form->field($model, 'relation_immergency_contact_person')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'permanent_address')->textInput(['placeholder' => 'Enter Permanent Address', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contact_no_immergency')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'present_address')->textInput(['placeholder' => 'Enter Present Address', 'maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email_address')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'email_address_official')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'blood_group')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'graduation_status')->dropDownList([ 'Graduated' => 'Graduated', 'Pursuing' => 'Pursuing', ], ['prompt' => '']) ?>
-
-    <?= $form->field($model, 'educational_qualification')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'educational_institute')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'educational_qualification_second_last')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'educational_institute_second_last')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'previous_experience')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'previous_experience_two')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'permanent_address')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'present_address')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'user_id')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="box-footer">
+        <div class="row">
+            <div class="col-md-6">
+                <?= Html::submitButton($model->isNewRecord ? 'Add HR (Management)' : 'Update HR (Management)', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <div class="col-md-6">
+                <div class="pull-right">
+                <?= Html::resetButton('Reset Form', ['class' => 'btn btn-danger']) ?>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

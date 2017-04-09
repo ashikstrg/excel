@@ -1247,12 +1247,12 @@ class AppbasicController extends Controller {
 
                             if ($value == 'Yes') {
 
-                                $checklist .= '<div>' . '<b>Question: </b>' . $questionArray[$key] . ', <b> Answer: </b>' . $value . '</div>';
+                                $checklist .= '<div>' . '<b>Question: </b>' . $questionArray[$key] . ', <b> Answer: </b>' . $value . '.</div> ';
                             } else if ($value == 'No') {
 
                                 if (isset($answer->remark->$key) && $answer->remark->$key != '') {
 
-                                    $checklist .= '<div>' . '<b>Question: </b>' . $questionArray[$key] . ', <b> Answer: </b>' . $value . ', <b>Review: </b>' . $answer->remark->$key . '</div>';
+                                    $checklist .= '<div>' . '<b>Question: </b>' . $questionArray[$key] . ', <b> Answer: </b>' . $value . ', <b>Review: </b>' . $answer->remark->$key . '.</div> ';
                                 } else {
 
                                     $error = true;

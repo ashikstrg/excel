@@ -31,6 +31,7 @@ class Travel extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'batch' => 'Token No',
             'hr_employee_id' => 'Employee ID',
             'hr_name' => 'Name',
             'hr_designation' => 'Designation',

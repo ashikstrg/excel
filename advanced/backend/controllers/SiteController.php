@@ -191,6 +191,14 @@ class SiteController extends Controller
                 Yii::$app->session->set('isSales', 0);
                 Yii::$app->session->set('isFSM', 0);
                 
+            } else if (Yii::$app->session->get('userRole') == 'Management') {
+                
+                $hrModel = \backend\models\HrManagement::find()->select(['id', 'name', 'employee_id', 'designation', 'joining_date', 'image_web_filename'])->where(['user_id' => Yii::$app->user->identity->id])->one();
+                
+                Yii::$app->session->set('isAdmin', 0);
+                Yii::$app->session->set('isSales', 0);
+                Yii::$app->session->set('isFSM', 0);
+                
             } 
             
             if($hrModel->designation == 'TM') {

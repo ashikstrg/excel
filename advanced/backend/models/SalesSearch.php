@@ -35,13 +35,12 @@ class SalesSearch extends Sales
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
         
@@ -72,7 +71,6 @@ class SalesSearch extends Sales
             'csm_parent' => $this->csm_parent,
             'product_id' => $this->product_id,
             'price' => $this->price,
-            'sales_date' => $this->sales_date,
             'created_at' => $this->created_at,
         ]);
 
@@ -98,6 +96,7 @@ class SalesSearch extends Sales
             ->andFilterWhere(['like', 'product_color', $this->product_color])
             ->andFilterWhere(['like', 'product_type', $this->product_type])
             ->andFilterWhere(['like', 'imei_no', $this->imei_no])
+            ->andFilterWhere(['like', 'sales_date', $this->sales_date])
             ->andFilterWhere(['like', 'created_by', $this->created_by]);
 
         return $dataProvider;

@@ -11,21 +11,13 @@ use kartik\widgets\DatePicker;
 <div class="stock-search_daily">
     
     <?php $form = ActiveForm::begin([
-        'action' => ['leaderboard'],
+        'action' => ['leaderboard_tm'],
         'method' => 'get',
     ]); ?>
 
     <div class="row">
         <div class="col-md-8">
-            <?php
-            
-            if(!Yii::$app->session->get('isTM')) {
-                echo Html::a('<i class="glyphicon glyphicon-group"></i> TM wise Leaderboard', ['leaderboard_tm'], ['class' => 'btn btn-primary', 'title'=> 'Refresh']); 
-            } else {
-                echo '&nbsp;';
-            }
-
-            ?>
+            &nbsp;
         </div>
         
         <div class="col-md-3">

@@ -1,66 +1,131 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\HrManagementSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+use kartik\export\ExportMenu;
 
-$this->title = 'Hr Managements';
+$this->title = 'HR Configuration (Management)';
+$this->miniTitle = 'HR Module';
+$this->subTitle = 'HR Data (Management)';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hr-management-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php 
+    $gridColumns = [
+        ['class' => '\kartik\grid\CheckboxColumn'], // 0
+        ['class' => 'yii\grid\ActionColumn'], // 1
+        ['class' => 'yii\grid\SerialColumn'], // 2
 
-    <p>
-        <?= Html::a('Create Hr Management', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+        'employee_id', // 3
+        'name', // 4
+        [
+            'attribute' => 'Image',
+            'format' => 'raw',
+            'value' => function ($model) {   
+            if ($model->image_web_filename!='')
+              return '<img src="'.Yii::$app->homeUrl. '/../uploads/hr/'.$model->image_web_filename.'" width="50px" height="auto">'; else return 'no image';
+            },
+        ], // 5
+        'joining_date', // 8
+        'leaving_date', // 9
+        'contact_no_official', // 10
+        'contact_no_personal', //11
+        'name_immergency_contact_person', // 12
+        'relation_immergency_contact_person', // 13
+        'contact_no_immergency', // 14
+        'email_address_official:email', // 15
+        'email_address:email', // 16
+        'permanent_address', // 21
+        'present_address', // 22
+        'blood_group', // 23
+        'status', // 32  
+        'created_at', // 36
+        'created_by', // 37
+        'updated_at', // 38
+        'updated_by', // 39
+    ];
+
+    $fullExportMenu = ExportMenu::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'designation_id',
-            'designation',
-            'employee_type_id',
-            'employee_type',
-            // 'employee_id',
-            // 'name',
-            // 'status',
-            // 'joining_date',
-            // 'leaving_date',
-            // 'image',
-            // 'image_src_filename',
-            // 'image_web_filename',
-            // 'contact_no_official',
-            // 'contact_no_personal',
-            // 'name_immergency_contact_person',
-            // 'relation_immergency_contact_person',
-            // 'contact_no_immergency',
-            // 'email_address:email',
-            // 'email_address_official:email',
-            // 'blood_group',
-            // 'graduation_status',
-            // 'educational_qualification',
-            // 'educational_institute',
-            // 'educational_qualification_second_last',
-            // 'educational_institute_second_last',
-            // 'previous_experience',
-            // 'previous_experience_two',
-            // 'permanent_address',
-            // 'present_address',
-            // 'created_at',
-            // 'created_by',
-            // 'updated_at',
-            // 'updated_by',
-            // 'user_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
+        'columns' => $gridColumns,
+        'target' => ExportMenu::TARGET_BLANK,
+        'fontAwesome' => true,
+        'hiddenColumns'=>[0, 1, 5],
+        'noExportColumns'=>[0, 1, 5],
+        'pjaxContainerId' => 'kv-pjax-container',
+        'exportConfig' => [
+            'HTML' => false,
+            'TXT' => false,
         ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+        'dropdownOptions' => [
+            'label' => 'Full',
+            'class' => 'btn btn-default',
+            'itemsBefore' => [
+                '<li class="dropdown-header">Export All Data</li>',
+            ],
+        ],
+    ]);
+
+    ?>
+
+    <?php Pjax::begin(); ?>    
+    <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => $gridColumns,
+            'pjax' => true,
+            'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+            'export' => [
+                'label' => 'Page',
+                'fontAwesome' => true,
+            ],
+            'toolbar' =>  [
+                '{export}',
+                $fullExportMenu,
+                ['content'=>
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'], ['class' => 'btn btn-success']) . ' '.
+                    Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['class' => 'btn btn-warning', 'title'=> 'Refresh'])
+                ],
+            ],
+
+            'panel' => [
+                'type' => GridView::TYPE_PRIMARY,
+                'heading'=> '<i class="glyphicon glyphicon-book"></i> List of HR',
+                'after' => html::button('<i class="glyphicon glyphicon-remove"></i> Inactive Selected HR', ['class' => 'btn btn-danger mdelete pull-right']) . '<div class="clearfix"></div>'
+            ],
+        ]); ?>
+    <?php Pjax::end(); ?>
+    
+</div>
+
+<div class="box-footer">
+    <div class="row">
+        <div class="col-md-12">
+            <i>* HR should not be deleted without Super Admin privilege.</i>
+        </div>
+    </div>
+</div>
+
+<?php 
+
+    $this->registerJs(' 
+
+    $(document).ready(function(){
+    $(\'.mdelete\').click(function(){
+
+        var keys = $(\'#w4\').yiiGridView(\'getSelectedRows\');
+          $.ajax({
+            type: \'POST\',
+            url : \'mdelete\',
+            data : {row_id: keys},
+            success : function() {
+              $(this).closest(\'tr\').remove(); //or whatever html you use for displaying rows
+            }
+        });
+
+    });
+    });', \yii\web\View::POS_READY);
+
+?>

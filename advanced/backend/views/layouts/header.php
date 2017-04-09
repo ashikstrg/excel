@@ -249,6 +249,12 @@ if($notificationCount > 10) {
                                 'Profile', ['/hr-trainer/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
                         );
                     }
+                    else if(Yii::$app->session->get('userRole') == 'Management') {
+                        echo Html::a(
+                                'Profile', ['/hr-management/profile', 'id' => Yii::$app->session->get('hrId')], ['class' => 'btn btn-default btn-flat']
+                        );
+                    }
+                    
                     ?>
                 </div>
                 <div class="pull-right">

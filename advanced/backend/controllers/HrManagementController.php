@@ -25,7 +25,6 @@ use common\models\User;
 
 class HrManagementController extends Controller
 {
-
     public function behaviors()
     {
         return [
@@ -56,51 +55,16 @@ class HrManagementController extends Controller
         ]);
     }
     
-    public static function getDesignationParent($parent) {
-
-        $data = HrManagement::find()->where(['designation_id'=> $parent])->select(['employee_id as id', 'CONCAT(employee_id, " - ", name) as name'])->asArray()->all();
-        $value = (count($data) == 0) ? ['' => ''] : $data;
-
-        return $value;
-    }
-    
-    public function actionFind_manager() 
-    {
-
-        $out = [];
-        if (isset($_POST['depdrop_parents'])) {
-
-            $dependent = $_POST['depdrop_parents'];
-
-            $hrDesignationModel = HrDesignation::find()->select('parent')->where(['id' => $dependent[0]])->one();
-
-            if ($hrDesignationModel != null) {
-                $parent = $hrDesignationModel->parent;
-                $out = self::getDesignationParent($parent); 
-                echo Json::encode(['output'=>$out, 'selected'=>'']);
-                return;
-            }
-        }
-
-        echo Json::encode(['output'=>'', 'selected'=>'']);
-    }
-
     public function actionCreate()
     {
         $model = new HrManagement();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $hrDesignation = HrDesignation::find()->select(['type'])->where(['id' => $model->designation_id])->one();
-            $model->designation = $hrDesignation->type;
-
-            $hrEmployeeType = HrEmployeeType::find()->select('type')->where(['id' => self::$employeeTypeId])->one();
-            $model->employee_type = $hrEmployeeType->type;
-
-            $hrManager = HrManagement::find()->select(['id', 'name', 'designation'])->where(['employee_id' => $model->manager_id])->one();
-            $model->parent = $hrManager->id;
-            $model->manager_name = $hrManager->name;
-            $model->manager_designation = $hrManager->designation;
+            $model->designation_id = 100;
+            $model->designation = 'Management';
+            $model->employee_type_id = 5;
+            $model->employee_type = 'Management';
 
             $model->created_at = date('Y-m-d H:i:s', time());
             $model->created_by = Yii::$app->user->identity->username;
@@ -160,11 +124,8 @@ class HrManagementController extends Controller
 
         } else {
 
-            $hrDesignationModel = ArrayHelper::map(HrDesignation::find()->select(['id', 'type'])->where(['employee_type_id' => self::$employeeTypeId])->all(), 'id', 'type');
-
             return $this->render('create', [
-                'model' => $model,
-                'hrDesignationModel' => $hrDesignationModel
+                'model' => $model
             ]);
         }
     }
@@ -175,16 +136,10 @@ class HrManagementController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $hrDesignation = HrDesignation::find()->select('type')->where(['id' => $model->designation_id])->one();
-            $model->designation = $hrDesignation->type;
-
-            $hrEmployeeType = HrEmployeeType::find()->select('type')->where(['id' => self::$employeeTypeId])->one();
-            $model->employee_type = $hrEmployeeType->type;
-
-            $hrManager = HrSales::find()->select(['id', 'name', 'designation'])->where(['employee_id' => $model->manager_id])->one();
-            $model->parent = $hrManager->id;
-            $model->manager_name = $hrManager->name;
-            $model->manager_designation = $hrManager->designation;
+            $model->designation_id = 100;
+            $model->designation = 'Management';
+            $model->employee_type_id = 5;
+            $model->employee_type = 'Management';
 
             $model->updated_at = date('Y-m-d H:i:s', time());
             $model->updated_by = Yii::$app->user->identity->username;
@@ -212,7 +167,7 @@ class HrManagementController extends Controller
 
             if ($model->save()) { 
 
-                Yii::$app->session->setFlash('success', 'HR (Sales) has successfully been updated.');
+                Yii::$app->session->setFlash('success', 'HR (Management) has successfully been updated.');
                 return $this->redirect(['view', 'id' => $model->id]);    
 
             }  else {
@@ -224,11 +179,8 @@ class HrManagementController extends Controller
 
         } else {
 
-            $hrDesignationModel = ArrayHelper::map(HrDesignation::find()->select(['id', 'type'])->where(['employee_type_id' => self::$employeeTypeId])->all(), 'id', 'type');
-
             return $this->render('update', [
-                'model' => $model,
-                'hrDesignationModel' => $hrDesignationModel
+                'model' => $model
             ]);
         }
     }
@@ -245,6 +197,24 @@ class HrManagementController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+    
+    public function actionMdelete()
+    {
+        $updated_at = date('Y-m-d H:i:s', time());
+        $updated_by = Yii::$app->user->identity->username;
+        
+        $pk = Yii::$app->request->post('row_id');
+
+        foreach ($pk as $key => $value) 
+        {
+            $sql = "UPDATE hr_management SET status='Inactive', updated_at='$updated_at', updated_by='$updated_by' WHERE id = $value";
+            $query = Yii::$app->db->createCommand($sql)->execute();
+        }
+
+        Yii::$app->session->setFlash('success', 'HR (Managemennt) has successfully been Inactive.');
+        return $this->redirect(['index']);
+
     }
 
     protected function findModel($id)

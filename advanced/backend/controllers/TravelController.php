@@ -144,7 +144,7 @@ class TravelController extends Controller
             if($model->save()) {
                 
                 $this->sendNotification($model->id);
-                Yii::$app->session->setFlash('success', 'Travel Application has successfully been sent to your line manage.');
+                Yii::$app->session->setFlash('success', 'Travel Application has successfully been sent to your line manage. Your token number is <b>' . $model->batch . '.</b>');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
             

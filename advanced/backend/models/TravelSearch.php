@@ -14,7 +14,7 @@ class TravelSearch extends Travel
     {
         return [
             [['id'], 'integer'],
-            [['hr_employee_id', 'hr_name', 'hr_designation', 'hr_employee_type', 'start_date', 'end_date', 'place', 'line_manager_employee_id', 'line_manager_name', 'status', 'action_date', 'action_by', 'created_at'], 'safe'],
+            [['batch', 'hr_employee_id', 'hr_name', 'hr_designation', 'hr_employee_type', 'start_date', 'end_date', 'place', 'line_manager_employee_id', 'line_manager_name', 'status', 'action_date', 'action_by', 'created_at'], 'safe'],
             [['cost'], 'number'],
         ];
     }
@@ -49,6 +49,7 @@ class TravelSearch extends Travel
         ]);
 
         $query->andFilterWhere(['like', 'hr_employee_id', $this->hr_employee_id])
+            ->andFilterWhere(['like', 'batch', $this->batch])
             ->andFilterWhere(['like', 'hr_name', $this->hr_name])
             ->andFilterWhere(['like', 'hr_designation', $this->hr_designation])
             ->andFilterWhere(['like', 'hr_employee_type', $this->hr_employee_type])

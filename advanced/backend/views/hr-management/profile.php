@@ -21,8 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'employee_id',
             'name',
-            'employee_type',
-            'designation',
             'joining_date',
             'leaving_date',
             'contact_no_official',

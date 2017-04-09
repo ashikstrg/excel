@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'batch',
             'hr_name',
             'hr_employee_id',
             'hr_designation',

@@ -89,6 +89,28 @@ class TargetController extends Controller
         ]);
     }
     
+    public function actionLeaderboard_tm()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->leaderboard_tm(Yii::$app->request->queryParams);
+
+        return $this->render('leaderboard_tm', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionLeaderboard_value_tm()
+    {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->leaderboard_value_tm(Yii::$app->request->queryParams);
+
+        return $this->render('leaderboard_value_tm', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     public function actionAchv()
     {
         $searchModel = new TargetSearch();
