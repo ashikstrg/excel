@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 // Custom Datepicker
-use kartik\datetime\DateTimePicker;
+use kartik\date\DatePicker;
 // Multiple Select
 use kartik\widgets\Select2;
 

@@ -92,17 +92,27 @@ class TravelController extends Controller
 
             if($model->hr_employee_type == 'Sales') {
                 
-                $hrModel = \backend\models\HrSales::find()
-                        ->select(['parent', 'manager_id', 'manager_name', 'manager_designation'])
-                        ->where(['employee_id' => $model->hr_employee_id])
-                        ->orderBy(['id' => SORT_DESC])
-                        ->one();
+                if(!Yii::$app->session->get('isCSM')) { 
+                    
+                    $hrModel = \backend\models\HrSales::find()
+                            ->select(['parent', 'manager_id', 'manager_name', 'manager_designation'])
+                            ->where(['employee_id' => $model->hr_employee_id])
+                            ->orderBy(['id' => SORT_DESC])
+                            ->one();
+
+                    $lineManagerID = $hrModel->parent;
+                    $lineManagerEmployeeID = $hrModel->manager_id;
+                    $lineManagerName = $hrModel->manager_name;
+                    $lineManagerDesignation = $hrModel->manager_designation;
+                    $lineManagerEmployeeType = 'Sales';
+                    
+                } else {
+                    
+                    
+                    
+                }
                 
-                $lineManagerID = $hrModel->parent;
-                $lineManagerEmployeeID = $hrModel->manager_id;
-                $lineManagerName = $hrModel->manager_name;
-                $lineManagerDesignation = $hrModel->manager_designation;
-                $lineManagerEmployeeType = 'Sales';
+                
                 
             } else if($model->hr_employee_type == 'FSM') {
                 

@@ -11,7 +11,7 @@ use kartik\widgets\DatePicker;
 <div class="stock-search_daily">
     
     <?php $form = ActiveForm::begin([
-        'action' => ['leaderboard_value_tm'],
+        'action' => ['leaderboard_value_am'],
         'method' => 'get',
     ]); ?>
 

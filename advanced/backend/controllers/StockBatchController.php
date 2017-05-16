@@ -449,6 +449,7 @@ class StockBatchController extends Controller
     }
     
     public function actionUpre() {
+        
         $model = new StockBatch();
 
         $errorsArray = \Yii::$app->session['errorsArray'];
@@ -512,7 +513,7 @@ class StockBatchController extends Controller
                             if ($stockSubmission !== null) {
 
                                 $inventoryModel = Inventory::find()
-                                        ->where('imei_no=:imei_no AND validity=:validity', [':imei_no' => $stockIMEI, ':validity' => Inventory::$validityIn])
+                                        ->where('imei_no=:imei_no AND validity=:validity', [':imei_no' => $stockIMEI])
                                         ->one();
 
                                 if ($inventoryModel !== null) {

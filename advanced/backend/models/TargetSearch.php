@@ -179,7 +179,7 @@ class TargetSearch extends Target
         }
         
         $dataProvider = Target::find()
-                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 
+                ->select(["CONCAT(`employee_name`, ' - ', employee_id, ' (', designation, ')') AS employee_id", 
                     'SUM(fsm_vol) AS fsm_vol', 'SUM(fsm_vol_sales) AS fsm_vol_sales',
                     'case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end AS achievement_percent'])
                 ->andFilterWhere(['like', 'target_date', $this->target_date])
@@ -211,7 +211,7 @@ class TargetSearch extends Target
         }
         
         $dataProvider = Target::find()
-                ->select(["CONCAT(employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_val) AS fsm_val', 'SUM(fsm_val_sales) AS fsm_val_sales',
+                ->select(["CONCAT(`employee_name`, ' - ', employee_id, ' (', designation, ')') AS employee_id", 'SUM(fsm_val) AS fsm_val', 'SUM(fsm_val_sales) AS fsm_val_sales',
                     'case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end AS achievement_percent'])
                 ->andFilterWhere(['like', 'target_date', $this->target_date])
                 ->andFilterWhere([
@@ -324,7 +324,7 @@ class TargetSearch extends Target
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', fsm_vol_sales, 0)) AS ',
                         CONCAT('`', product_model_name, '`')
@@ -333,8 +333,9 @@ class TargetSearch extends Target
             INTO @sql
             FROM target;
             SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, ', @sql, ', SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
-            CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent 
+            retail_territory, employee_id, employee_name, designation, SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent,
+            ', @sql, '
             FROM target 
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
@@ -445,6 +446,253 @@ class TargetSearch extends Target
         return $dataProvider;
     }
     
+    public function leaderboard_am($params) {
+        
+        $product = array();
+
+        $this->load($params);
+
+        if (empty($this->am_employee_id)) {
+            $this->am_employee_id = null;
+        }
+
+        if (empty($this->am_name)) {
+            $this->am_name = null;
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        if (Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+
+        $AmEmployeeId = $this->am_employee_id;
+        $AmName = $this->am_name;
+        $targetDate = $this->target_date;
+
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate . '-01'])->distinct()->all();
+
+
+        if (!empty($targetProductModel)) {
+            foreach ($targetProductModel as $value) {
+                $product[] = $value->product_model_code;
+            }
+        }
+
+        $productString = '"' . implode('","', $product) . '"';
+
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT am_employee_id) FROM target WHERE 
+           csm_employee_id=:csm_employee_id or :csm_employee_id is null")
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
+                ->queryScalar();
+
+        $sql = "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'SUM(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', am_vol_sales, 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
+                    )
+                )
+            INTO @sql
+            FROM target;
+            SET @sql = CONCAT('SELECT am_employee_id, am_name, SUM(am_vol) AS total_target, SUM(am_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(am_vol)=0 then 0 else ( SUM(am_vol_sales)/SUM(am_vol))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
+            FROM target 
+            WHERE (am_employee_id like :am_employee_id or :am_employee_id is null)
+            AND (am_name like :am_name or :am_name is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
+            GROUP BY am_employee_id'); ";
+
+        $cmd = Yii::$app->db->createCommand($sql);
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':am_employee_id' => '%' . $AmEmployeeId . '%',
+                ':am_name' => '%' . $AmName . '%',
+                ':target_date' => $targetDate . '-01',
+                ':csm_employee_id' => $this->csm_employee_id
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'defaultOrder' => ['achievement_percent' => SORT_DESC],
+                'attributes' => [
+                    'am_employee_id' => [
+                        'asc' => ['am_employee_id' => SORT_ASC],
+                        'desc' => ['am_employee_id' => SORT_DESC],
+                    ],
+                    'am_name' => [
+                        'asc' => ['am_name' => SORT_ASC],
+                        'desc' => ['am_name' => SORT_DESC],
+                    ],
+                    'total_target' => [
+                        'asc' => ['total_target' => SORT_ASC],
+                        'desc' => ['total_target' => SORT_DESC],
+                    ],
+                    'total_achievement' => [
+                        'asc' => ['total_achievement' => SORT_ASC],
+                        'desc' => ['total_achievement' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+    
+    public function leaderboard_value_am($params) {
+        $product = array();
+
+        $this->load($params);
+
+        if (empty($this->am_employee_id)) {
+            $this->am_employee_id = null;
+        }
+
+        if (empty($this->am_name)) {
+            $this->am_name = null;
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        if (Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+
+        $retailTerritory = $this->retail_territory;
+        $AmEmployeeId = $this->am_employee_id;
+        $AmName = $this->tm_name;
+        $targetDate = $this->target_date;
+
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate . '-01'])->distinct()->all();
+
+
+        if (!empty($targetProductModel)) {
+            foreach ($targetProductModel as $value) {
+                $product[] = $value->product_model_code;
+            }
+        }
+
+        $productString = '"' . implode('","', $product) . '"';
+
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT tm_employee_id) FROM target WHERE 
+            (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)")
+                ->bindValue(':am_employee_id', $this->am_employee_id)
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
+                ->queryScalar();
+
+        $sql = "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'SUM(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', am_val_sales, 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
+                    )
+                )
+            INTO @sql
+            FROM target;
+            SET @sql = CONCAT('SELECT am_employee_id, am_name, SUM(am_val) AS total_target, 
+            SUM(am_val_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(am_val)=0 then 0 else ( SUM(am_val_sales)/SUM(am_val))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
+            FROM target 
+            WHERE (am_employee_id like :am_employee_id or :am_employee_id is null)
+            AND (am_name like :am_name or :am_name is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
+            GROUP BY am_employee_id'); ";
+
+        $cmd = Yii::$app->db->createCommand($sql);
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':am_employee_id' => '%' . $AmEmployeeId . '%',
+                ':am_name' => '%' . $AmName . '%',
+                ':target_date' => $targetDate . '-01',
+                ':am_employee_id' => $this->am_employee_id,
+                ':csm_employee_id' => $this->csm_employee_id
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'defaultOrder' => ['achievement_percent' => SORT_DESC],
+                'attributes' => [
+                    'am_employee_id' => [
+                        'asc' => ['am_employee_id' => SORT_ASC],
+                        'desc' => ['am_employee_id' => SORT_DESC],
+                    ],
+                    'am_name' => [
+                        'asc' => ['am_name' => SORT_ASC],
+                        'desc' => ['am_name' => SORT_DESC],
+                    ],
+                    'total_target' => [
+                        'asc' => ['total_target' => SORT_ASC],
+                        'desc' => ['total_target' => SORT_DESC],
+                    ],
+                    'total_achievement' => [
+                        'asc' => ['total_achievement' => SORT_ASC],
+                        'desc' => ['total_achievement' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+
     public function leaderboard_tm($params)
     {
         $product = array();
@@ -510,7 +758,7 @@ class TargetSearch extends Target
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', tm_vol_sales, 0)) AS ',
                         CONCAT('`', product_model_name, '`')
@@ -518,8 +766,8 @@ class TargetSearch extends Target
                 )
             INTO @sql
             FROM target;
-            SET @sql = CONCAT('SELECT retail_territory, tm_employee_id, tm_name, ', @sql, ', SUM(tm_vol) AS total_target, SUM(tm_vol_sales) AS total_achievement,
-            CONCAT(FORMAT(case when SUM(tm_vol)=0 then 0 else ( SUM(tm_vol_sales)/SUM(tm_vol))*100 end ,2), \"%\") AS achievement_percent 
+            SET @sql = CONCAT('SELECT retail_territory, tm_employee_id, tm_name, SUM(tm_vol) AS total_target, SUM(tm_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(tm_vol)=0 then 0 else ( SUM(tm_vol_sales)/SUM(tm_vol))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
             FROM target 
             WHERE (retail_territory like :retail_territory or :retail_territory is null)
             AND (tm_employee_id like :tm_employee_id or :tm_employee_id is null)
@@ -650,7 +898,7 @@ class TargetSearch extends Target
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', tm_val_sales, 0)) AS ',
                         CONCAT('`', product_model_name, '`')
@@ -658,9 +906,9 @@ class TargetSearch extends Target
                 )
             INTO @sql
             FROM target;
-            SET @sql = CONCAT('SELECT retail_territory, tm_employee_id, tm_name, ', @sql, ', SUM(tm_val) AS total_target, 
+            SET @sql = CONCAT('SELECT retail_territory, tm_employee_id, tm_name, SUM(tm_val) AS total_target, 
             SUM(tm_val_sales) AS total_achievement,
-            CONCAT(FORMAT(case when SUM(tm_val)=0 then 0 else ( SUM(tm_val_sales)/SUM(tm_val))*100 end ,2), \"%\") AS achievement_percent 
+            CONCAT(FORMAT(case when SUM(tm_val)=0 then 0 else ( SUM(tm_val_sales)/SUM(tm_val))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
             FROM target 
             WHERE (retail_territory like :retail_territory or :retail_territory is null)
             AND (tm_employee_id like :tm_employee_id or :tm_employee_id is null)
@@ -825,7 +1073,7 @@ class TargetSearch extends Target
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', fsm_vol, 0)) AS ',
                         CONCAT('`', product_model_name, '`')
@@ -834,8 +1082,8 @@ class TargetSearch extends Target
             INTO @sql
             FROM target;
             SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, ', @sql, ', SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
-            CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent 
+            retail_territory, employee_id, employee_name, designation, SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
             FROM target 
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
@@ -1045,7 +1293,7 @@ class TargetSearch extends Target
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', FORMAT(fsm_val_sales, 2), 0)) AS ',
                         CONCAT('`', product_model_name, '`')
@@ -1054,8 +1302,8 @@ class TargetSearch extends Target
             INTO @sql
             FROM target;
             SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, ', @sql, ', FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
-            CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), \"%\") AS achievement_percent 
+            retail_territory, employee_id, employee_name, designation, FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
             FROM target 
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
@@ -1264,7 +1512,7 @@ class TargetSearch extends Target
             SELECT 
                 GROUP_CONCAT(DISTINCT
                     CONCAT(
-                        'MAX(IF(product_model_code = ''',
+                        'SUM(IF(product_model_code = ''',
                         product_model_code,
                         ''', FORMAT(fsm_val, 2), 0)) AS ',
                         CONCAT('`', product_model_name, '`')
@@ -1273,8 +1521,8 @@ class TargetSearch extends Target
             INTO @sql
             FROM target;
             SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, ', @sql, ', FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
-            CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), \"%\") AS achievement_percent 
+            retail_territory, employee_id, employee_name, designation, FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
             FROM target 
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)

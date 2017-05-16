@@ -24,8 +24,15 @@ use kartik\widgets\DatePicker;
             } else {
                 echo '&nbsp;';
             }
-
-            ?>
+            
+            echo '&nbsp;';
+            
+            if (!Yii::$app->session->get('isTM') && !Yii::$app->session->get('isAM')) {
+                echo Html::a('<i class="glyphicon glyphicon-group"></i> AM wise Leaderboard', ['leaderboard_am'], ['class' => 'btn btn-primary', 'title' => 'Refresh']);
+            } else {
+                echo '&nbsp;';
+            }
+?>
         </div>
         
         <div class="col-md-3">

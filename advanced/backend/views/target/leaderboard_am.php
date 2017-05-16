@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 
-$this->title = 'TM wise Leaderboard by Volume';
+$this->title = 'AM wise Leaderboard by Volume';
 $this->miniTitle = 'Leaderboard Module';
 $this->subTitle = 'Leaderboard Ranking';
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,7 +33,7 @@ if($currentMonth ==  $month && $currentYear == $year) {
 ?>
 <div class="target-leaderboard">
     
-    <?php echo $this->render('_search_leaderboard_tm', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search_leaderboard_am', ['model' => $searchModel]); ?>
 
     <?php 
     

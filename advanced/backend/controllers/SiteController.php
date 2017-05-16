@@ -66,6 +66,35 @@ class SiteController extends Controller
             return $this->redirect(['trainer']);
         }
         
+        $todaysSalesQuery = \backend\models\Sales::find();
+        $todaysSalesQuery->select([
+            'COUNT(id) AS total_vol',
+            'SUM(price) AS total_val'
+        ]);
+        $todaysSalesQuery->andFilterWhere([
+            'DAY(sales_date)' => date('d', time()),
+            'MONTH(sales_date)' => date('m', time()),
+            'YEAR(sales_date)' => date('Y', time())
+        ]);
+        if(Yii::$app->session->get('isFSM')) {
+            $todaysSalesQuery->andFilterWhere([
+                'employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isTM')) {
+            $todaysSalesQuery->andFilterWhere([
+                'tm_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isAM')) {
+            $todaysSalesQuery->andFilterWhere([
+                'am_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        } else if(Yii::$app->session->get('isCSM')) {
+            $todaysSalesQuery->andFilterWhere([
+                'csm_employee_id' => Yii::$app->session->get('employee_id')
+            ]);
+        }
+        $todaysSalesReport = $todaysSalesQuery->one();
+        
         $targetQuery = \backend\models\Target::find();
         $targetQuery->select([
             'SUM(`fsm_vol`) as fsm_vol', 
@@ -141,7 +170,8 @@ class SiteController extends Controller
         
         return $this->render('index', [
             'target' => $target,
-            'salesProductType' => $salesProductType
+            'salesProductType' => $salesProductType,
+            'todaysSalesReport' => $todaysSalesReport
         ]);
     }
 

@@ -41,6 +41,10 @@ class Sales extends \yii\db\ActiveRecord
     public $date_range;
     public $total;
     
+    // Dashboard
+    public $total_vol;
+    public $total_val;
+    
     public static function tableName()
     {
         return 'sales';
@@ -86,10 +90,10 @@ class Sales extends \yii\db\ActiveRecord
             'employee_id' => 'FSM ID',
             'employee_name' => 'FSM Name',
             'tm_parent' => 'TM Parent',
-            'tm_employee_id' => 'TM ID',
+            'tm_employee_id' => 'TM Employee ID',
             'tm_name' => 'TM Name',
             'am_parent' => 'AM Parent',
-            'am_employee_id' => 'AM ID',
+            'am_employee_id' => 'AM Employee ID',
             'am_name' => 'AM Name',
             'csm_parent' => 'Csm Parent',
             'csm_employee_id' => 'CSM ID',

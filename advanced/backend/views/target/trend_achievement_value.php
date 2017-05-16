@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $employee_id = array();
     $targetVol = array();
     $achievementVol = array();
+    $achievementPercent = array();
     foreach($dataProvider as $target) {
         $employee_id[] = $target->employee_id;
         $targetVol[] = (int) $target->fsm_val;

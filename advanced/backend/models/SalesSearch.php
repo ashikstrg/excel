@@ -820,6 +820,7 @@ class SalesSearch extends Sales
             
         }
         
+        $attributeSales = '';
         if(Yii::$app->session->get('isTM')) {
             $this->tm_employee_id = Yii::$app->session->get('employee_id');
             $this->am_employee_id = null;
@@ -828,10 +829,12 @@ class SalesSearch extends Sales
             $this->tm_employee_id = null;
             $this->am_employee_id = Yii::$app->session->get('employee_id');
             $this->csm_employee_id = null;
+            $attributeSales = 'tm_employee_id, tm_name,';
         } else if(Yii::$app->session->get('isCSM')) {
             $this->tm_employee_id = null;
             $this->am_employee_id = null;
             $this->csm_employee_id = Yii::$app->session->get('employee_id');
+            $attributeSales = 'tm_employee_id, tm_name, am_employee_id, am_name,';
         } else {
             $this->tm_employee_id = null;
             $this->am_employee_id = null;
@@ -871,7 +874,7 @@ class SalesSearch extends Sales
             INTO @sql
             FROM sales;
             SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, ', @sql, ', COUNT(id) AS total
+            retail_territory, employee_id, employee_name, designation, $attributeSales COUNT(id) AS total, ', @sql, '
             FROM sales, (SELECT @i:= 0) AS i
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
@@ -1024,8 +1027,6 @@ class SalesSearch extends Sales
             $this->designation = null;
         }
         
-        
-        
         $dateRange = array();
         $dateRange[0] = null;
         $dateRange[1] = null;
@@ -1049,6 +1050,7 @@ class SalesSearch extends Sales
             
         }
         
+        $attributeSales = '';
         if(Yii::$app->session->get('isTM')) {
             $this->tm_employee_id = Yii::$app->session->get('employee_id');
             $this->am_employee_id = null;
@@ -1057,10 +1059,12 @@ class SalesSearch extends Sales
             $this->tm_employee_id = null;
             $this->am_employee_id = Yii::$app->session->get('employee_id');
             $this->csm_employee_id = null;
+            $attributeSales = 'tm_employee_id, tm_name,';
         } else if(Yii::$app->session->get('isCSM')) {
             $this->tm_employee_id = null;
             $this->am_employee_id = null;
             $this->csm_employee_id = Yii::$app->session->get('employee_id');
+            $attributeSales = 'tm_employee_id, tm_name, am_employee_id, am_name,';
         } else {
             $this->tm_employee_id = null;
             $this->am_employee_id = null;
@@ -1100,7 +1104,7 @@ class SalesSearch extends Sales
             INTO @sql
             FROM sales;
             SET @sql = CONCAT('SELECT @i:=@i+1 `#`, retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, ', @sql, ', SUM(price) AS total
+            retail_territory, employee_id, employee_name, designation, $attributeSales SUM(price) AS total, ', @sql, '
             FROM sales, (SELECT @i:= 0) AS i
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
             AND (retail_name like :retail_name or :retail_name is null)
