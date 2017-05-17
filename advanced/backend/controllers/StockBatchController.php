@@ -513,7 +513,7 @@ class StockBatchController extends Controller
                             if ($stockSubmission !== null) {
 
                                 $inventoryModel = Inventory::find()
-                                        ->where('imei_no=:imei_no AND validity=:validity', [':imei_no' => $stockIMEI])
+                                        ->where('imei_no=:imei_no', [':imei_no' => $stockIMEI])
                                         ->one();
 
                                 if ($inventoryModel !== null) {
