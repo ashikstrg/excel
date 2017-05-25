@@ -258,7 +258,8 @@ class SalesController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        
+        Yii::$app->session->setFlash('success', 'The selected item has successfully been deleted.');
         return $this->redirect(['index']);
     }
 

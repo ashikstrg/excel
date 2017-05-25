@@ -38,8 +38,7 @@ class Inventory extends \yii\db\ActiveRecord
             [['product_name'], 'string', 'max' => 80],
             [['product_model_code', 'product_model_name', 'product_color', 'product_type'], 'string', 'max' => 50],
             [['created_by', 'updated_by'], 'string', 'max' => 255],
-            [['imei_no'], 'unique'],
-            [['batch'], 'unique'],
+            [['imei_no'], 'unique']
         ];
     }
 

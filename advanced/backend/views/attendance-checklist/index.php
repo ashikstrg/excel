@@ -19,6 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'retail_name',
         'hr_employee_id',
         'hr_name',
+        'tm_employee_id',
+        'tm_name',
         'checklist_date',
         'in_time',
         'out_time',

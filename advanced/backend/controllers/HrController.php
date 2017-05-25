@@ -189,7 +189,7 @@ class HrController extends Controller
         } else {
 
             $hrDesignationModel = ArrayHelper::map(HrDesignation::find()->select(['id', 'type'])->where(['employee_type_id' => self::$employeeTypeId])->all(), 'id', 'type');
-            $retailModel = ArrayHelper::map(Retail::find()->select(['id', 'CONCAT(dms_code, " - ", name) as name'])->all(), 'id', 'name');
+            $retailModel = ArrayHelper::map(Retail::find()->select(['id', 'CONCAT(dms_code, " - ", name) as name'])->orderBy(['dms_code' => SORT_ASC])->all(), 'id', 'name');
 
             return $this->render('create', [
                 'model' => $model,

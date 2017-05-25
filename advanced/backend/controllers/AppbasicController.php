@@ -38,7 +38,7 @@ class AppbasicController extends Controller {
                         'actions' => ['login', 'sales_report', 'sales_view', 'stock_report', 'stock_view', 'stock_fetch', 'add_sales', 'inventory_fetch', 
                             'add_stock', 'attendance_fetch', 'add_attendance', 'add_attendance_out', 'leaderboard', 'leaderboard_val', 'target', 
                             'target_val', 'target_total', 'target_total_val', 'training', 'complain_fetch', 'complain_add', 'complain_view', 
-                            'notification_fetch', 'notification_count', 'notification_view'],
+                            'notification_fetch', 'notification_count', 'notification_view', 'attendance_check'],
                         'allow' => true,
                     ],
                 ],
@@ -1150,6 +1150,47 @@ class AppbasicController extends Controller {
 
         echo json_encode($request);
     }
+    
+    // Fetch Attendance
+    public function actionAttendance_check() {
+
+        Access::setPermission();
+
+        $postdata = file_get_contents("php://input");
+        if (isset($postdata) && !empty($postdata)) {
+
+            $request = json_decode($postdata);
+            $request->response = 'Error';
+            $request->message = Message::$serverError;
+
+            if (isset($request->employee_id) && !empty($request->employee_id)) {
+
+                $attendanceCount = AttendanceChecklist::find()
+                        ->where('hr_employee_id=:hr_employee_id AND checklist_date=:checklist_date', [':hr_employee_id' => $request->employee_id, ':checklist_date' => date('Y-m-d', time())])
+                        ->count();
+
+                if ($attendanceCount == 0) {
+
+                    $request->response = 'IN';
+
+                } else {
+
+                    $request->response = 'Error';
+                }
+                
+            } else {
+
+                $request->response = 'Error';
+                $request->message = Message::$employeeIdNotFound;
+            }
+        } else {
+
+            $request->response = 'Error';
+            $request->message = 'Data not submitted.';
+        }
+
+        echo json_encode($request);
+    }
 
     // Fetch Attendance
     public function actionAttendance_fetch() {
@@ -1223,7 +1264,7 @@ class AppbasicController extends Controller {
                 $answer = json_decode($request->answer);
 
                 $hrModelOne = Hr::find()
-                        ->select(['retail_dms_code', 'retail_name', 'employee_id', 'name'])
+                        ->select(['retail_dms_code', 'retail_name', 'employee_id', 'name', 'tm_employee_id', 'tm_name'])
                         ->where('employee_id=:employee_id', [':employee_id' => $employee_id])
                         ->orderBy(['id' => SORT_DESC])
                         ->one();
@@ -1270,6 +1311,8 @@ class AppbasicController extends Controller {
                             $model->retail_name = $hrModelOne->retail_name;
                             $model->hr_employee_id = $hrModelOne->employee_id;
                             $model->hr_name = $hrModelOne->name;
+                            $model->tm_employee_id = $hrModelOne->tm_employee_id;
+                            $model->tm_name = $hrModelOne->tm_name;
                             $model->checklist_date = date('Y-m-d', time());
                             $model->in_time = date('H:i:s', time());
                             $model->status = AttendanceChecklist::$statusPending;

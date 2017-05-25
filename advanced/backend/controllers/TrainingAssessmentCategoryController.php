@@ -87,6 +87,10 @@ class TrainingAssessmentCategoryController extends Controller
                 
                 $hrModel = \backend\models\HrSales::find()->select(['id', 'name', 'employee_id', 'employee_type'])->where('designation=:designation', [':designation' => $v])->all();
                 
+            } else if($v == 'Skill Development Trainer') {
+                
+                $hrModel = \backend\models\HrTrainer::find()->select(['id', 'name', 'employee_id', 'employee_type'])->where('designation=:designation', [':designation' => $v])->all();
+                
             } else {
                 
                 $hrModel = \backend\models\Hr::find()->select(['id', 'name', 'employee_id', 'employee_type'])->where('designation=:designation', [':designation' => $v])->all();
@@ -207,7 +211,7 @@ class TrainingAssessmentCategoryController extends Controller
     public function actionCreate()
     {
         $model = new TrainingAssessmentCategory();
-        $designationModel = \yii\helpers\ArrayHelper::map(\backend\models\HrDesignation::find()->where("employee_type='Sales' OR employee_type='FSM'")->all(), 'type', 'type');
+        $designationModel = \yii\helpers\ArrayHelper::map(\backend\models\HrDesignation::find()->where("employee_type='Sales' OR employee_type='FSM' OR employee_type='Trainer'")->all(), 'type', 'type');
         
         $now = new Expression('NOW()');
         $userId = Yii::$app->user->identity->id;
@@ -244,7 +248,7 @@ class TrainingAssessmentCategoryController extends Controller
     {
         $model = $this->findModel($id);
 
-        $designationModel = \yii\helpers\ArrayHelper::map(\backend\models\HrDesignation::find()->where("employee_type='Sales' OR employee_type='FSM'")->all(), 'type', 'type');
+        $designationModel = \yii\helpers\ArrayHelper::map(\backend\models\HrDesignation::find()->where("employee_type='Sales' OR employee_type='FSM' OR employee_type='Trainer'")->all(), 'type', 'type');
         
         $now = new Expression('NOW()');
         $username = Yii::$app->user->identity->username;

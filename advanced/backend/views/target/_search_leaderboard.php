@@ -19,7 +19,7 @@ use kartik\widgets\DatePicker;
         <div class="col-md-8">
             <?php
             
-            if(!Yii::$app->session->get('isTM')) {
+            if(!Yii::$app->session->get('isTM') && Yii::$app->session->get('userRole') != 'Trainer') {
                 echo Html::a('<i class="glyphicon glyphicon-group"></i> TM wise Leaderboard', ['leaderboard_tm'], ['class' => 'btn btn-primary', 'title'=> 'Refresh']); 
             } else {
                 echo '&nbsp;';
@@ -27,7 +27,7 @@ use kartik\widgets\DatePicker;
             
             echo '&nbsp;';
             
-            if (!Yii::$app->session->get('isTM') && !Yii::$app->session->get('isAM')) {
+            if (!Yii::$app->session->get('isTM') && !Yii::$app->session->get('isAM') && Yii::$app->session->get('userRole') != 'Trainer') {
                 echo Html::a('<i class="glyphicon glyphicon-group"></i> AM wise Leaderboard', ['leaderboard_am'], ['class' => 'btn btn-primary', 'title' => 'Refresh']);
             } else {
                 echo '&nbsp;';

@@ -14,6 +14,7 @@ use yii\db\Expression;
 
 class TravelController extends Controller
 {
+    
     public function behaviors()
     {
         return [
@@ -108,7 +109,17 @@ class TravelController extends Controller
                     
                 } else {
                     
-                    
+                    $hrModel = \backend\models\HrManagement::find()
+                            ->select(['id', 'employee_id', 'name', 'designation'])
+                            ->where(['employee_id' => \backend\models\HrManagement::$hosEmployeeId])
+                            ->orderBy(['id' => SORT_DESC])
+                            ->one();
+
+                    $lineManagerID = $hrModel->id;
+                    $lineManagerEmployeeID = $hrModel->employee_id;
+                    $lineManagerName = $hrModel->name;
+                    $lineManagerDesignation = $hrModel->designation;
+                    $lineManagerEmployeeType = 'Management';
                     
                 }
                 

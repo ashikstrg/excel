@@ -6,6 +6,9 @@ use kartik\widgets\DepDrop;
 use yii\helpers\Url; 
 use kartik\widgets\DatePicker;
 use kartik\widgets\FileInput;
+// Input Search
+//use kartik\widgets\TypeaheadBasic;
+use kartik\widgets\Select2;
 
 ?>
 
@@ -29,10 +32,29 @@ use kartik\widgets\FileInput;
                     'url'=>Url::to(['/hr/find_manager'])
                 ]
             ]); ?>
+            
+            <?php // $form->field($model, 'retail_id')->widget(TypeaheadBasic::classname(), [
+                //'data' => $retailModel,
+               // 'dataset' => ['limit' => 10],
+                //'options' => ['placeholder' => 'Select Retail', 'autocomplete' => 'off'],
+                //'pluginOptions' => ['highlight'=>true],
+            //]); ?>
+            
+            <?php
+            echo $form->field($model, 'retail_id')->widget(Select2::classname(), [
+                'data' => $retailModel,
+                'options' => ['placeholder' => 'Select Retail'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+            ?>
 
-            <?= $form->field($model, 'retail_id')->dropDownList($retailModel, [
-            'prompt' => 'Select Retail'
-            ]); ?>
+            <?php 
+//            echo $form->field($model, 'retail_id')->dropDownList($retailModel, [
+//           'prompt' => 'Select Retail'
+//            ]); 
+            ?>
 
             <?= $form->field($model, 'employee_id')->textInput(['placeholder' => 'Enter Employee ID', 'maxlength' => true]) ?>
 

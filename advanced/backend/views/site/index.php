@@ -63,7 +63,7 @@ if($requiredAmount > 0 && $remainingDay > 0) {
                 <span class="info-box-number">
                     <?php
                     if(!empty($todaysSalesReport)) {
-                        echo $todaysSalesReport->total_vol;
+                        echo $todaysSalesReport->total_val;
                     }
                     ?>
                 </span>

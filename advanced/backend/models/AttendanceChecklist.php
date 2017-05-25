@@ -19,7 +19,7 @@ class AttendanceChecklist extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['checklist', 'retail_dms_code', 'retail_name', 'hr_employee_id', 'hr_name', 'checklist_date', 'in_time', 'status'], 'required'],
+            [['checklist', 'retail_dms_code', 'retail_name', 'hr_employee_id', 'hr_name', 'tm_employee_id', 'tm_name', 'checklist_date', 'in_time', 'status'], 'required'],
             [['checklist', 'status'], 'string'],
             [['checklist_date', 'in_time', 'out_time'], 'safe'],
             [['retail_dms_code'], 'string', 'max' => 100],
@@ -29,9 +29,6 @@ class AttendanceChecklist extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -41,6 +38,8 @@ class AttendanceChecklist extends \yii\db\ActiveRecord
             'retail_name' => 'Retail Name',
             'hr_employee_id' => 'FSM ID',
             'hr_name' => 'FSM Name',
+            'tm_employee_id' => 'TM Employee ID', 
+            'tm_name' => 'TM Name',
             'checklist_date' => 'Date',
             'in_time' => 'In Time',
             'out_time' => 'Out Time',

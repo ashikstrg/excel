@@ -108,7 +108,13 @@ class TravelSearch extends Travel
                 'action_by' => Yii::$app->session->get('employee_id'),
             ]);
             
-        } if(\Yii::$app->session->get('userRole') == 'admin') {
+        } else if(\Yii::$app->session->get('userRole') == 'admin') {
+            
+            $query->andFilterWhere([
+                'action_by' => Yii::$app->session->get('employee_id'),
+            ]);
+            
+        } else if(\Yii::$app->session->get('userRole') == 'Management') {
             
             $query->andFilterWhere([
                 'action_by' => Yii::$app->session->get('employee_id'),
@@ -152,6 +158,12 @@ class TravelSearch extends Travel
             ->andFilterWhere(['like', 'action_by', $this->action_by]);
         
         if(\Yii::$app->session->get('userRole') == 'Sales') {
+            
+            $query->andFilterWhere([
+                'line_manager_employee_id' => Yii::$app->session->get('employee_id'),
+            ]);
+            
+        } else if (\Yii::$app->session->get('userRole') == 'Management') {
             
             $query->andFilterWhere([
                 'line_manager_employee_id' => Yii::$app->session->get('employee_id'),

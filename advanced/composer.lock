@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "998a214fd27e0659a00d2cd6d08daa23",
-    "content-hash": "e22807ca2c1e8f0bcf944f89eddac4ef",
+    "hash": "ac1bf0ff3cb8240bf27928c8d9783c5e",
+    "content-hash": "15af739c8fc377dba377c72ee0ba430f",
     "packages": [
         {
             "name": "bower-asset/adminlte",
@@ -1792,12 +1792,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "d7bfdabc48d766f4f4a82f715315f19d25f4a0d9"
+                "reference": "03f202e9e2415f4c84e93a64074d85677fd0cc51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/d7bfdabc48d766f4f4a82f715315f19d25f4a0d9",
-                "reference": "d7bfdabc48d766f4f4a82f715315f19d25f4a0d9",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/03f202e9e2415f4c84e93a64074d85677fd0cc51",
+                "reference": "03f202e9e2415f4c84e93a64074d85677fd0cc51",
                 "shasum": ""
             },
             "require": {
@@ -1837,7 +1837,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-11-03 17:45:17"
+            "time": "2017-04-12 09:00:24"
         },
         {
             "name": "kartik-v/yii2-widget-sidenav",

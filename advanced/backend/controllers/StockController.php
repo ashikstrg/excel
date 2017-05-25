@@ -185,6 +185,87 @@ class StockController extends Controller
         ]);
         
     }
+    
+    public function actionAdd()
+    {
+        $model = new Stock();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            
+            $model->batch = 0;
+            
+            $retailModelOne = \backend\models\Retail::find()
+                    ->select(['id', 'dms_code', 'name', 'retail_type', 'channel_type', 'retail_zone', 'retail_area', 'territory'])
+                    ->where('dms_code=:dms_code', [':dms_code' => $model->retail_dms_code])
+                    ->one();
+            
+            if(!empty($retailModelOne)) {
+                
+                $model->retail_id = $retailModelOne->id;
+                $model->retail_dms_code = $retailModelOne->dms_code;
+                $model->retail_name = $retailModelOne->name;
+                $model->retail_type = $retailModelOne->retail_type;
+                $model->retail_channel_type = $retailModelOne->channel_type;
+                $model->retail_zone = $retailModelOne->retail_zone;
+                $model->retail_area = $retailModelOne->retail_area;
+                $model->retail_territory = $retailModelOne->territory;
+
+                $inventoryModelOne = Inventory::find()
+                        ->where('imei_no=:imei_no AND validity=:validity', [':imei_no' => $model->imei_no, ':validity' => Inventory::$validityIn])
+                        ->one();
+
+                if (!empty($inventoryModelOne)) {
+
+                    $model->product_id = $inventoryModelOne->product_id;
+                    $model->product_name = $inventoryModelOne->product_name;
+                    $model->product_model_name = $inventoryModelOne->product_model_name;
+                    $model->product_model_code = $inventoryModelOne->product_model_code;
+                    $model->product_color = $inventoryModelOne->product_color;
+                    $model->product_type = $inventoryModelOne->product_type;
+                    $model->lifting_price = $inventoryModelOne->lifting_price;
+                    $model->rrp = $inventoryModelOne->rrp;
+                    $model->validity = Stock::$validityIn;
+                    $model->status = $inventoryModelOne->status;
+
+                    $model->submission_date = date('Y-m-d', time());
+                    $model->created_at = new Expression('NOW()');
+                    $model->created_by = Yii::$app->user->identity->username;
+
+                    $inventoryModelOne->validity = Inventory::$validityOut;
+                    $inventoryModelOne->stage = Inventory::$stageStock;
+                    $inventoryModelOne->updated_at = new Expression('NOW()');
+                    $inventoryModelOne->updated_by = Yii::$app->user->identity->username;
+
+                    if ($inventoryModelOne->update() !== false) {
+
+                        if ($model->save()) {
+
+                            Yii::$app->session->setFlash('success', 'The product has successfully been added in the stock.');
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        } else {
+
+                            \Yii::$app->session->setFlash('error', 'This IMEI Number could not be added due to the server error.');
+                        }
+                    } else {
+
+                        \Yii::$app->session->setFlash('error', 'This IMEI Number could not be added due to the server error related to inventory.');
+                    }
+                } else {
+
+                    \Yii::$app->session->setFlash('error', 'This IMEI Number has not been added in the inventory yet.');
+                }
+                
+            } else {
+
+                \Yii::$app->session->setFlash('error', 'The DMS Code is not valid.');
+            }
+        } 
+            
+        return $this->render('add', [
+            'model' => $model
+        ]);
+        
+    }
 
     public function actionUpdate($id)
     {

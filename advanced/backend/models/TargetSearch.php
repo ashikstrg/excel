@@ -275,6 +275,12 @@ class TargetSearch extends Target
             $this->target_date = date('Y-m', time());
         }
         
+        if(empty($this->tm_employee_id)) {
+            $tmEmployeeId = null;
+        } else {
+            $tmEmployeeId = $this->tm_employee_id;
+        }
+        
         if(Yii::$app->session->get('isTM')) {
             $this->tm_employee_id = Yii::$app->session->get('employee_id');
             $this->am_employee_id = null;
@@ -304,8 +310,9 @@ class TargetSearch extends Target
         $employeeName = $this->employee_name;
         $designation = $this->designation;
         $targetDate = $this->target_date;
+        $targetDateFullFormat = $targetDate.'-01';
         
-        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate.'-01'])->distinct()->all();
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDateFullFormat])->distinct()->all();
         
         
         if(!empty($targetProductModel)) {
@@ -316,8 +323,38 @@ class TargetSearch extends Target
         
         $productString = '"'.implode('","', $product).'"';
         
-        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM target')
-			->queryScalar();
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT employee_id) FROM target WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
+            AND (retail_name like :retail_name or :retail_name is null)
+            AND (retail_type like :retail_type or :retail_type is null)
+            AND (retail_channel_type like :retail_channel_type or :retail_channel_type is null)
+            AND (retail_zone like :retail_zone or :retail_zone is null)
+            AND (retail_area like :retail_area or :retail_area is null)
+            AND (retail_territory like :retail_territory or :retail_territory is null)
+            AND (employee_id like :employee_id or :employee_id is null)
+            AND (employee_name like :employee_name or :employee_name is null)
+            AND (designation like :designation or :designation is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (tm_employee_id=:tmEmployeeId or :tmEmployeeId is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null);")
+                ->bindValue(':retail_dms_code', $retailDmsCode)
+                ->bindValue(':retail_name', '%' . $retailName . '%')
+                ->bindValue(':retail_type', '%' . $retailType . '%')
+                ->bindValue(':retail_channel_type', '%' . $retailChannelType . '%')
+                ->bindValue(':retail_zone', '%' . $retailZone . '%')
+                ->bindValue(':retail_area', '%' . $retailArea . '%')
+                ->bindValue(':retail_territory', '%' . $retailTerritory . '%')
+                ->bindValue(':employee_id', '%' . $employeeId . '%')
+                ->bindValue(':employee_name', '%' . $employeeName . '%')
+                ->bindValue(':designation', '%' . $designation . '%')
+                ->bindValue(':target_date', $targetDate.'-01')
+                ->bindValue(':tm_employee_id', $this->tm_employee_id)
+                ->bindValue(':tmEmployeeId', $tmEmployeeId)
+                ->bindValue(':am_employee_id', $this->am_employee_id)
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
+                ->queryScalar();
         
         $sql= "SET @sql = NULL;
             SET @@group_concat_max_len = 6000000;
@@ -333,7 +370,7 @@ class TargetSearch extends Target
             INTO @sql
             FROM target;
             SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
+            retail_territory, employee_id, employee_name, designation, tm_employee_id, tm_name, SUM(fsm_vol) AS total_target, SUM(fsm_vol_sales) AS total_achievement,
             CONCAT(FORMAT(case when SUM(fsm_vol)=0 then 0 else ( SUM(fsm_vol_sales)/SUM(fsm_vol))*100 end ,2), \"%\") AS achievement_percent,
             ', @sql, '
             FROM target 
@@ -350,6 +387,7 @@ class TargetSearch extends Target
             AND (product_model_code IN ($productString))
             AND (target_date=:target_date)
             AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (tm_employee_id=:tmEmployeeId or :tmEmployeeId is null)
             AND (am_employee_id=:am_employee_id or :am_employee_id is null)
             AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
             GROUP BY employee_id'); ";
@@ -376,6 +414,7 @@ class TargetSearch extends Target
                 ':designation' => '%' . $designation . '%',
                 ':target_date' => $targetDate.'-01',
                 ':tm_employee_id' => $this->tm_employee_id,
+                ':tmEmployeeId' => $tmEmployeeId,
                 ':am_employee_id' => $this->am_employee_id,
                 ':csm_employee_id' => $this->csm_employee_id
             ],
@@ -515,7 +554,7 @@ class TargetSearch extends Target
             AND (product_model_code IN ($productString))
             AND (target_date=:target_date)
             AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
-            GROUP BY am_employee_id'); ";
+            GROUP BY am_employee_id');";
 
         $cmd = Yii::$app->db->createCommand($sql);
         $cmd->execute();
@@ -1244,6 +1283,12 @@ class TargetSearch extends Target
             $this->target_date = date('Y-m', time());
         }
         
+        if(empty($this->tm_employee_id)) {
+            $tmEmployeeId = null;
+        } else {
+            $tmEmployeeId = $this->tm_employee_id;
+        }
+        
         if(Yii::$app->session->get('isTM')) {
             $this->tm_employee_id = Yii::$app->session->get('employee_id');
             $this->am_employee_id = null;
@@ -1273,8 +1318,9 @@ class TargetSearch extends Target
         $employeeName = $this->employee_name;
         $designation = $this->designation;
         $targetDate = $this->target_date;
+        $targetDateFullFormat = $targetDate.'-01';
         
-        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate.'-01'])->distinct()->all();
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDateFullFormat])->distinct()->all();
         
         
         if(!empty($targetProductModel)) {
@@ -1285,8 +1331,38 @@ class TargetSearch extends Target
         
         $productString = '"'.implode('","', $product).'"';
         
-        $totalCount = Yii::$app->db->createCommand('SELECT COUNT(DISTINCT employee_id) FROM target')
-			->queryScalar();
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT employee_id) FROM target WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
+            AND (retail_name like :retail_name or :retail_name is null)
+            AND (retail_type like :retail_type or :retail_type is null)
+            AND (retail_channel_type like :retail_channel_type or :retail_channel_type is null)
+            AND (retail_zone like :retail_zone or :retail_zone is null)
+            AND (retail_area like :retail_area or :retail_area is null)
+            AND (retail_territory like :retail_territory or :retail_territory is null)
+            AND (employee_id like :employee_id or :employee_id is null)
+            AND (employee_name like :employee_name or :employee_name is null)
+            AND (designation like :designation or :designation is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (tm_employee_id=:tmEmployeeId or :tmEmployeeId is null)
+            AND (am_employee_id=:am_employee_id or :am_employee_id is null)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null);")
+                ->bindValue(':retail_dms_code', $retailDmsCode)
+                ->bindValue(':retail_name', '%' . $retailName . '%')
+                ->bindValue(':retail_type', '%' . $retailType . '%')
+                ->bindValue(':retail_channel_type', '%' . $retailChannelType . '%')
+                ->bindValue(':retail_zone', '%' . $retailZone . '%')
+                ->bindValue(':retail_area', '%' . $retailArea . '%')
+                ->bindValue(':retail_territory', '%' . $retailTerritory . '%')
+                ->bindValue(':employee_id', '%' . $employeeId . '%')
+                ->bindValue(':employee_name', '%' . $employeeName . '%')
+                ->bindValue(':designation', '%' . $designation . '%')
+                ->bindValue(':target_date', $targetDate.'-01')
+                ->bindValue(':tm_employee_id', $this->tm_employee_id)
+                ->bindValue(':tmEmployeeId', $tmEmployeeId)
+                ->bindValue(':am_employee_id', $this->am_employee_id)
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
+                ->queryScalar();
         
         $sql= "SET @sql = NULL;
             SET @@group_concat_max_len = 6000000;
@@ -1302,7 +1378,7 @@ class TargetSearch extends Target
             INTO @sql
             FROM target;
             SET @sql = CONCAT('SELECT retail_dms_code, retail_name, retail_type, retail_channel_type, retail_zone, retail_area, 
-            retail_territory, employee_id, employee_name, designation, FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
+            retail_territory, employee_id, employee_name, designation, tm_employee_id, tm_name, FORMAT(SUM(fsm_val), 2) AS total_target, FORMAT(SUM(fsm_val_sales), 2) AS total_achievement,
             CONCAT(FORMAT(case when SUM(fsm_val)=0 then 0 else ( SUM(fsm_val_sales)/SUM(fsm_val))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
             FROM target 
             WHERE (retail_dms_code=:retail_dms_code or :retail_dms_code is null)
@@ -1318,6 +1394,7 @@ class TargetSearch extends Target
             AND (product_model_code IN ($productString))
             AND (target_date=:target_date)
             AND (tm_employee_id=:tm_employee_id or :tm_employee_id is null)
+            AND (tm_employee_id=:tmEmployeeId or :tmEmployeeId is null)
             AND (am_employee_id=:am_employee_id or :am_employee_id is null)
             AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
             GROUP BY employee_id'); ";
@@ -1344,6 +1421,7 @@ class TargetSearch extends Target
                 ':designation' => '%' . $designation . '%',
                 ':target_date' => $targetDate.'-01',
                 ':tm_employee_id' => $this->tm_employee_id,
+                ':tmEmployeeId' => $tmEmployeeId,
                 ':am_employee_id' => $this->am_employee_id,
                 ':csm_employee_id' => $this->csm_employee_id
             ],

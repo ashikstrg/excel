@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $gridColumns = [
         [
             'class' => 'yii\grid\ActionColumn',
-            'template' => '{view}',
+            'template' => '{view} {delete}',
         ], // 0
         ['class' => 'yii\grid\SerialColumn'], // 1
         'retail_dms_code', // 2

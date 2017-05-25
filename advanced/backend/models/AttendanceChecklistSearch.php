@@ -13,7 +13,7 @@ class AttendanceChecklistSearch extends AttendanceChecklist
     {
         return [
             [['id'], 'integer'],
-            [['checklist', 'retail_dms_code', 'retail_name', 'hr_employee_id', 'hr_name', 'checklist_date', 'in_time', 'out_time', 'status'], 'safe'],
+            [['checklist', 'retail_dms_code', 'retail_name', 'hr_employee_id', 'hr_name', 'tm_employee_id', 'tm_name', 'checklist_date', 'in_time', 'out_time', 'status'], 'safe'],
         ];
     }
 
@@ -50,6 +50,8 @@ class AttendanceChecklistSearch extends AttendanceChecklist
             ->andFilterWhere(['like', 'retail_name', $this->retail_name])
             ->andFilterWhere(['like', 'hr_employee_id', $this->hr_employee_id])
             ->andFilterWhere(['like', 'hr_name', $this->hr_name])
+            ->andFilterWhere(['like', 'tm_employee_id', $this->tm_employee_id])
+            ->andFilterWhere(['like', 'tm_name', $this->tm_name])
             ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;

@@ -6,6 +6,8 @@ use Yii;
 
 class HrManagement extends \yii\db\ActiveRecord
 {
+    public static $hosEmployeeId = 'XLHOS';
+
     public static function tableName()
     {
         return 'hr_management';

@@ -300,16 +300,15 @@ class TargetBatchController extends Controller
                                         if(isset($employeeModelCode[$hrEmployeeID][$productModelCode])) {
                                             
                                             $targetModelEntry = Target::find()
-                                                ->select('id')
                                                 ->where('employee_id=:employee_id AND product_model_code=:product_model_code AND target_date=:target_date', 
                                                         [':employee_id' => $hrEmployeeID, ':product_model_code' => $productModelCode, ':target_date' => $model->target_date])
                                                 ->one();
                                             
+                                            $targetVolume = $employeeModelCode[$hrEmployeeID][$productModelCode];
+                                            $targetValue = $product->rrp * $employeeModelCode[$hrEmployeeID][$productModelCode]; 
+                                            
                                             if($targetModelEntry === null) {
                                                 
-                                                $targetVolume = $employeeModelCode[$hrEmployeeID][$productModelCode];
-                                                $targetValue = $product->rrp * $employeeModelCode[$hrEmployeeID][$productModelCode];    
-
                                                 $sales = (new \yii\db\Query())
                                                         ->select([
                                                             "sum(case when `hr_id`='$hrId' then 1 else 0 end) fsm_vol",
@@ -379,7 +378,27 @@ class TargetBatchController extends Controller
                                                 
                                             } else {
                                                 
-                                                $errorsArray[] = 'Row Number ' . $rowArray[$hrEmployeeID][$productModelCode] . ':Target has already been set for this model.';
+                                                $targetModelEntry->fsm_vol = $targetVolume;
+                                                $targetModelEntry->fsm_val = $targetValue;
+                                                $targetModelEntry->tm_vol = $targetVolume;
+                                                $targetModelEntry->tm_val = $targetValue;
+                                                $targetModelEntry->am_vol = $targetVolume;
+                                                $targetModelEntry->am_val = $targetValue;
+                                                $targetModelEntry->csm_vol = $targetVolume;
+                                                $targetModelEntry->csm_val = $targetValue;
+                                                
+                                                if($targetModelEntry->save()) {
+                                                    
+                                                    $successArray[] = 'Row Number ' . $rowArray[$hrEmployeeID][$productModelCode] . ':Target plan has successfully been updated for this model.';
+                                                
+                                                    
+                                                } else {
+                                                    
+                                                    $errorsArray[] = 'Row Number ' . $rowArray[$hrEmployeeID][$productModelCode] . ':Target has already been set for this model. Target data could not be updated due to data inconsistency.';
+                                                    
+                                                }
+                                                
+                                                
                                                 
                                             }
                                             

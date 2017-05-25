@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle
         'dist/css/AdminLTE.min.css',
         'dist/css/skins/_all-skins.min.css',
         'plugins/iCheck/flat/blue.css',
+        'dist/css/custom.css',
         // 'plugins/jvectormap/jquery-jvectormap-1.2.2.css', //Map Related data
         // 'plugins/datepicker/datepicker3.css', // Date Picker
         // 'plugins/daterangepicker/daterangepicker.css', // Date Range Picker

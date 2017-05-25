@@ -31,7 +31,8 @@
         "miloschuman/yii2-highcharts-widget": "*",
         "yii2assets/yii2-pdfjs": ">=1.0",
         "kartik-v/yii2-editable": "@dev",
-        "kartik-v/yii2-widget-select2": "@dev"
+        "kartik-v/yii2-widget-select2": "@dev",
+        "kartik-v/yii2-widget-typeahead": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
