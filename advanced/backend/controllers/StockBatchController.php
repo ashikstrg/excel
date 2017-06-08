@@ -621,12 +621,127 @@ class StockBatchController extends Controller
         \Yii::$app->session['successArray'] = $successArray;
         return $this->redirect(['view', 'id' => $model->id]);
     }
+    
+    public function actionUpgood() {
+        
+        $model = new StockBatch();
+
+        $errorsArray = \Yii::$app->session['errorsArray'];
+        $successArray = \Yii::$app->session['successArray'];
+        $successCount = 0;
+
+        $userId = Yii::$app->user->identity->id;
+        $username = Yii::$app->user->identity->username;
+
+        $model->file = UploadedFile::getInstance($model, 'file');
+        $uploadExists = 0;
+
+        if ($model->file) {
+
+            $random_date = Yii::$app->formatter->asDatetime(date("dmyyhis"), "php:dmYHis");
+            $random = $random_date . rand(10, 100) . $userId;
+            $now = new Expression('NOW()');
+            $today = date('Y-m-d', time());
+
+            $filePath = 'uploads/files/stock/admin/';
+            $model->file_import = $filePath . $random . str_replace($model->file->name, '', $model->file) . '.csv';
+
+            $uploadExists = 1;
+        }
+
+        if ($uploadExists) {
+
+            $model->file->saveAs($model->file_import);
+
+            $handle = fopen($model->file_import, 'r');
+
+            if ($handle) {
+
+                $model->batch = $random;
+                $model->status = 'Active';
+                $model->created_by = $username;
+                $model->created_at = $now;
+                $model->stock_date = $today;
+
+                if ($model->validate()) {
+
+                    $rowNumber = 0;
+                    while (($line = fgetcsv($handle, 1000, ",")) != FALSE) {
+
+                        $rowNumber++;
+                        if ($rowNumber == 1) {
+                            continue;
+                        }
+
+                        $stockIMEI = HtmlPurifier::process(trim($line[0]));
+
+                        if (strlen($stockIMEI) == 15) {
+
+                            $stockSubmission = Stock::find()
+                                    ->select('id')
+                                    ->where('imei_no=:imei_no', [':imei_no' => $stockIMEI])
+                                    ->one();
+
+                            if ($stockSubmission !== null) {
+
+                                $inventoryModel = Inventory::find()
+                                        ->where('imei_no=:imei_no', [':imei_no' => $stockIMEI])
+                                        ->one();
+
+                                if ($inventoryModel !== null) {
+
+                                    $inventoryModel->validity = Inventory::$validityIn;
+                                    $inventoryModel->stage = Inventory::$stageInventory;
+                                    $inventoryModel->save(false);
+
+                                    $stockSubmission->delete();
+
+                                    $successArray[] = 'Row Number ' . $rowNumber . ': Stock Data has successfully been uploaded.';
+                                    $successCount++;
+                                    
+                                } else {
+
+                                    $errorsArray[] = 'Row Number ' . $rowNumber . ': IMEI Number is invalid.';
+                                }
+                            } else {
+
+                                $errorsArray[] = 'Row Number ' . $rowNumber . ': This IMEI Number has not been added in the stock.';
+                            }
+                        } else {
+
+                            $errorsArray[] = 'Row Number ' . $rowNumber . ': IMEI number must be 15 characters long.';
+                        }
+                    }
+
+                    $model->total_row = $successCount;
+                    $model->save();
+                }
+
+                fclose($handle);
+                
+            }
+        }
+
+        \Yii::$app->session['errorsArray'] = $errorsArray;
+        \Yii::$app->session['successArray'] = $successArray;
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
 
     public function actionMultiple()
     {
         $model = new StockBatch();
 
         return $this->render('multiple', [
+            'model' => $model,
+        ]);
+        
+    }
+    
+    public function actionGood()
+    {
+        $model = new StockBatch();
+
+        return $this->render('good', [
             'model' => $model,
         ]);
         

@@ -49,7 +49,7 @@ class UpazilasSearch extends Upazilas
             'id' => $this->id
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'upazilas.name', $this->name]);
         $query->andFilterWhere(['like', 'districts.name', $this->district_id]);
         $query->andFilterWhere(['like', 'divisions.name', $this->division_id]);
 
