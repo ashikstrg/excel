@@ -657,7 +657,7 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'pdf'])
             {
                 color: "#002F57",
                 icon: "ion-arrow-expand",
-                title: "Complain Box",
+                title: "Feedback",
                 url: "app.complain"
             }
         ];

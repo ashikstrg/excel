@@ -89,6 +89,16 @@ class TargetController extends Controller
         ]);
     }
     
+    public function actionLeaderboard_csm() {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->leaderboard_csm(Yii::$app->request->queryParams);
+
+        return $this->render('leaderboard_csm', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
     public function actionLeaderboard_am() {
         $searchModel = new TargetSearch();
         $dataProvider = $searchModel->leaderboard_am(Yii::$app->request->queryParams);
@@ -107,6 +117,16 @@ class TargetController extends Controller
         return $this->render('leaderboard_tm', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionLeaderboard_value_csm() {
+        $searchModel = new TargetSearch();
+        $dataProvider = $searchModel->leaderboard_value_csm(Yii::$app->request->queryParams);
+
+        return $this->render('leaderboard_value_csm', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
     

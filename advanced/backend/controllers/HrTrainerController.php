@@ -60,7 +60,7 @@ class HrTrainerController extends Controller
     
     public static function getDesignationParent($parent) {
 
-        $data = HrSales::find()->where(['designation_id'=> $parent])->select(['employee_id as id', 'CONCAT(employee_id, " - ", name) as name'])->asArray()->all();
+        $data = HrTrainer::find()->where(['designation_id'=> $parent])->select(['employee_id as id', 'CONCAT(employee_id, " - ", name) as name'])->asArray()->all();
         $value = (count($data) == 0) ? ['' => ''] : $data;
 
         return $value;
@@ -99,7 +99,7 @@ class HrTrainerController extends Controller
             $hrEmployeeType = HrEmployeeType::find()->select('type')->where(['id' => self::$employeeTypeId])->one();
             $model->employee_type = $hrEmployeeType->type;
 
-            $hrManager = HrSales::find()->select(['id', 'name', 'designation'])->where(['employee_id' => $model->manager_id])->one();
+            $hrManager = HrTrainer::find()->select(['id', 'name', 'designation'])->where(['employee_id' => $model->manager_id])->one();
             $model->parent = $hrManager->id;
             $model->manager_name = $hrManager->name;
             $model->manager_designation = $hrManager->designation;

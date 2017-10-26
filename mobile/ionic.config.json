@@ -1,4 +1,15 @@
 {
   "name": "todo",
-  "app_id": "ee058b6a"
+  "app_id": "ee058b6a",
+  "integrations": {
+    "gulp": {},
+    "cordova": {}
+  },
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
 }

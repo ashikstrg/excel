@@ -485,6 +485,127 @@ class TargetSearch extends Target
         return $dataProvider;
     }
     
+    public function leaderboard_csm($params) {
+        
+        $product = array();
+
+        $this->load($params);
+
+        if (empty($this->csm_employee_id)) {
+            $this->csm_employee_id = null;
+        }
+
+        if (empty($this->csm_name)) {
+            $this->csm_name = null;
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        if (Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+
+        $CsmEmployeeId = $this->csm_employee_id;
+        $CsmName = $this->csm_name;
+        $targetDate = $this->target_date;
+
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate . '-01'])->distinct()->all();
+
+
+        if (!empty($targetProductModel)) {
+            foreach ($targetProductModel as $value) {
+                $product[] = $value->product_model_code;
+            }
+        }
+
+        $productString = '"' . implode('","', $product) . '"';
+
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT csm_employee_id) FROM target WHERE 
+           csm_employee_id=:csm_employee_id or :csm_employee_id is null")
+                ->bindValue(':csm_employee_id', $this->csm_employee_id)
+                ->queryScalar();
+
+        $sql = "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'SUM(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', csm_vol_sales, 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
+                    )
+                )
+            INTO @sql
+            FROM target;
+            SET @sql = CONCAT('SELECT csm_employee_id, csm_name, SUM(csm_vol) AS total_target, SUM(csm_vol_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(csm_vol)=0 then 0 else ( SUM(csm_vol_sales)/SUM(csm_vol))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
+            FROM target 
+            WHERE (csm_employee_id like :csm_employee_id or :csm_employee_id is null)
+            AND (csm_name like :csm_name or :csm_name is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            AND (csm_employee_id=:csm_employee_id or :csm_employee_id is null)
+            GROUP BY csm_employee_id');";
+
+        $cmd = Yii::$app->db->createCommand($sql);
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':csm_employee_id' => '%' . $CsmEmployeeId . '%',
+                ':csm_name' => '%' . $CsmName . '%',
+                ':target_date' => $targetDate . '-01',
+                ':csm_employee_id' => $this->csm_employee_id
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'defaultOrder' => ['achievement_percent' => SORT_DESC],
+                'attributes' => [
+                    'csm_employee_id' => [
+                        'asc' => ['csm_employee_id' => SORT_ASC],
+                        'desc' => ['csm_employee_id' => SORT_DESC],
+                    ],
+                    'csm_name' => [
+                        'asc' => ['csm_name' => SORT_ASC],
+                        'desc' => ['csm_name' => SORT_DESC],
+                    ],
+                    'total_target' => [
+                        'asc' => ['total_target' => SORT_ASC],
+                        'desc' => ['total_target' => SORT_DESC],
+                    ],
+                    'total_achievement' => [
+                        'asc' => ['total_achievement' => SORT_ASC],
+                        'desc' => ['total_achievement' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+    
     public function leaderboard_am($params) {
         
         $product = array();
@@ -606,6 +727,123 @@ class TargetSearch extends Target
         return $dataProvider;
     }
     
+    public function leaderboard_value_csm($params) {
+        $product = array();
+
+        $this->load($params);
+
+        if (empty($this->csm_employee_id)) {
+            $this->csm_employee_id = null;
+        }
+
+        if (empty($this->csm_name)) {
+            $this->csm_name = null;
+        }
+
+        if (empty($this->target_date)) {
+            $this->target_date = date('Y-m', time());
+        }
+
+        if (Yii::$app->session->get('isCSM')) {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = Yii::$app->session->get('employee_id');
+        } else {
+            $this->tm_employee_id = null;
+            $this->am_employee_id = null;
+            $this->csm_employee_id = null;
+        }
+
+        $CsmEmployeeId = $this->csm_employee_id;
+        $CsmName = $this->csm_name;
+        $targetDate = $this->target_date;
+
+        $targetProductModel = Target::find()->select('product_model_code')->where(['target_date' => $targetDate . '-01'])->distinct()->all();
+
+
+        if (!empty($targetProductModel)) {
+            foreach ($targetProductModel as $value) {
+                $product[] = $value->product_model_code;
+            }
+        }
+
+        $productString = '"' . implode('","', $product) . '"';
+
+        $totalCount = Yii::$app->db->createCommand("SELECT COUNT(DISTINCT am_employee_id) FROM target")
+                ->queryScalar();
+
+        $sql = "SET @sql = NULL;
+            SET @@group_concat_max_len = 6000000;
+            SELECT 
+                GROUP_CONCAT(DISTINCT
+                    CONCAT(
+                        'SUM(IF(product_model_code = ''',
+                        product_model_code,
+                        ''', csm_val_sales, 0)) AS ',
+                        CONCAT('`', product_model_name, '`')
+                    )
+                )
+            INTO @sql
+            FROM target;
+            SET @sql = CONCAT('SELECT csm_employee_id, csm_name, SUM(csm_val) AS total_target, 
+            SUM(csm_val_sales) AS total_achievement,
+            CONCAT(FORMAT(case when SUM(csm_val)=0 then 0 else ( SUM(csm_val_sales)/SUM(csm_val))*100 end ,2), \"%\") AS achievement_percent, ', @sql, ' 
+            FROM target 
+            WHERE (csm_employee_id like :csm_employee_id or :csm_employee_id is null)
+            AND (csm_name like :csm_name or :csm_name is null)
+            AND (product_model_code IN ($productString))
+            AND (target_date=:target_date)
+            GROUP BY csm_employee_id'); ";
+
+        $cmd = Yii::$app->db->createCommand($sql);
+        $cmd->execute();
+        $cmd->pdoStatement->closeCursor();
+
+        $cmd1 = Yii::$app->db->createCommand('SELECT @sql;');
+        $result = $cmd1->queryOne();
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $result['@sql'],
+            'params' => [
+                ':csm_employee_id' => '%' . $CsmEmployeeId . '%',
+                ':csm_name' => '%' . $CsmName . '%',
+                ':target_date' => $targetDate . '-01'
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'sort' => [
+                'defaultOrder' => ['achievement_percent' => SORT_DESC],
+                'attributes' => [
+                    'csm_employee_id' => [
+                        'asc' => ['csm_employee_id' => SORT_ASC],
+                        'desc' => ['csm_employee_id' => SORT_DESC],
+                    ],
+                    'csm_name' => [
+                        'asc' => ['csm_name' => SORT_ASC],
+                        'desc' => ['csm_name' => SORT_DESC],
+                    ],
+                    'total_target' => [
+                        'asc' => ['total_target' => SORT_ASC],
+                        'desc' => ['total_target' => SORT_DESC],
+                    ],
+                    'total_achievement' => [
+                        'asc' => ['total_achievement' => SORT_ASC],
+                        'desc' => ['total_achievement' => SORT_DESC],
+                    ],
+                    'achievement_percent' => [
+                        'asc' => ['achievement_percent' => SORT_ASC],
+                        'desc' => ['achievement_percent' => SORT_DESC],
+                    ],
+                ],
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+    
     public function leaderboard_value_am($params) {
         $product = array();
 
@@ -633,7 +871,6 @@ class TargetSearch extends Target
             $this->csm_employee_id = null;
         }
 
-        $retailTerritory = $this->retail_territory;
         $AmEmployeeId = $this->am_employee_id;
         $AmName = $this->tm_name;
         $targetDate = $this->target_date;

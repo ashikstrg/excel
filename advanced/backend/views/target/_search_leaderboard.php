@@ -32,6 +32,14 @@ use kartik\widgets\DatePicker;
             } else {
                 echo '&nbsp;';
             }
+            
+            echo '&nbsp;';
+            
+            if (Yii::$app->session->get('userRole') == 'Management') {
+                echo Html::a('<i class="glyphicon glyphicon-group"></i> CSM wise Leaderboard', ['leaderboard_csm'], ['class' => 'btn btn-primary', 'title' => 'Refresh']);
+            } else {
+                echo '&nbsp;';
+            }
 ?>
         </div>
         

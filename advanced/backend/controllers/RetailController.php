@@ -200,6 +200,30 @@ class RetailController extends Controller
         $model->number_rsa -= 1;
 
         if ($model->load(Yii::$app->request->post())) {
+            
+            $channelType = ChannelType::find()->select('type')->where(['id' => $model->channelType])->one();
+            $model->channel_type = $channelType->type;
+
+            $retailType = RetailType::find()->select('type')->where(['id' => $model->retailType])->one();
+            $model->retail_type = $retailType->type;
+
+            $retailZone = RetailZone::find()->select('zone')->where(['id' => $model->retailZone])->one();
+            $model->retail_zone = $retailZone->zone;
+
+            $retailArea = RetailArea::find()->select('area')->where(['id' => $model->retailArea])->one();
+            $model->retail_area = $retailArea->area;
+
+            $retailLocation = RetailLocation::find()->select('location')->where(['id' => $model->retailLocation])->one();
+            $model->retail_location = $retailLocation->location;
+
+            $division = Divisions::find()->select('name')->where(['id' => $model->divisionProperty])->one();
+            $model->division = $division->name;
+
+            $district = Districts::find()->select('name')->where(['id' => $model->districtProperty])->one();
+            $model->district = $district->name;
+
+            $upazila = Upazilas::find()->select('name')->where(['id' => $model->upazilaProperty])->one();
+            $model->upazila = $upazila->name;
 
             $model->updated_at = date('Y-m-d H:i:s', time());
             $model->updated_by = Yii::$app->user->identity->username;
